@@ -1,0 +1,84 @@
+
+  .wrapper-button {
+    margin-left: 1em;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 4px 8px;
+    border-radius: 35px;
+    cursor: pointer;
+  }
+  
+  .IsLight {
+    background-color: #fff;
+  }
+  
+  .IsDark {
+    background-color: #000;
+  }
+  
+  .wrapper-button input {
+    display: none;
+  }
+  
+  .wrapper-button input + div {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    box-shadow: inset 8px -8px 0 0 #000;
+    transform: scale(1) rotate(-2deg);
+    transition: box-shadow 0.5s ease 0s, transform 0.4s ease 0.1s;
+  }
+  
+  .wrapper-button input + div::before {
+    content: "";
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: background 0.3s ease;
+  }
+  
+  .wrapper-button input + div::after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    margin: -2px 0 0 -2px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    box-shadow: 0 -13px 0 #fff,
+      0 13px 0 #fff,
+      13px 0 0 #fff,
+      -13px 0 0 #fff,
+      9px 9px 0 #fff,
+      -9px 9px 0 #fff,
+      9px -9px 0 #fff,
+      -9px -9px 0 #fff;
+    transform: scale(0);
+    transition: all 0.3s ease;
+  }
+  
+  .wrapper-button input:checked + div {
+    box-shadow: inset 32px -32px 0 0 #fff;
+    transform: scale(0.5) rotate(0deg);
+    transition: transform 0.3s ease 0.1s, box-shadow 0.2s ease 0s;
+  }
+  
+  .wrapper-button input:checked + div::before {
+    background: #fff;
+    transition: background 0.3s ease 0.1s;
+  }
+  
+  .wrapper-button input:checked + div::after {
+    transform: scale(1.5);
+    transition: transform 0.5s ease 0.15s;
+  }
+  

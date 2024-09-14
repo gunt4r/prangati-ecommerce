@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  background-color: #fff;
+  color-scheme: light !important;
+}
+/* section-top */
+.section-top {
+  height: 35px;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+.section-top__paragraph {
+  color: #fff;
+  margin-top: 0;
+  font-weight: 300;
+  font-size: 14px;
+  padding-top: 10px;
+  display: flex;
+  margin-left: auto;
+  width: fit-content;
+}
+.section-top__link {
+  color: #fff !important;
+  text-decoration: underline;
+  font-weight: 600;
+  padding-left: 10px;
+}
+/* SECTION NAVBAR  */
+
+.section-nav {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  justify-content: space-between;
+}
+.section-nav__logo-link {
+  text-decoration: none;
+  color: #000;
+}
+
+.section-nav__logo-text {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.section-nav__menu {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  margin-bottom: 0;
+}
+.section-nav__menu-item {
+  color: #000;
+}
+.section-nav__menu-item:not(:last-child) {
+  margin-right: 20px;
+}
+.section-nav__menu-item-link {
+  text-decoration: none;
+  color: #000;
+}
+.section-nav__helpers {
+  display: flex;
+  align-items: center;
+}
+.section-nav__helpers-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.section-nav__helpers-search-input {
+  border: none;
+  background-color: #f5f5f5;
+  padding: 10px 15px;
+  padding-right: 35px; /* Добавлено место для значка */
+}
+.section-nav__helpers-search-label {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+.section-nav__helpers-desire {
+  margin-right: 20px;
+}
+.section-nav__helpers-search-icon {
+  font-size: 24px;
+}
+.section-nav__helpers-desire-icon {
+  font-size: 24px;
+}
+.section-nav__helpers-cart-icon {
+  font-size: 24px;
+}
