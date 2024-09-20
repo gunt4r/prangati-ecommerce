@@ -15,6 +15,22 @@ module.exports = {
       },
     },
   },
-  darkmode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            background: "#EAEBED",
+            backgroundColor: "#EAEBED",
+            primary: {
+              DEFAULT: "#BEF264",
+              foreground: "#000000",
+            },
+            focus: "#BEF264",
+            backgroundColorButtonBlack: "#1e1e1e",
+          },
+        },
+      },
+    }),
+  ],
 };

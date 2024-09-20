@@ -1,8 +1,8 @@
-import { Roboto } from "next/font/google";
+import { Archivo } from "next/font/google";
 
-export const roboto = Roboto({
+export const archivo = Archivo({
   weight: "400",
   subsets: ["latin"],
   display: "swap",
-  variable: "--Roboto",
+  variable: "--Archivo",
 });
