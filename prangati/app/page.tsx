@@ -1,12 +1,11 @@
-import Header from "@/components/Header/Headerpage.tsx";
-
+import HomePage from "@/components/HomePage";
 import "@/styles/globals.css";
-function HomePage() {
+function App() {
   return (
     <>
-      <Header />
+      <HomePage />
     </>
   );
 }
 
-export default HomePage;
+export default App;

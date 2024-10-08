@@ -16,49 +16,55 @@ const Dropdownlanguage = () => {
   const { i18n } = useTranslation();
   const [isMounted, setIsMounted] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState<string>(
-    Cookies.get('language') || 'en'
+    Cookies.get('language') || 'En'
   );
-
+  
   useEffect(() => {
     setIsMounted(true);
-    if (!Cookies.get('language')) {
-      setSelectedKeys(Cookies.get('language') || 'en');
-    } else {
-      Cookies.set('language', i18n.language);
-    }
   }, []);
 
   useEffect(() => {
     if (isMounted) {
-      selectedKeys?.valueOf() === undefined ? "en" : selectedKeys;
-      Cookies.set('language', selectedKeys.currentKey);
-      i18n.changeLanguage(selectedKeys as string);
+      const savedLanguage = Cookies.get('language') || 'En';
+
+      setSelectedKeys(savedLanguage);
+      i18n.changeLanguage(savedLanguage);
     }
-  }, [selectedKeys, isMounted]);
+  }, [isMounted, i18n]);
+
+  useEffect(() => {
+    if (isMounted && selectedKeys) {
+      let temp = Array.from(selectedKeys);
+      const language = temp.join('').replace("%2", "");
+
+      Cookies.set('language', language);
+      
+      i18n.changeLanguage(language);
+    }
+  }, [selectedKeys, isMounted, i18n]);
 
   if (!isMounted) {
-    return null;
+    return null; 
   }
 
   return (
     <Dropdown >
       <DropdownTrigger>
-        <Button className="capitalize" variant="light">
-          {selectedKeys}
+        <Button className="capitalize" size='lg' variant="light">
+          {selectedKeys }
           <IoIosArrowDown />
         </Button>
       </DropdownTrigger>
       <DropdownMenu
         disallowEmptySelection
-        aria-label="Single selection example"
         selectedKeys={selectedKeys}
         selectionMode="single"
         variant="flat"
         onSelectionChange={setSelectedKeys as (keys: SharedSelection) => void}
       >
-        <DropdownItem key="en">En</DropdownItem>
-        <DropdownItem key="ro">Ro</DropdownItem>
-        <DropdownItem key="ru">Ru</DropdownItem>
+        <DropdownItem key="En">English</DropdownItem>
+        <DropdownItem key="Ro">Română</DropdownItem>
+        <DropdownItem key="Ru">Русский</DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );

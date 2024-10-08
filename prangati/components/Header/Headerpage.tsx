@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 'use client';
 import classNames from 'classnames';
 import Link from 'next/link';
@@ -8,19 +9,20 @@ import {
   IoCloseOutline,
   IoSearchOutline,
 } from 'react-icons/io5';
-import { TiUserOutline } from "react-icons/ti";
+import { BiUser } from 'react-icons/bi';
 import { SlMenu } from 'react-icons/sl';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
-import { Button } from '@nextui-org/button';
+import { motion } from 'framer-motion';
 
 import Dropdownlanguage from './dropdownLanguage/dropdownLanguage';
 import style from './styleHeader.module.css';
 import SearchBar from './SearchBar/SearchBar';
 
 import animateLink from '@/utils/animateLink.ts';
+import { poppins } from '@/config/fonts';
 
 function Header() {
   const { t } = useTranslation();
@@ -81,7 +83,10 @@ function Header() {
   };
 
   return (
-    <div ref={searchRef} className={classNames(style['section-nav__header'])}>
+    <div
+      ref={searchRef}
+      className={classNames(style['section-nav__header'], poppins.className)}
+    >
       {showMenuMobile && (
         <div className={classNames(style['section-nav__menu-medium'])}>
           <button
@@ -126,7 +131,7 @@ function Header() {
                 style['section-nav__menu-item-link'],
                 animateLink
               )}
-              href="/"
+              href="/about"
             >
               {' '}
               About
@@ -157,31 +162,38 @@ function Header() {
           <SearchBar handleSearch={handleInput} />
         </div>
         <section className={classNames(style['section-nav__helpers'])}>
-          <div className={classNames(style['section-nav__helpers-search'])}>
-            <input
-              className={classNames(style['section-nav__helpers-search-input'])}
-              id="search"
-              name="search"
-              placeholder={t('search')}
-              type="text"
-              onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                const { value } = e.currentTarget;
-
-                setInputDetails(value);
-              }}
-            />
-
-            <div
+          <motion.div
+            className={classNames(style['section-nav__helpers-search-wrapper'])}
+            whileHover={{
+              x: 5,
+              rotate: 0,
+            }}
+          >
+            <label
               className={classNames(style['section-nav__helpers-search-label'])}
+              htmlFor="search"
             >
               <IoSearchOutline className={classNames('text-black text-xl')} />
+            </label>
+            <div className={classNames(style['section-nav__helpers-search'])}>
+              <input
+                className={classNames(
+                  style['section-nav__helpers-search-input']
+                )}
+                id="search"
+                name="search"
+                placeholder={t('search')}
+                type="text"
+                onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                  const { value } = e.currentTarget;
+
+                  setInputDetails(value);
+                }}
+              />
             </div>
-          </div>
-            <Link href="/">
-              <Button className='bg-[#1e1e1e] p-0 text-white text-sm w-8' radius='lg' size='sm'>Log in</Button>
-            </Link>
+          </motion.div>
           <Link
-            className={classNames(style['section-nav__helpers-desire'])}
+            className={classNames(style['section-nav__helpers-icon'])}
             href="/"
           >
             <IoMdHeartEmpty
@@ -192,7 +204,7 @@ function Header() {
             />
           </Link>
           <Link
-            className={classNames(style['section-nav__helpers-cart'])}
+            className={classNames(style['section-nav__helpers-icon'])}
             href="/"
           >
             <IoCartOutline
@@ -202,7 +214,13 @@ function Header() {
               )}
             />
           </Link>
-          <Link href="" > <TiUserOutline className="text-2xl"/></Link>
+          <Link
+            className={classNames(style['section-nav__helpers-icon'])}
+            href=""
+          >
+            {' '}
+            <BiUser className="text-2xl" />
+          </Link>
           <button onClick={HandleMenu}>
             {' '}
             <SlMenu
@@ -244,7 +262,7 @@ function Header() {
           </div>
         )}
       </section>
-      <hr />
+      <hr className={classNames(style['section-nav__underline'])} />
     </div>
   );
 }

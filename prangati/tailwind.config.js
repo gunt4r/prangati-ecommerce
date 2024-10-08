@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { nextui } from "@nextui-org/theme";
 
 /** @type {import('tailwindcss').Config} */

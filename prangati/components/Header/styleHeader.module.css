@@ -1,6 +1,6 @@
 .section-nav__header {
   margin-bottom: 2rem;
-  background-color: #EAEBED;
+  background-color: #eaebed;
 }
 /* SECTION NAVBAR  */
 
@@ -8,11 +8,8 @@
   display: flex;
   align-items: center;
   width: 90%;
-  margin-right: auto;
-  margin-left: auto;
   justify-content: space-between;
-  margin-top: 2rem;
-  
+  margin: 2rem auto 1rem;
 }
 .section-nav__logo-link {
   text-decoration: none;
@@ -40,12 +37,35 @@
 }
 .section-nav__menu-item-link {
   text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
   color: #000;
 }
 .section-nav__helpers {
   display: flex;
   align-items: center;
-  width: 32%;
+}
+.section-nav__helpers-search-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #eaebed;
+  border-radius: 10px;
+  margin-right: 15px;
+}
+
+.section-nav__helpers-search-wrapper:hover {
+  border: 1px solid rgba(0, 0, 0, 0.1);/* Property 1=Variant2 */
+
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  background: #EAEBED;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  
+  transition: 0.3s ease-in-out;
 }
 .section-nav__helpers-search {
   position: relative;
@@ -56,20 +76,19 @@
 
 .section-nav__helpers-search-input {
   border: none;
-  background-color: #f5f5f5;
+  background-color: transparent;
   padding: 10px 15px;
-  padding-right: 35px;
   color: #000;
   outline: none;
-  width: 200px;
+  width: 100px;
   border-radius: 5px;
 }
 .section-nav__helpers-search-label {
-  position: absolute;
-  right: 10px;
+  padding-left: 10px;
   cursor: pointer;
 }
-.section-nav__helpers-desire {
+.section-nav__helpers-icon:not(:last-child) {
+  margin-right: 10px;
 }
 .section-nav__helpers-search-icon {
   font-size: 24px;
@@ -87,7 +106,6 @@
   position: relative;
 }
 
-
 .section-nav__search-results {
   position: absolute;
   top: 120px;
@@ -101,7 +119,7 @@
   z-index: 10;
 }
 
-.section-nav__search-list{
+.section-nav__search-list {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -142,6 +160,15 @@
 }
 .section-nav__helpers-menu-icon {
   display: none;
+}
+.section-nav__underline {
+  width: 100%;
+  height: 1.3px;
+  background-color: #727272;
+  width: 90%;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 /* MENU MOBILE  */
