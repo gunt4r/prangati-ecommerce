@@ -23,6 +23,7 @@ import SearchBar from './SearchBar/SearchBar';
 
 import animateLink from '@/utils/animateLink.ts';
 import { poppins } from '@/config/fonts';
+import { Around } from '@theme-toggles/react';
 
 function Header() {
   const { t } = useTranslation();
@@ -101,17 +102,22 @@ function Header() {
           </button>
         </div>
       )}
+
+      <Link className={classNames(style['section-nav__logo'])} href="/">
+        <div className={classNames(style['section-nav__logo-wrapper'])}>
+          <p className={classNames(style['section-nav__logo-text'])}>
+            PRANGATI
+          </p>
+        </div>
+      </Link>
       <section
         className={classNames(style['section-nav'])}
         color="backgroundColor"
       >
-        <Link className={classNames(style['section-nav__logo-link'])} href="/">
-          <div className={classNames(style['section-nav__logo'])}>
-            <p className={classNames(style['section-nav__logo-text'])}>
-              PRANGATI
-            </p>
-          </div>
-        </Link>
+        <div className={classNames(style['section-nav__utils'])}>
+          <Around duration={750} style={{marginRight:"15px"}} />
+          <Dropdownlanguage />
+        </div>
         <ul className={classNames(style['section-nav__menu'])}>
           <li className={classNames(style['section-nav__menu-item'])}>
             <Link
@@ -150,7 +156,16 @@ function Header() {
             </Link>
           </li>
           <li className={classNames(style['section-nav__menu-item'])}>
-            <Dropdownlanguage />
+            <Link
+              className={classNames(
+                style['section-nav__menu-item-link'],
+                animateLink
+              )}
+              href="/"
+            >
+              {' '}
+              Contacts
+            </Link>
           </li>
         </ul>
         <div

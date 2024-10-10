@@ -6,6 +6,7 @@ import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { archivo} from "@/config/fonts.ts";
+import "@theme-toggles/react/css/Around.css"
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,

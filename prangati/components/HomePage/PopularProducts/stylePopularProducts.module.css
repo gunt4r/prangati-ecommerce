@@ -1,0 +1,63 @@
+.section-popular {
+  background-color: #e5e5e5;
+}
+
+.section-popular__content {
+  background-color: #e5e5e5;
+  width: 90%;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.section-popular__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+}
+
+.section-popular__title {
+  font-size: 3rem;
+  font-weight: 100;
+  line-height: 2.5rem;
+  color: #1e1e1e;
+  margin-bottom: 1.5rem;
+}
+
+.section-popular__header-link__wrapper {
+  margin-right: 10%;
+  height: 80px;
+}
+
+.section-popular__header-link {
+  color: #1e1e1e;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 150px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  margin-bottom: auto;
+
+  transition: background-color 0.5s ease, transform 0.5s ease;
+}
+
+.section-popular__header-link__arrow {
+  margin-left: 15px;
+}
+
+.hovered {
+  background-color: #eaebed;
+  transform: translate(15px, 15px);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.unhovered {
+  background-color: transparent;
+  transform: none;
+  box-shadow: none;
+}
