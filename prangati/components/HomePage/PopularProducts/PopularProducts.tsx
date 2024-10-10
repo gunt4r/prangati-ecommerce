@@ -55,6 +55,15 @@ export default function PopularProducts() {
             </div>
           </Link>
         </div>
+        <p
+          className={classNames(
+            style["section-popular__subtitle"],
+            poppins.className,
+          )}
+        >
+          This beloved product has become a favorite among our customers for its
+          exceptional features and unparalleled performance
+        </p>
       </section>
     </section>
   );

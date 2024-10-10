@@ -16,6 +16,7 @@ import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import { motion } from 'framer-motion';
+import { Around } from '@theme-toggles/react';
 
 import Dropdownlanguage from './dropdownLanguage/dropdownLanguage';
 import style from './styleHeader.module.css';
@@ -23,7 +24,6 @@ import SearchBar from './SearchBar/SearchBar';
 
 import animateLink from '@/utils/animateLink.ts';
 import { poppins } from '@/config/fonts';
-import { Around } from '@theme-toggles/react';
 
 function Header() {
   const { t } = useTranslation();

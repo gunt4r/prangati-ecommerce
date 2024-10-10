@@ -25,7 +25,6 @@ export default function InputEmail({handleValueInput}:{ handleValueInput: (data:
     <div className={classNames(style["section-news__input-wrapper"])}>
       <Input
         className={classNames(style["section-news__input"],"max-w-xs")}
-        color={isInvalid ? 'danger' : 'default'}
         errorMessage="Please enter a valid email"
         isInvalid={isInvalid}
         label="Your Email Adress"

@@ -43,7 +43,9 @@
   border-radius: 50px;
   margin-bottom: auto;
 
-  transition: background-color 0.5s ease, transform 0.5s ease;
+  transition:
+    background-color 0.5s ease,
+    transform 0.5s ease;
 }
 
 .section-popular__header-link__arrow {
@@ -60,4 +62,14 @@
   background-color: transparent;
   transform: none;
   box-shadow: none;
+}
+.section-popular__subtitle {
+  width: 52%;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 127%;
+  text-transform: uppercase;
+  color: #898989;
+  margin-bottom: 2rem;
 }
