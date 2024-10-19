@@ -1,0 +1,43 @@
+.carousel-container {
+  width: 100%;
+  position: relative;
+  background-color: #e5e5e5;
+}
+.section-carousel__wrapper{
+    background-color: #e5e5e5;
+    width: 90%;
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+    flex-direction: column;
+}
+.carousel-content {
+  display: flex;
+  align-items: center;
+  min-height: 200px;
+  overflow: hidden;
+  justify-content: space-between;
+  
+}
+
+.carousel-item {
+  font-size: 24px;
+  text-align: center;
+}
+
+.pagination-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-dot {
+  height: 10px;
+  border-radius: 5px;
+  margin: 0 5px;
+  background-color: #ccc;
+  cursor: pointer;
+  margin-bottom: 3rem;
+}

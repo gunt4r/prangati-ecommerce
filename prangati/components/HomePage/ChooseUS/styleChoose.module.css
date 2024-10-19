@@ -1,0 +1,63 @@
+.section-choose {
+  margin-bottom: 3rem;
+}
+.section-choose__wrapper {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.section-choose__wrapper-left {
+  background-image: url('../../../public/lampHomePage.png');
+  width: 400px;
+  height: 498px;
+  position: relative;
+  border-radius: 20px;
+}
+.section-choose__left-text {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 50%;
+  font-weight: 300;
+  font-size: 1rem;
+  line-height: 18px;
+  text-align: right;
+  text-transform: uppercase;
+  color: #1e1e1e;
+}
+
+.section-choose__wrapper-right {
+  width: calc(100% - 550px);
+}
+.section-choose__right-title {
+  font-weight: 200;
+  font-size: 3rem;
+  text-align: left;
+  text-transform: uppercase;
+  color: #1e1e1e;
+  margin-bottom: 1rem;
+}
+.section-choose__right-subtitle {
+  font-size: 1rem;
+  line-height: 153%;
+  text-transform: uppercase;
+  color: #898989;
+  margin-bottom: 2rem;
+}
+.rotate-45 {
+  transition: transform 0.3s ease;
+  transform: rotate(45deg);
+}
+.section-choose__bottom-cards {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+}

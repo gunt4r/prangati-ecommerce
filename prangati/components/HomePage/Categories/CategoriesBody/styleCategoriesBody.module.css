@@ -1,0 +1,82 @@
+.section-categories__card {
+  background-color: #d9d9d9;
+  padding: 10px;
+}
+.section-categories__card-image {
+  width: 74%;
+  height: 55%;
+  top: 64px;
+  left: 38px;
+}
+.section-categories__card-wrapper {
+  width: 100% !important;
+  height: 100%;
+  border: 1px solid #1e1e1e !important;
+  border-radius: 10px;
+}
+.section-categories__card-category {
+  font-weight: 200;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #000000;
+}
+.section-categories__card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 90%;
+}
+.section-categories__card-icon {
+  font-size: 24px;
+  color: #1e1e1e;
+}
+.section-categories__card-long {
+  background-color: #d9d9d9;
+  padding: 10px;
+  width: 600px;
+}
+.section-categories__card-category__long {
+  font-weight: 200;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #000000;
+}
+.section-categories__gaming-category__long {
+  font-weight: 200;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #d9d9d9;
+}
+.section-categories__card-icon__long {
+  font-size: 28px;
+  color: #1e1e1e;
+}
+.section-categories__card-wrapper__gaming {
+  width: 100% !important;
+  height: 100%;
+  border: 1px solid #d9d9d9 !important;
+  border-radius: 10px;
+}
+.section-category__gaming-image {
+  filter: grayscale(100%);
+  width: 83%;
+  height: 90%;
+  left: 51px;
+  top: 33px;
+}
+.section-categories__gaming-icon__long {
+  font-size: 28px;
+  color: #d9d9d9;
+}
+.section-categories__card-three {
+  padding: 10px;
+  background-color: transparent;
+}
+.section-category__gadget-image {
+  filter: grayscale(100%);
+}
+.section-categories__gadget-icon__long {
+  color: #d9d9d9;
+  font-size: 28px;
+}

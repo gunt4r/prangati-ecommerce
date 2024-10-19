@@ -1,0 +1,33 @@
+.section-vision {
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #000;
+}
+.section-vision__wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-vision__wrapper-left {
+  height: 100%;
+  display: flex;
+  margin-bottom: auto;
+  width: 50%;
+}
+.section-vision__left-title {
+  font-weight: 200;
+  font-size: 3.5rem;
+  line-height: 116%;
+  text-transform: uppercase;
+  color: #262626;
+}
+.section-vision__wrapper-right {
+  width: 50%;
+  border-left: 1px solid #000000;
+  padding-left: 100px;
+}

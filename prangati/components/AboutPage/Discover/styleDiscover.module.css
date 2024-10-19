@@ -1,0 +1,29 @@
+.section-discover {
+  width: 90%;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  flex-direction: column;
+  margin-bottom: 4rem;
+}
+.section-discover__title {
+  font-weight: 200;
+  font-size: 4rem;
+  line-height: 95.79%;
+  color: #262626;
+  text-transform: uppercase;
+  width: 50%;
+  margin-bottom: 2rem;
+}
+.section-discover__title-underline {
+  position: relative;
+}
+.section-discover__title-underline:after {
+  content: '';
+  width: 250px;
+  height: 4px;
+  background: #262626;
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+}

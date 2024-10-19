@@ -18,7 +18,7 @@
 }
 .section-nav__logo-link {
   text-decoration: none;
-  color: #000;
+  color: #1e1e1e;
 }
 
 .section-nav__logo-text {
@@ -63,9 +63,8 @@
 }
 
 .section-nav__helpers-search-wrapper:hover {
-  border: 1px solid rgba(0, 0, 0, 0.1); /* Property 1=Variant2 */
+  border: 1px solid rgba(0, 0, 0, 0.1);
 
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -91,6 +90,9 @@
   outline: none;
   width: 100px;
   border-radius: 5px;
+}
+.section-nav__helpers-search-input::placeholder {
+  color: #5c5c5c;
 }
 .section-nav__helpers-search-label {
   padding-left: 10px;

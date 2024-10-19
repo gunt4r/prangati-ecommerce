@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Archivo,Poppins,Oswald } from "next/font/google";
+import { Archivo,Albert_Sans,Poppins,Oswald } from "next/font/google";
 
 export const archivo = Archivo({
-  weight: "400",
   subsets: ["latin"],
   display: "swap",
   variable: "--Archivo",
@@ -20,4 +19,10 @@ export const oswald = Oswald({
   subsets: ["latin"],
   display: "swap",
   variable: "--Oswald",
+});
+
+export const albertSans = Albert_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--AlbertSans",
 });

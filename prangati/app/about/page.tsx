@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import Header from "@/components/Header/Headerpage";
+import AboutPage from "@/components/AboutPage/index";
 export default function About() {
-  return <Header />;
+  return <AboutPage />;
 }

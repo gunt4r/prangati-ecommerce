@@ -3,6 +3,9 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_PRODUCT: "https://api.escuelajs.co/api/v1/products",
   },
+  compiler: {
+    styledComponents: true,
+  },
 };
 
 module.exports = nextConfig;
