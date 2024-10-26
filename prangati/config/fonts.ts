@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Archivo,Albert_Sans,Poppins,Oswald } from "next/font/google";
+import { Archivo,Albert_Sans,Poppins,Oswald,Manrope } from "next/font/google";
+
+// ABLATION 
 
 export const archivo = Archivo({
   subsets: ["latin"],
@@ -25,4 +27,10 @@ export const albertSans = Albert_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--AlbertSans",
+});
+
+export const manrope = Manrope({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--Manrope",
 });

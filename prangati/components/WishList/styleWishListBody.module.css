@@ -1,0 +1,36 @@
+.section-wish__wrapper {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  flex-direction: column;
+}
+
+.section-wish__subtitle {
+  font-weight: 100;
+  font-size: 1rem;
+  line-height: 148%;
+  text-align: center;
+  color: #5a5a5a;
+  width: 40%;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 4rem;
+}
+.section-wish__line {
+  width: 40%;
+  background-color: #4b4b4b;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  height: 1.5px;
+  margin-bottom: 4rem;
+}
+.section-wish__cards {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}

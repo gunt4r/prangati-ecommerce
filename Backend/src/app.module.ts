@@ -3,23 +3,19 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserController } from './user.controller';
+import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { MailModule } from './mail/mail.module';
 import { MailService } from './mail/mail.service';
+import { NewsletterController } from './mail/mail.controller';
+import { ContactsModule } from './contacts/contacts.module';
+import { ContactsController } from './contacts/contacts.controller';
+import { ContactsService } from './contacts/contacts.service';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
-  imports: [MailerModule.forRoot({
-    transport: {
-      host: 'localhost:3000', // Your SMTP host
-      port: 3000,
-      auth: {
-        user: 'vladprangati2005@gmail.com',
-        pass: `${process.env.APP_PASSWORD_GMAIL}`,
-      },
-    },
-    defaults: {
-      from: '"No Reply" <noreply@example.com>',
-    },
-  }),],
-  controllers: [AppController,UserController],
-  providers: [AppService,MailService],
+  imports: [ConfigModule.forRoot(),MailerModule,MailModule, ContactsModule, UserModule, AuthModule],
+  controllers: [AppController,UserController,NewsletterController,ContactsController],
+  providers: [AppService,MailService,ContactsService],
 })
 export class AppModule {}

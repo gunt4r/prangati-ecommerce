@@ -1,28 +1,15 @@
 "use client";
-import { useSelector } from "react-redux";
 
-import { RootState } from "@/store";
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-}
+import Header from "@/components/Header/Headerpage";
+import Footer from "@/components/Footer/Footer";
+import WishListBody from "@/components/WishList/WishListBody";
 
 const Wishlist = () => {
-  const wishlist = useSelector((state: RootState) => state.wishlist.items);
-
   return (
     <div>
-      <h5>Wishlist</h5>
-      {wishlist.map((product: Product) => (
-        <div key={product.id}>
-          <p>{product.title}</p>
-          <p>{product.price}</p>
-        </div>
-      ))}
+      <Header />
+      <WishListBody />
+      <Footer />
     </div>
   );
 };

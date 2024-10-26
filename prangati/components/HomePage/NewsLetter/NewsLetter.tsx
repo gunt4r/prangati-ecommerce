@@ -2,16 +2,56 @@
 import classNames from "classnames";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 import style from "./styleNewsLetter.module.css";
 
 import { oswald, poppins } from "@/config/fonts";
-import InputEmail from "@/components/inputEmail/inputEmail";
+import InputEmail from "@/components/HomePage/NewsLetter/inputEmail/inputEmail";
 
 export default function NewsLetter() {
-  const [value, setValue] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const handleEmail = (data: string) => {
-    setValue(data);
+    setEmail(data);
+  };
+
+  const handleSubmit = async () => {
+    if (!email) {
+      setMessage("Please enter a valid email");
+
+      return;
+    }
+
+    let subject, body;
+
+    if (Cookies.get("language") == "En") {
+      subject = "Thank You for Subscribing to Our Newsletter!";
+      body =
+        "Get Ready! Exciting News, Exclusive Offers, and the Latest Updates Are Coming to Your Inbox!";
+    } else if (Cookies.get("languagea") == "Ru") {
+      subject = "Спасибо за подписку на нашу рассылку!";
+      body =
+        "Готовьтесь! Увлекательные новости, эксклюзивные предложения и свежие обновления ждут вас в почте!";
+    } else {
+      subject = "Mulțumim pentru abonarea la newsletter-ul nostru!";
+      body =
+        "Pregătește-te! Știri interesante, oferte exclusive și cele mai noi actualizări îți vor ajunge în inbox!";
+    }
+
+    const data = { email, subject, body };
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const response = await axios.post(
+        "http://localhost:3000/newsletter/send",
+        data,
+      );
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error sending data:", error);
+    }
   };
 
   const motionBackground = {
@@ -55,7 +95,10 @@ export default function NewsLetter() {
           directly in your inbox.
         </motion.p>
         <div>
-          <InputEmail handleValueInput={handleEmail} />
+          <InputEmail
+            handleSubmit={handleSubmit}
+            handleValueInput={handleEmail}
+          />
         </div>
       </div>
     </motion.div>

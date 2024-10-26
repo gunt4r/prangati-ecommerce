@@ -14,6 +14,9 @@ module.exports = {
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
       },
+      colors: {
+        backgroundColor: "#EAEBED",
+      }
     },
   },
   plugins: [
@@ -22,7 +25,6 @@ module.exports = {
         light: {
           colors: {
             background: "#EAEBED",
-            backgroundColor: "#EAEBED",
             primary: {
               DEFAULT: "#BEF264",
               foreground: "#000000",

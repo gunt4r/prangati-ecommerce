@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 
 import { RootState } from "@/store";
 
+import Header from "@/components/Header/Headerpage";
+import Footer from "@/components/Footer/Footer";
 interface Product {
   id: number;
   title: string;
@@ -17,6 +19,7 @@ const Cart = () => {
 
   return (
     <div>
+      <Header />
       {cart.map((product: Product) => (
         <div key={product.id}>
           <p>{product.title}</p>
@@ -24,6 +27,7 @@ const Cart = () => {
           <p>{product.quantity}</p>
         </div>
       ))}
+      <Footer />
     </div>
   );
 };

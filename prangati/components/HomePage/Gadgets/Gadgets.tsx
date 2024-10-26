@@ -69,7 +69,7 @@ export default function Gadgets() {
             <Button
               className={classNames(
                 style["section-gadgets__bottom-left-button"],
-                "hover:bg-default-900 hover:text-default-50 bg-default-50 border-2 border-default-900 text-default-900 duration-500",
+                "hover:bg-default-900 hover:text-default-50 bg-backgroundColor border-2 border-default-900 text-default-900 duration-500",
               )}
               radius="full"
               size="lg"

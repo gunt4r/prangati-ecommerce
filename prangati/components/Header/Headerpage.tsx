@@ -144,7 +144,7 @@ function Header() {
         color="backgroundColor"
       >
         <div className={classNames(style["section-nav__utils"])}>
-          <Around duration={750} style={{ marginRight: "15px" }} />
+          <Around duration={750} style={{ marginRight: "15px" }} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
           <Dropdownlanguage />
         </div>
         <ul className={classNames(style["section-nav__menu"])}>
@@ -190,7 +190,7 @@ function Header() {
                 style["section-nav__menu-item-link"],
                 animateLink,
               )}
-              href="/"
+              href="/contacts"
             >
               {" "}
               Contacts

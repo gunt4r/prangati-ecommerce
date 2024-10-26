@@ -1,15 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get } from '@nestjs/common';
-import { MailService } from './mail/mail.service'; 
+import { Controller, } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  constructor(private readonly mailService: MailService) {} 
+  constructor() {} 
 
-  @Get('send-mail')
-  async sendMail() {
-    const user = { email: 'vladprangati737@gmail.com' };
-    await this.mailService.sendUserConfirmation(user);
-    return 'Email sent successfully';
-  }
+  
 }

@@ -1,0 +1,28 @@
+
+.section-contacts__form-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+.section-contacts__form-top-title {
+  font-weight: 100;
+  font-size: 2rem;
+  line-height: 148%;
+  color: #262626;
+  text-transform: uppercase;
+  margin-right: 40px;
+}
+.section-contacts__form-top-subtitle {
+  font-weight: 100;
+  font-size: 1rem;
+  line-height: 126%;
+  color: #5c5c5c;
+  width: 70%;
+  text-transform: uppercase;
+}
+.section-contacts__form-body-top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}

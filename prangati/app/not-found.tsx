@@ -1,4 +1,11 @@
-/* eslint-disable prettier/prettier */
+import NotFoundComponent from "@/components/NotFoundPage/NotFound";
+import Header from "@/components/Header/Headerpage";
+
 export default function NotFound() {
-  return <h5>Not found</h5>;
+  return (
+    <div>
+      <Header />
+      <NotFoundComponent />
+    </div>
+  );
 }

@@ -1,0 +1,20 @@
+.section-contacts {
+  display: flex;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  flex-direction: column;
+}
+.section-contacts__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-contacts__left {
+  width: 55%;
+}
+.section-contacts__right {
+  width: 40%;
+  border-left: 1px solid #000000;
+  padding-left: 60px;
+}
