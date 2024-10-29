@@ -1,0 +1,10 @@
+.section-sign {
+  display: flex;
+  width: 90%;
+  align-items: center;
+  margin-right: auto;
+  margin-left: auto;
+  flex-direction: row;
+  padding-top: 1rem;
+  justify-content: space-between;
+}

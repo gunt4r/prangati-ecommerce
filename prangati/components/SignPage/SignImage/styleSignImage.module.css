@@ -1,0 +1,25 @@
+.section-sign__image-wrapper{
+    width: 50%;
+    display: flex;
+    position: relative;
+    height: 751px;
+}
+
+.section-nav__logo {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 1%;
+    right: 1%;
+  }
+  .section-nav__logo-link {
+    text-decoration: none;
+    color: #1e1e1e;
+  }
+  
+  .section-nav__logo-text {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }

@@ -144,7 +144,13 @@ function Header() {
         color="backgroundColor"
       >
         <div className={classNames(style["section-nav__utils"])}>
-          <Around duration={750} style={{ marginRight: "15px" }} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+          <Around
+            duration={750}
+            placeholder={undefined}
+            style={{ marginRight: "15px" }}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          />
           <Dropdownlanguage />
         </div>
         <ul className={classNames(style["section-nav__menu"])}>
