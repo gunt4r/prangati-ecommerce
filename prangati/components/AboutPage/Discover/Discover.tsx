@@ -22,7 +22,7 @@ export default function Discover() {
           world.
         </span>
       </p>
-      <img alt="imag" src={imageDiscover.src} />
+      <img alt="imag" className="grayscale" src={imageDiscover.src} />
     </section>
   );
 }

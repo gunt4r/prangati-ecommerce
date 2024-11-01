@@ -1,0 +1,33 @@
+.section-login__form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  width: 40%;
+  padding-top: 4rem;
+}
+.section-login__title {
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 72px;
+  color: #000000;
+}
+.section-login__subtitle {
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 27px;
+  color: #000000;
+}
+.section-login__form-agree {
+  width: 90%;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+}
+.section-login__bottom-forgot {
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  color: #515151;
+}

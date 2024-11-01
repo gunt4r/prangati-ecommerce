@@ -8,7 +8,7 @@ import { FaGoogle } from "react-icons/fa";
 import { Button } from "@nextui-org/button";
 import { Link } from "@nextui-org/link";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 import style from "./styleSignForm.module.css";
 
@@ -19,12 +19,15 @@ export default function SignForm() {
   const [valueFullName, setValueFullname] = useState("");
   const [valueEmail, setValueEmail] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisibleRepeated, setIsVisibleRepeated] = useState(false);
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [isInvalidFullName, setIsInvalidFullName] = useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
-
+  const [isChecked, setIsChecked] = useState(false);
+  const [isInvalidPasswordMatch, setIsInvalidPasswordMatch] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
+  const toggleVisibilityRepeated = () => setIsVisibleRepeated(!isVisibleRepeated);
 
   const validateEmail = (value: string) =>
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
@@ -37,6 +40,16 @@ export default function SignForm() {
     return value.trim().split(" ").length === 2;
   };
 
+  const validatePassword = (value: string) => {
+    const hasValidLength = value.length >= 8 && value.length <= 30;
+    const hasNumber = /\d/.test(value);
+    const hasUpperCase = /[A-Z]/.test(value);
+    return hasValidLength && hasNumber && hasUpperCase;
+  };
+  const isInvalidPasswordCriteria = useMemo(() => {
+    return password !== "" && !validatePassword(password);
+  }, [password]);
+
   const handleSubmit = async () => {
     if (!valueFullName || !valueEmail || !password || !repeatedPassword) {
       toast.error("All fields are required.");
@@ -47,15 +60,28 @@ export default function SignForm() {
     if (
       isInvalidEmail ||
       !validateFullName(valueFullName) ||
-      password !== repeatedPassword
+      password !== repeatedPassword ||
+      isInvalidPasswordCriteria
     ) {
       setIsInvalidFullName(!validateFullName(valueFullName));
-      setIsInvalidPassword(password !== repeatedPassword);
+      setIsInvalidPassword(password !== repeatedPassword || isInvalidPasswordCriteria);
       toast.error("Please check your inputs.");
 
       return;
     }
 
+    setIsInvalidPassword(!validatePassword(password));
+    setIsInvalidPasswordMatch(password !== repeatedPassword);
+
+    if (isInvalidPassword || isInvalidPasswordMatch) {
+      toast.error("Please check your password requirements.");
+      return;
+    }
+    if (!isChecked) {
+      toast.error("You have to check the checkbox");
+
+      return;
+    }
     try {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_SERVER + "auth/register",
@@ -69,7 +95,12 @@ export default function SignForm() {
 
       if (response.status == 201) {
         toast.success("Registration successful!");
-        router.push("/");
+        const { token } = response.data;
+
+        localStorage.setItem("token", token);
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
       } else {
         toast.error("Registration failed. Please try again.");
       }
@@ -142,8 +173,8 @@ export default function SignForm() {
             )}
           </button>
         }
-        errorMessage="Passwords do not match"
-        isInvalid={isInvalidPassword}
+        errorMessage="Password must be 8-30 characters long, contain a number, and an uppercase letter"
+        isInvalid={isInvalidPasswordCriteria}
         label="Password"
         type={isVisible ? "text" : "password"}
         value={password}
@@ -152,39 +183,44 @@ export default function SignForm() {
         onValueChange={setPassword}
       />
       <Input
-        className="w-10/12 mb-6 hover:duration-1000"
-        classNames={{
-          inputWrapper: "border-default-500 hover:border-default-300",
-        }}
-        endContent={
-          <button
-            aria-label="toggle password visibility"
-            className="focus:outline-none"
-            type="button"
-            onClick={toggleVisibility}
-          >
-            {isVisible ? (
-              <IoMdEyeOff className="text-2xl text-default-400 pointer-events-none" />
-            ) : (
-              <IoMdEye className="text-2xl text-default-400 pointer-events-none" />
-            )}
-          </button>
-        }
-        errorMessage="Passwords do not match"
-        isInvalid={isInvalidPassword}
-        label="Re-enter password"
-        type={isVisible ? "text" : "password"}
-        value={repeatedPassword}
-        variant="underlined"
-        onChange={(e) => setRepeatedPassword(e.target.value)}
-        onValueChange={setRepeatedPassword}
-      />
+  className="w-10/12 mb-6 hover:duration-1000"
+  classNames={{
+    inputWrapper: "border-default-500 hover:border-default-300",
+  }}
+  endContent={
+    <button
+      aria-label="toggle password visibility"
+      className="focus:outline-none"
+      type="button"
+      onClick={toggleVisibilityRepeated}
+    >
+      {isVisibleRepeated ? (
+        <IoMdEyeOff className="text-2xl text-default-400 pointer-events-none" />
+      ) : (
+        <IoMdEye className="text-2xl text-default-400 pointer-events-none" />
+      )}
+    </button>
+  }
+  errorMessage="Passwords do not match"
+  isInvalid={isInvalidPasswordMatch}
+  label="Re-enter password"
+  type={isVisibleRepeated ? "text" : "password"}
+  value={repeatedPassword}
+  variant="underlined"
+  onChange={(e) => {
+    const value = e.target.value;
+    setRepeatedPassword(value);
+    setIsInvalidPasswordMatch(password !== value);
+  }}
+/>
       <Checkbox
         className="w-10/12 mb-12"
         classNames={{
           wrapper: "mr-6",
         }}
         color="default"
+        isSelected={isChecked}
+        onValueChange={setIsChecked}
       >
         <p className="text-sm">
           I’ve read and agree with Terms of Service and our Privacy Policy

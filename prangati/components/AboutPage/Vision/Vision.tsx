@@ -15,21 +15,21 @@ export default function Vision() {
       title: "Vision",
       image: <img alt="Wireless Headphone" src={imageVision.src} />,
       paragraph:
-        "Our vision is to revolutionize everyday life through cutting-edge technology, creating a world where innovation enhances every moment.",
+        "To redefine the future of footwear by merging style, comfort, and cutting-edge technology, empowering individuals to perform at their best in every step they take.",
       underline: true,
     },
     {
       title: "Innovation",
       image: <img alt="Wireless Headphone" src={imageInnovation.src} />,
       paragraph:
-        "We are committed to exploring the latest advancements and bringing high-quality gadgets that exceed user expectations.",
+        "Driven by a passion for excellence, we integrate advanced materials and smart design into every shoe, pushing the boundaries of performance and comfort for athletes and trendsetters alike.",
       underline: true,
     },
     {
       title: "Connection",
       image: <img alt="Wireless Headphone" src={imageConnection.src} />,
       paragraph:
-        "We believe in building a community around technology, encouraging users to share experiences and inspire each other.",
+        "We are dedicated to connecting people through their shared passion for movement, creating a community where performance meets lifestyle in every pair.",
       underline: false,
     },
   ];

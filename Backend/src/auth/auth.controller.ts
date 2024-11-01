@@ -9,6 +9,7 @@ import {
   Options,
   HttpStatus,
   HttpCode,
+  Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from '../dto/create-auth.dto';
@@ -33,7 +34,11 @@ export class AuthController {
   findAll() {
     return this.authService.findAll();
   }
-
+  @UseGuards(JwtAuthGuard)
+  @Get('check')
+  checkAuth(@Request() req) {
+    return { authorized: true, user: req.user };
+  }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.authService.findOne(+id);
