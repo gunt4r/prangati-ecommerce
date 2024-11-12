@@ -15,6 +15,9 @@
   margin-top: 2rem;
   display: flex;
   justify-content: center;
+  width: fit-content;
+  margin-right: auto;
+  margin-left: auto;
 }
 .section-nav__logo-link {
   text-decoration: none;

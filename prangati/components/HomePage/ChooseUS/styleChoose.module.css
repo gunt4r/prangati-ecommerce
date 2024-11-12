@@ -9,24 +9,26 @@
   margin-left: auto;
   justify-content: space-between;
   margin-bottom: 2rem;
+  padding-top: 3rem;
 }
 
 .section-choose__wrapper-left {
   background-image: url('../../../public/lampHomePage.png');
-  width: 400px;
+  width: 461px;
   height: 498px;
   position: relative;
   border-radius: 20px;
+  filter: grayscale(1);
 }
 .section-choose__left-text {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  top: 20px;
+  left: 20px;
   width: 50%;
   font-weight: 300;
   font-size: 1rem;
   line-height: 18px;
-  text-align: right;
+  text-align: left;
   text-transform: uppercase;
   color: #1e1e1e;
 }

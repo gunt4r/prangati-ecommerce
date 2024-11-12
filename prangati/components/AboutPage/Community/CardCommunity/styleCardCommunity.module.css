@@ -1,0 +1,47 @@
+.section-vision__card {
+    margin-top: 1rem;
+  }
+  .section-vision__card-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .section-vision__card-title {
+    font-weight: 100;
+    font-size: 2rem;
+    line-height: 133%;
+    text-transform: uppercase;
+    color: #000000;
+    margin-bottom: 0.5rem;
+    padding-left: 20px;
+  }
+  
+  .section-vision__card-text {
+    font-weight: 300;
+    font-size: 0.9rem;
+    line-height: 150%;
+    color: #363636;
+    width: 500px;
+    padding: 5px 20px;
+  }
+  .section-vision__card-left {
+    height: 115px;
+  }
+  .section-vision__card-image {
+    height: 115px;
+    display: flex;
+    margin-top: auto;
+  }
+  .section-vision__card-image img {
+    height: 100%;
+  }
+  .section-vision__card-underline {
+    background-color: #000000;
+    height: 2.5px;
+    width: 100%;
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  

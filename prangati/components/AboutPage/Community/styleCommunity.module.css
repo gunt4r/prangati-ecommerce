@@ -1,0 +1,32 @@
+.section-about__community {
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  width: 90%;
+  flex-direction: column;
+}
+.section-vision__wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-vision__wrapper-left {
+    height: 100%;
+    display: flex;
+    margin-bottom: auto;
+    width: 45%;
+  }
+  .section-vision__left-title {
+    font-weight: 200;
+    font-size: 3.5rem;
+    line-height: 116%;
+    text-transform: uppercase;
+    color: #262626;
+  }
+  .section-vision__wrapper-right {
+    width: 55%;
+    border-left: 1px solid #000000;
+    padding-left: 80px;
+  }
+  

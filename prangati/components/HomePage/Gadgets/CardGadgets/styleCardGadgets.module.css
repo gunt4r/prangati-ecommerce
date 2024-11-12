@@ -25,10 +25,5 @@
   cursor: pointer;
   margin-bottom: 2rem;
 }
-
-.image-container {
-    box-shadow: 0 10rem 3rem -1rem rgba(0, 0, 0, 0.20);
-    transition: box-shadow 0.3s ease;
-    width: 122px;
-    height: 147px;
-  }
+.image-container{
+width: 150px;}

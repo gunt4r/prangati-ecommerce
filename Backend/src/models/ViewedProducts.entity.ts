@@ -1,17 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
-import { User } from './User.entity';
-import { Product } from './Product.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('viewed_products')
 export class ViewedProducts {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => User, (user) => user.viewedProducts)
-  user: User;
+  @Column()
+  userUuid: string;
 
-  @ManyToOne(() => Product, { eager: true })
-  product: Product;
+  @Column()
+  productId: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   viewedAt: Date;

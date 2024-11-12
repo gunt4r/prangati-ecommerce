@@ -8,18 +8,18 @@ import CardGadgets from "./CardGadgets/CardGadgets";
 
 import { archivo, albertSans } from "@/config/fonts";
 import imageCamera from "@/public/homeCameraGadgets.png";
-import imageHeadphones from "@/public/homeHeadsetGadgets.png";
-import imagePhone from "@/public/homePhoneGadgets.png";
+import imageShoes from "@/public/homeHeadsetGadgets.svg";
+import imageShoe from "@/public/homePhoneGadgets.svg";
 
 export default function Gadgets() {
   const cardGadgets = [
     {
       title: "My New Wireless Headphone",
-      image: <img alt="Wireless Headphone" src={imageHeadphones.src} />,
+      image: <img alt="Wireless Headphone" src={imageShoes.src} />,
     },
     {
       title: "Most Viral Wireless Charger",
-      image: <img alt="Wireless Headphone" src={imagePhone.src} />,
+      image: <img alt="Wireless Headphone" src={imageShoe.src} />,
     },
   ];
 
@@ -81,7 +81,10 @@ export default function Gadgets() {
         <section className={classNames(style["section-gadgets__right"])}>
           <img
             alt=""
-            className={classNames(style["section-gadgets__right-camera"])}
+            className={classNames(
+              style["section-gadgets__right-camera"],
+              "grayscale",
+            )}
             src={imageCamera.src}
           />
           {cardGadgets.map((item, index) => {

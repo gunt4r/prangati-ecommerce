@@ -1,8 +1,15 @@
-// entities/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Cart } from './Cart.entity';
 import { Order } from './Order.entity';
-import { ViewedProducts } from './ViewedProducts.entity';
+import { PasswordResetToken } from './password-reset-token.entity';
+import { FailedRequest } from './failed-request.entity';
 
 @Entity('users')
 export class User {
@@ -42,6 +49,15 @@ export class User {
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
 
-  @OneToMany(() => ViewedProducts, (viewed) => viewed.user)
-  viewedProducts: ViewedProducts[];
+  @OneToMany(() => PasswordResetToken, (token) => token.user)
+  passwordResetTokens: PasswordResetToken[];
+
+  @OneToMany(() => FailedRequest, (request) => request.user)
+  failedRequests: FailedRequest[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

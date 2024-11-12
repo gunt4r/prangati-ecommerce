@@ -5,7 +5,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 
 import style from "./styleHeadingSection.module.css";
 
-import { oswald, poppins } from "@/config/fonts";
+import { oswald, poppins,archivo } from "@/config/fonts";
 
 export default function HeadingSection({
   textHeading,
@@ -26,7 +26,7 @@ export default function HeadingSection({
       <h5
         className={classNames(
           style["section-popular__title"],
-          oswald.className,
+          archivo.className,
         )}
       >
         {textHeading}

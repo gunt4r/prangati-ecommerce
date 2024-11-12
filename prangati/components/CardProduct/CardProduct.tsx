@@ -20,7 +20,10 @@ interface Product {
   price: number;
   images: string[];
 }
-export default function CardProduct({ product }: { product: Product }) {
+interface Link {
+  link: string,
+}
+export default function CardProduct({ product }: { product: Product },{link} : {link:Link}) {
   const dispatch = useDispatch();
   const descriptionProduct = product.description.substring(0, 10);
   const [isLiked, setIsLiked] = useState(false);
@@ -37,7 +40,10 @@ export default function CardProduct({ product }: { product: Product }) {
 
   return (
     <div className={classNames(style["section-card"])}>
-      <Link className={classNames(style["section-card__wrapper"])} href="/asda">
+      <Link
+        className={classNames(style["section-card__wrapper"])}
+        href={`/product/${product.id}`}
+      >
         <img
           alt=""
           className={classNames(style["section-card__image"])}
@@ -45,7 +51,10 @@ export default function CardProduct({ product }: { product: Product }) {
         />
       </Link>
       <hr className={classNames(style["section-card__line"])} />
-      <Link className={classNames(style["section-card__wrapper"])} href="/asda">
+      <Link
+        className={classNames(style["section-card__wrapper"])}
+        href={`/product/${product.id}`}
+      >
         <p
           className={classNames(
             style["section-card__title"],
@@ -58,7 +67,7 @@ export default function CardProduct({ product }: { product: Product }) {
       <div className={classNames(style["section-card__wrapper-details"])}>
         <Link
           className={classNames(style["section-card__wrapper"])}
-          href="/asda"
+          href={`/product/${product.id}`}
         >
           <p
             className={classNames(
@@ -71,7 +80,7 @@ export default function CardProduct({ product }: { product: Product }) {
         </Link>
         <Link
           className={classNames(style["section-card__wrapper"])}
-          href="/asda"
+          href={`/product/${product.id}`}
         >
           <p
             className={classNames(

@@ -1,14 +1,19 @@
-/* eslint-disable prettier/prettier */
-import { Archivo,Albert_Sans,Poppins,Oswald,Manrope } from "next/font/google";
+import {
+  Archivo,
+  Albert_Sans,
+  Poppins,
+  Oswald,
+  Manrope,
+  Montserrat
+} from "next/font/google";
 
-// ABLATION 
+// ABLATION
 
-export const archivo = Archivo({
+export const archivo = Montserrat({
   subsets: ["latin"],
   display: "swap",
   variable: "--Archivo",
 });
-
 
 export const poppins = Poppins({
   weight: "400",

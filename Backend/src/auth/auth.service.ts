@@ -1,29 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { CreateAuthDto } from '../dto/create-auth.dto';
 import { User } from 'src/models/User.entity';
-import { TypeOrmConfigService } from 'src/config/typeorm.config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthUserDto } from 'src/dto/auth-user.dto';
-import { Repository } from 'typeorm';
-@Injectable()
-export class AuthService {
-  private userRepository: Repository<User>;
 
+@Injectable()
+export class AuthService implements OnModuleInit {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly typeOrmConfigService: TypeOrmConfigService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async onModuleInit() {
-    const dataSource = this.typeOrmConfigService.createDataSource();
-    await dataSource.initialize();
-    this.userRepository = dataSource.getRepository(User);
-  }
+  async onModuleInit() {}
 
-  async signIn(CreateAuthDto: CreateAuthDto) {
+  async signIn(createAuthDto: CreateAuthDto) {
     try {
-      const { fullName, email, password } = CreateAuthDto;
+      const { fullName, email, password } = createAuthDto;
 
       const existingUser = await this.userRepository.findOne({
         where: { email },
@@ -34,38 +30,39 @@ export class AuthService {
       }
 
       if (!fullName || !email || !password) {
-        throw new Error('Full name,email and password are required');
+        throw new Error('Full name, email and password are required');
       }
+
       const firstName = fullName.split(' ')[0];
       const lastName = fullName.split(' ')[1];
       const saltRounds = 10;
-      const salt = await bcrypt.hash(password, saltRounds);
-      const hashedPassword = await bcrypt.hash(password, salt);
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
       const user = new User();
       user.firstName = firstName;
       user.lastName = lastName;
       user.password = hashedPassword;
       user.email = email;
-      const savedUser = await this.userRepository.manager.save(user);
+      const savedUser = await this.userRepository.save(user);
       const payload = { email: savedUser.email, sub: savedUser.id };
       const token = this.jwtService.sign(payload);
 
       return { ...savedUser, token };
     } catch (error) {
       console.error(error);
+      throw new Error('Error during sign in');
     }
   }
 
-  async logIn(AuthUserDto: AuthUserDto) {
+  async logIn(authUserDto: AuthUserDto) {
     try {
-      const { email, password } = AuthUserDto;
+      const { email, password } = authUserDto;
       const user = await this.userRepository.findOne({
         where: { email },
       });
       if (!user) {
         throw new Error('You are not registered');
       }
-      const validPass = bcrypt.compare(password, user.password);
+      const validPass = await bcrypt.compare(password, user.password);
 
       if (!validPass) {
         throw new Error('Incorrect email or password');
@@ -76,11 +73,12 @@ export class AuthService {
       return { ...user, token };
     } catch (error) {
       console.error(error);
+      throw new Error('Error during log in');
     }
   }
+
   async findAll() {
-    const allUsers = await this.userRepository.find();
-    return allUsers;
+    return await this.userRepository.find();
   }
 
   findOne(id: number) {

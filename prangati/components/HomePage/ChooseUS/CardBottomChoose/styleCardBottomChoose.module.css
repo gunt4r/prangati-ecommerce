@@ -7,7 +7,7 @@
 
 .section-card__bottom-title {
   font-weight: 200;
-  font-size: 2.3rem;
+  font-size: 1.9rem;
   text-transform: uppercase;
   color: #242424;
   height: 100px;
@@ -15,7 +15,7 @@
 }
 .section-card__bottom-description {
   font-weight: 300;
-  font-size: 1rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   color: #242424;
   height: 100px;

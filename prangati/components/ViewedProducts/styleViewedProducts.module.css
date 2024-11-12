@@ -1,0 +1,25 @@
+.viewedProductsSection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto; /* Центрируем секцию */
+  }
+  
+  .viewedProductsSection > * {
+    flex: 1 1 calc(30% - 16px); /* Три колонки с учетом отступа */
+    margin: 8px; /* Отступ между карточками */
+  }
+  
+  @media (max-width: 1024px) {
+    .viewedProductsSection > * {
+      flex: 1 1 calc(50% - 16px); /* Две колонки на средней ширине */
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .viewedProductsSection > * {
+      flex: 1 1 100%; /* Одна колонка на узких экранах */
+    }
+  }
+  
