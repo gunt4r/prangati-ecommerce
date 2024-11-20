@@ -1,34 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { PasswordResetService } from './password-reset.service';
-import { CreatePasswordResetDto } from './dto/create-password-reset.dto';
-import { UpdatePasswordResetDto } from './dto/update-password-reset.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Controller('password-reset')
 export class PasswordResetController {
-  constructor(private readonly passwordResetService: PasswordResetService) {}
+  constructor(
+    private readonly passwordResetService: PasswordResetService,
+    private readonly mailService: MailService,
+  ) {}
 
-  @Post()
-  create(@Body() createPasswordResetDto: CreatePasswordResetDto) {
-    return this.passwordResetService.create(createPasswordResetDto);
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    await this.passwordResetService.sendPasswordResetEmail(email);
+    return { message: 'Password reset link has been sent to your email' };
   }
 
-  @Get()
-  findAll() {
-    return this.passwordResetService.findAll();
-  }
+  @Post('reset-password')
+  async resetPassword(
+    @Body('token') token: string,
+    @Body('newPassword') newPassword: string,
+  ) {
+    if (!newPassword || newPassword.length < 6) {
+      throw new BadRequestException('Password must be at least 6 characters');
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.passwordResetService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePasswordResetDto: UpdatePasswordResetDto) {
-    return this.passwordResetService.update(+id, updatePasswordResetDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.passwordResetService.remove(+id);
+    await this.passwordResetService.resetPassword(token, newPassword);
+    return { message: 'Password has been successfully reset' };
   }
 }

@@ -30,7 +30,7 @@ export default function NewsLetter() {
       subject = "Thank You for Subscribing to Our Newsletter!";
       body =
         "Get Ready! Exciting News, Exclusive Offers, and the Latest Updates Are Coming to Your Inbox!";
-    } else if (Cookies.get("languagea") == "Ru") {
+    } else if (Cookies.get("language") == "Ru") {
       subject = "Спасибо за подписку на нашу рассылку!";
       body =
         "Готовьтесь! Увлекательные новости, эксклюзивные предложения и свежие обновления ждут вас в почте!";
@@ -45,7 +45,7 @@ export default function NewsLetter() {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const response = await axios.post(
-        "http://localhost:3000/newsletter/send",
+        `${process.env.NEXT_PUBLIC_SERVER}newsletter/send`,
         data,
       );
     } catch (error) {

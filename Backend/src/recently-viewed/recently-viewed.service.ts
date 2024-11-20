@@ -34,11 +34,12 @@ export class RecentlyViewedService {
     userUuid: string,
     limit: number = 3,
   ): Promise<ViewedProducts[]> {
-    return this.viewedProductsRepository.find({
+    const returnedProducts = this.viewedProductsRepository.find({
       where: { userUuid },
       order: { viewedAt: 'DESC' },
       take: limit,
     });
+    return returnedProducts ? returnedProducts : [];
   }
   async getAll() {
     return await this.viewedProductsRepository.find();

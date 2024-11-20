@@ -1,0 +1,16 @@
+.section-news__input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.section-news__input {
+  margin-right: 15px;
+}
+.section-news__input-button {
+  background-color: #565656;
+  color: #fcfcfc;
+  transform: translateY(-4px);
+}

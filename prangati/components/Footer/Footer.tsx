@@ -188,7 +188,7 @@ export default function Footer() {
             poppins.className,
           )}
         >
-          ©2024 HiTech
+          ©2024 Prangati
         </p>
       </div>
     </footer>

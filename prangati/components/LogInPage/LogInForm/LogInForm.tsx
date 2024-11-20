@@ -152,7 +152,7 @@ export default function LogInForm() {
             style["section-login__bottom-forgot"],
             poppins.className,
           )}
-          href="/"
+          href="/forgot-password"
         >
           Forgot password?
         </Link>

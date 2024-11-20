@@ -20,10 +20,8 @@ interface Product {
   price: number;
   images: string[];
 }
-interface Link {
-  link: string,
-}
-export default function CardProduct({ product }: { product: Product },{link} : {link:Link}) {
+
+export default function CardProduct({ product }: { product: Product }) {
   const dispatch = useDispatch();
   const descriptionProduct = product.description.substring(0, 10);
   const [isLiked, setIsLiked] = useState(false);

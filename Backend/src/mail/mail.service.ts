@@ -33,7 +33,7 @@ export class MailService {
     }
   }
   async sendEmailForgotPassword(to: string, token: string) {
-    const resetUrl = `https://your-app-url.com/password-reset?token=${token}`;
+    const resetUrl = `${process.env.PUBLIC_SERVER}password-reset?token=${token}`;
     const mailOptions = {
       from: `Prangati shop ${process.env.MAIL_USER}`,
       to,
