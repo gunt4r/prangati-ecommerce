@@ -1,27 +1,27 @@
-'use client';
-import axios from 'axios';
-import classNames from 'classnames';
-import { Checkbox, Input } from '@nextui-org/react';
-import { useMemo, useState } from 'react';
-import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
-import { FaGoogle } from 'react-icons/fa';
-import { Button } from '@nextui-org/button';
-import { Link } from '@nextui-org/link';
-import { useRouter } from 'next/navigation';
-import toast, { Toaster } from 'react-hot-toast';
+"use client";
+import axios from "axios";
+import classNames from "classnames";
+import { Checkbox, Input } from "@nextui-org/react";
+import { useMemo, useState } from "react";
+import { IoMdEyeOff, IoMdEye } from "react-icons/io";
+import { FaGoogle } from "react-icons/fa";
+import { Button } from "@nextui-org/button";
+import { Link } from "@nextui-org/link";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
-import style from './styleSignForm.module.css';
+import style from "./styleSignForm.module.css";
 
-import { poppins } from '@/config/fonts';
+import { poppins } from "@/config/fonts";
 
 export default function SignForm() {
   const router = useRouter();
-  const [valueFullName, setValueFullname] = useState('');
-  const [valueEmail, setValueEmail] = useState('');
+  const [valueFullName, setValueFullname] = useState("");
+  const [valueEmail, setValueEmail] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isVisibleRepeated, setIsVisibleRepeated] = useState(false);
-  const [password, setPassword] = useState('');
-  const [repeatedPassword, setRepeatedPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [repeatedPassword, setRepeatedPassword] = useState("");
   const [isInvalidFullName, setIsInvalidFullName] = useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -34,26 +34,27 @@ export default function SignForm() {
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
 
   const isInvalidEmail = useMemo(() => {
-    return valueEmail !== '' && !validateEmail(valueEmail);
+    return valueEmail !== "" && !validateEmail(valueEmail);
   }, [valueEmail]);
 
   const validateFullName = (value: string) => {
-    return value.trim().split(' ').length === 2;
+    return value.trim().split(" ").length === 2;
   };
 
   const validatePassword = (value: string) => {
     const hasValidLength = value.length >= 8 && value.length <= 30;
     const hasNumber = /\d/.test(value);
     const hasUpperCase = /[A-Z]/.test(value);
+
     return hasValidLength && hasNumber && hasUpperCase;
   };
   const isInvalidPasswordCriteria = useMemo(() => {
-    return password !== '' && !validatePassword(password);
+    return password !== "" && !validatePassword(password);
   }, [password]);
 
   const handleSubmit = async () => {
     if (!valueFullName || !valueEmail || !password || !repeatedPassword) {
-      toast.error('All fields are required.');
+      toast.error("All fields are required.");
 
       return;
     }
@@ -66,9 +67,9 @@ export default function SignForm() {
     ) {
       setIsInvalidFullName(!validateFullName(valueFullName));
       setIsInvalidPassword(
-        password !== repeatedPassword || isInvalidPasswordCriteria
+        password !== repeatedPassword || isInvalidPasswordCriteria,
       );
-      toast.error('Please check your inputs.');
+      toast.error("Please check your inputs.");
 
       return;
     }
@@ -77,53 +78,54 @@ export default function SignForm() {
     setIsInvalidPasswordMatch(password !== repeatedPassword);
 
     if (isInvalidPassword || isInvalidPasswordMatch) {
-      toast.error('Please check your password requirements.');
+      toast.error("Please check your password requirements.");
+
       return;
     }
     if (!isChecked) {
-      toast.error('You have to check the checkbox');
+      toast.error("You have to check the checkbox");
 
       return;
     }
     try {
       const response = await axios.post(
-        process.env.NEXT_PUBLIC_SERVER + 'auth/register',
+        process.env.NEXT_PUBLIC_SERVER + "auth/register",
         {
           fullName: valueFullName,
           email: valueEmail,
           password: password,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (response.status == 201) {
-        toast.success('Registration successful!');
+        toast.success("Registration successful!");
         const { token } = response.data;
 
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
         setTimeout(() => {
-          router.push('/');
+          router.push("/");
         }, 1500);
       } else {
-        toast.error('Registration failed. Please try again.');
+        toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
-      toast.error('Registration failed. Please try again.');
+      toast.error("Registration failed. Please try again.");
     }
   };
 
   return (
-    <section className={classNames(style['section-sign__form'])}>
+    <section className={classNames(style["section-sign__form"])}>
       <Toaster position="bottom-right" />
       <p
-        className={classNames(style['section-sign__title'], poppins.className)}
+        className={classNames(style["section-sign__title"], poppins.className)}
       >
         Sign Up
       </p>
       <p
         className={classNames(
-          style['section-sign__subtitle'],
-          poppins.className
+          style["section-sign__subtitle"],
+          poppins.className,
         )}
       >
         Please enter your details
@@ -131,7 +133,7 @@ export default function SignForm() {
       <Input
         className="w-10/12 mb-6 hover:duration-1000"
         classNames={{
-          inputWrapper: 'border-default-500 hover:border-default-300',
+          inputWrapper: "border-default-500 hover:border-default-300",
         }}
         errorMessage="Please enter your full name"
         isInvalid={isInvalidFullName}
@@ -141,11 +143,11 @@ export default function SignForm() {
         value={valueFullName}
         variant="underlined"
         onChange={(e) => setValueFullname(e.target.value)}
-      />{' '}
+      />{" "}
       <Input
         className="w-10/12 mb-6 hover:duration-1000"
         classNames={{
-          inputWrapper: 'border-default-500 hover:border-default-300',
+          inputWrapper: "border-default-500 hover:border-default-300",
         }}
         errorMessage="Please enter a valid email"
         isInvalid={isInvalidEmail}
@@ -160,7 +162,7 @@ export default function SignForm() {
       <Input
         className="w-10/12 mb-6 hover:duration-1000"
         classNames={{
-          inputWrapper: 'border-default-500 hover:border-default-300',
+          inputWrapper: "border-default-500 hover:border-default-300",
         }}
         endContent={
           <button
@@ -179,7 +181,7 @@ export default function SignForm() {
         errorMessage="Password must be 8-30 characters long, contain a number, and an uppercase letter"
         isInvalid={isInvalidPasswordCriteria}
         label="Password"
-        type={isVisible ? 'text' : 'password'}
+        type={isVisible ? "text" : "password"}
         value={password}
         variant="underlined"
         onChange={(e) => setPassword(e.target.value)}
@@ -188,7 +190,7 @@ export default function SignForm() {
       <Input
         className="w-10/12 mb-6 hover:duration-1000"
         classNames={{
-          inputWrapper: 'border-default-500 hover:border-default-300',
+          inputWrapper: "border-default-500 hover:border-default-300",
         }}
         endContent={
           <button
@@ -207,11 +209,12 @@ export default function SignForm() {
         errorMessage="Passwords do not match"
         isInvalid={isInvalidPasswordMatch}
         label="Re-enter password"
-        type={isVisibleRepeated ? 'text' : 'password'}
+        type={isVisibleRepeated ? "text" : "password"}
         value={repeatedPassword}
         variant="underlined"
         onChange={(e) => {
           const value = e.target.value;
+
           setRepeatedPassword(value);
           setIsInvalidPasswordMatch(password !== value);
         }}
@@ -219,7 +222,7 @@ export default function SignForm() {
       <Checkbox
         className="w-10/12 mb-12"
         classNames={{
-          wrapper: 'mr-6',
+          wrapper: "mr-6",
         }}
         color="default"
         isSelected={isChecked}
@@ -245,7 +248,7 @@ export default function SignForm() {
         <FaGoogle /> Sign up with Google
       </Button>
       <p className="mb-6">
-        Already have an account?{' '}
+        Already have an account?{" "}
         <Link
           className="ml-4 text-black font-bold cursor-pointer"
           href="/logIn"

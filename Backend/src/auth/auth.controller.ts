@@ -15,6 +15,8 @@ import { AuthService } from './auth.service';
 import { CreateAuthDto } from '../dto/create-auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { AuthUserDto } from 'src/dto/auth-user.dto';
+import { ThrottlerGuard } from '@nestjs/throttler';
+@UseGuards(ThrottlerGuard)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

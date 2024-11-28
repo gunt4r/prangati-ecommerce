@@ -8,6 +8,7 @@ import { User } from '../models/User.entity';
 
 @Injectable()
 export class PasswordResetService {
+  TOKEN_EXPIRATION_MINUTES: number;
   constructor(
     @InjectRepository(PasswordResetToken)
     private readonly passwordResetTokenRepository: Repository<PasswordResetToken>,
@@ -16,10 +17,36 @@ export class PasswordResetService {
     private readonly mailService: MailService,
   ) {}
 
-  async createPasswordResetToken(email: string): Promise<string> {
+  private async isTokenRequestAllowed(email: string): Promise<boolean> {
+    const recentToken = await this.passwordResetTokenRepository.findOne({
+      where: { user: { email } },
+      order: { createdAt: 'DESC' },
+    });
+
+    if (recentToken) {
+      const now = new Date();
+      const diff =
+        (now.getTime() - recentToken.createdAt.getTime()) / 1000 / 60;
+      return diff > this.TOKEN_EXPIRATION_MINUTES;
+    }
+
+    return true;
+  }
+
+  async sendPasswordResetEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
-    if (!user)
+
+    if (!user) {
       throw new BadRequestException('User with this email does not exist.');
+    }
+
+    const isAllowed = await this.isTokenRequestAllowed(email);
+
+    if (!isAllowed) {
+      throw new BadRequestException(
+        'You can request a password reset only once every 20 minutes.',
+      );
+    }
 
     const token = await bcrypt.hash(user.email + Date.now().toString(), 10);
     const passwordResetToken = this.passwordResetTokenRepository.create({
@@ -29,12 +56,7 @@ export class PasswordResetService {
     });
 
     await this.passwordResetTokenRepository.save(passwordResetToken);
-    return token;
-  }
-
-  async sendPasswordResetEmail(email: string) {
-    const token = await this.createPasswordResetToken(email);
-    await this.mailService.sendEmailForgotPassword(email, token);
+    await this.mailService.sendResetPasswordLink(email, token);
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
@@ -47,15 +69,12 @@ export class PasswordResetService {
       throw new BadRequestException('Invalid or expired token');
     }
 
-    // Хэшируем новый пароль
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    // Обновляем пароль пользователя
     const user = resetToken.user;
+
     user.password = hashedPassword;
     await this.userRepository.save(user);
 
-    // Удаляем токен после успешного сброса пароля
     await this.passwordResetTokenRepository.delete(resetToken.id);
   }
 }

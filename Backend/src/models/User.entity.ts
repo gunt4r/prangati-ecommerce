@@ -9,7 +9,6 @@ import {
 import { Cart } from './Cart.entity';
 import { Order } from './Order.entity';
 import { PasswordResetToken } from './password-reset-token.entity';
-import { FailedRequest } from './failed-request.entity';
 
 @Entity('users')
 export class User {
@@ -52,12 +51,10 @@ export class User {
   @OneToMany(() => PasswordResetToken, (token) => token.user)
   passwordResetTokens: PasswordResetToken[];
 
-  @OneToMany(() => FailedRequest, (request) => request.user)
-  failedRequests: FailedRequest[];
-
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+  failedRequests: any;
 }

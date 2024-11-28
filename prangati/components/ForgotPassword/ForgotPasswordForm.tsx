@@ -15,8 +15,6 @@ import { archivo, poppins } from "@/config/fonts";
 import imageKey from "@/public/keyForgotPassword.svg";
 const ForgotPasswordForm: React.FC = () => {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
   const handleEmail = (data: string) => {
     setEmail(data);
   };
@@ -28,19 +26,15 @@ const ForgotPasswordForm: React.FC = () => {
     }
 
     e.preventDefault();
-    setMessage("");
-    setError("");
 
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER}password-reset/forgot-password`,
         { email },
       );
-      console.log(response.data.message)
-      setMessage(response.data.message);
-      toast.error(response.data.message);
+
+      toast.success(response.data.message || "Link has been sent to your emal");
     } catch (err: any) {
-      setError(err.response?.data?.message || "Error sending reset email");
       toast.error(err.response?.data?.message || "Error sending reset email");
     }
   };

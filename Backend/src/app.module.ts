@@ -15,6 +15,7 @@ import { TypeOrmConfigService } from './config/typeorm.config';
 import { RecentlyViewedModule } from './recently-viewed/recently-viewed.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordResetModule } from './password-reset/password-reset.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -22,6 +23,12 @@ import { PasswordResetModule } from './password-reset/password-reset.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
