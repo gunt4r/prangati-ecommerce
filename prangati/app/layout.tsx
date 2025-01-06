@@ -1,12 +1,17 @@
 /* eslint-disable prettier/prettier */
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
+import dynamic from 'next/dynamic';
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { archivo} from "@/config/fonts.ts";
+
 import "@theme-toggles/react/css/Around.css"
+
+const CookieConsentModal = dynamic(() => import('@/components/CookieConsentModal/CookieConsentModal'), { ssr: true });
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -36,6 +41,7 @@ export default function RootLayout({
       <body className={archivo.className}>
         <Providers>
           <main>{children}</main>
+          <CookieConsentModal />
         </Providers>
       </body>
     </html>

@@ -11,7 +11,7 @@ import style from "./styleWishListBody.module.css";
 import { RootState } from "@/store";
 import { poppins } from "@/config/fonts";
 import TitleHeader from "@/utils/TitleHeader/TitleHeader";
-
+import { Product } from "@/config/interfaces";
 const WishListBody = () => {
   const wishlist = useSelector((state: RootState) => state.wishlist.items);
 
@@ -45,8 +45,8 @@ const WishListBody = () => {
         </div>
       ) : (
         <div className={classNames(style["section-wish__cards"])}>
-          {wishlist.map((item, index) => (
-            <CardProduct key={index} product={item} />
+          {wishlist.map((item: Product) => (
+            <CardProduct key={item.id} product={item} />
           ))}
         </div>
       )}

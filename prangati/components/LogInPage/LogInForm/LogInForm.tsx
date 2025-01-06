@@ -9,6 +9,15 @@ import { Button } from "@nextui-org/button";
 import { Link } from "@nextui-org/link";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
+import React from "react";
 
 import style from "./styleLogInForm.module.css";
 
@@ -21,7 +30,7 @@ export default function LogInForm() {
   const [password, setPassword] = useState("");
   const [isSelected, setIsSelected] = useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const validateEmail = (value: string) =>
@@ -145,7 +154,15 @@ export default function LogInForm() {
           isSelected={isSelected}
           onValueChange={setIsSelected}
         >
-          <p className="text-sm">I Agree to Privacy Policy</p>
+          <p className="text-sm">
+            I Agree to{" "}
+            <Button
+              className="bg-transparent border-none py-0 px-4 pl-3.5"
+              onPress={onOpen}
+            >
+              <p className={style["section-login__privacy"]}>Privacy Policy</p>
+            </Button>
+          </p>
         </Checkbox>
         <Link
           className={classNames(
@@ -180,6 +197,89 @@ export default function LogInForm() {
           Sign up
         </Link>
       </p>
+      <Modal
+        backdrop="blur"
+        isOpen={isOpen}
+        scrollBehavior="inside"
+        size="2xl"
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Modal Title
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  At Prangati, we value and respect the privacy of our visitors
+                  and customers. This Privacy Policy explains how we collect,
+                  use, and protect your personal information when you visit our
+                  website and make purchases. 1. Information We Collect We
+                  collect the following types of information when you visit our
+                  website: Personal Information: This includes your name, email
+                  address, shipping address, phone number, and payment
+                  information. We collect this information when you make a
+                  purchase, subscribe to our newsletter, or create an account.
+                  Non-Personal Information: This includes data such as your IP
+                  address, browser type, device type, and browsing behavior on
+                  our website. We collect this automatically through cookies and
+                  other tracking technologies. 2. How We Use Your Information We
+                  use your information for the following purposes: To process
+                  and fulfill orders, including shipping and customer support.
+                  To send promotional emails, newsletters, or product updates,
+                  if you have opted in. To improve our website, products, and
+                  services by analyzing customer behavior and preferences. To
+                  comply with legal obligations and resolve disputes. 3. Sharing
+                  Your Information We do not sell, rent, or trade your personal
+                  information to third parties. However, we may share your
+                  information with trusted third-party service providers who
+                  help us run our business, such as: Payment processors (e.g.,
+                  credit card companies) Shipping companies (e.g., FedEx, UPS)
+                  Email marketing providers Analytics services (e.g., Google
+                  Analytics) These service providers have access to your
+                  information only as needed to perform their services and are
+                  obligated to protect your data. 4. Cookies and Tracking
+                  Technologies We use cookies to enhance your browsing
+                  experience, analyze website usage, and personalize content.
+                  You can control cookie settings in your browser, but please
+                  note that disabling cookies may affect your ability to use
+                  some features of our website. 5. Data Security We implement
+                  security measures to protect your personal information from
+                  unauthorized access, alteration, or disclosure. However, no
+                  data transmission over the internet is completely secure, so
+                  we cannot guarantee 100% security. 6. Your Rights Depending on
+                  your location and applicable laws, you may have the right to:
+                  Access and correct your personal data. Request the deletion of
+                  your personal data. Opt out of marketing communications. To
+                  exercise these rights, please contact us at email. 7.
+                  Third-Party Links Our website may contain links to external
+                  websites that are not operated by us. We are not responsible
+                  for the content or privacy practices of these third-party
+                  sites. 8. Children&apos;s Privacy Our website is not intended
+                  for children under the age of 13. We do not knowingly collect
+                  personal information from children. If we become aware that we
+                  have collected personal information from a child, we will take
+                  steps to delete that information. 9. Changes to This Privacy
+                  Policy We reserve the right to update or modify this Privacy
+                  Policy at any time. Any changes will be posted on this page
+                  with an updated effective date. We encourage you to review
+                  this policy periodically to stay informed about how we protect
+                  your information.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Action
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </section>
   );
 }

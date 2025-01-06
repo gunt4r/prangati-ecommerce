@@ -6,6 +6,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
 import style from "./styleCardProduct.module.css";
 
@@ -32,12 +33,25 @@ export default function CardProduct({ product }: { product: Product }) {
   };
 
   const handleToggleCart = () => {
+    if (isAddedCart) {
+      toast.success(`You successfully added ${product.title} to the cart`);
+    } else {
+      toast.error(`You removed ${product.title} from the cart`);
+    }
     setisAddedCart((prev) => !prev);
     dispatch(addItemToCart(product));
   };
 
   return (
     <div className={classNames(style["section-card"])}>
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            fontSize: "15px",
+          },
+        }}
+      />
       <Link
         className={classNames(style["section-card__wrapper"])}
         href={`/product/${product.id}`}

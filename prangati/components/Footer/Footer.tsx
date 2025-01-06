@@ -79,7 +79,7 @@ export default function Footer() {
                   poppins.className,
                 )}
               >
-                Gadgets
+                Shoes
               </h4>
             </Link>{" "}
             <ul>
@@ -89,11 +89,11 @@ export default function Footer() {
               </Link>
               <Link href="/">
                 {" "}
-                <li className={classNames(poppins.className)}>Laptops</li>
+                <li className={classNames(poppins.className)}>Nike</li>
               </Link>
               <Link href="/">
                 {" "}
-                <li className={classNames(poppins.className)}>Phones</li>
+                <li className={classNames(poppins.className)}>Adidas</li>
               </Link>{" "}
             </ul>
           </div>

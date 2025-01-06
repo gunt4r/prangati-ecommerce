@@ -4,12 +4,12 @@ import {
   Poppins,
   Oswald,
   Manrope,
-  Montserrat
+  // Montserrat
 } from "next/font/google";
 
 // ABLATION
 
-export const archivo = Montserrat({
+export const archivo = Archivo({
   subsets: ["latin"],
   display: "swap",
   variable: "--Archivo",

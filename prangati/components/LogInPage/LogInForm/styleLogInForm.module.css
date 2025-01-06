@@ -31,3 +31,9 @@
   line-height: 18px;
   color: #515151;
 }
+.section-login__privacy {
+  color: #754c50;
+  text-decoration: underline;
+  text-decoration-color: #754c50;
+  font-weight: 600;
+}

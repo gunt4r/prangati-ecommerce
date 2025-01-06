@@ -1,3 +1,5 @@
 {
-    "search" : "Search"
+  "search": "Search",
+  "cookieConsentTitle": "We use cookies",
+  "cookieConsentSubtitle": "We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. By continuing to use our site, you agree to our use of cookies. For more information, please review our <linkToServices><underline>Cookie Policy.</underline></linkToServices>"
 }
