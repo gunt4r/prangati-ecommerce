@@ -40,6 +40,17 @@ export default function LogInForm() {
     return valueEmail !== "" && !validateEmail(valueEmail);
   }, [valueEmail]);
 
+  const validatePassword = (value: string) => {
+    const hasValidLength = value.length >= 8 && value.length <= 30;
+    const hasNumber = /\d/.test(value);
+    const hasUpperCase = /[A-Z]/.test(value);
+
+    return hasValidLength && hasNumber && hasUpperCase;
+  };
+  const isInvalidPasswordCriteria = useMemo(() => {
+    return password !== "" && !validatePassword(password);
+  }, [password]);
+
   const handleSubmit = async () => {
     if (!valueEmail || !password) {
       toast.error("All fields are required.");
@@ -47,7 +58,8 @@ export default function LogInForm() {
       return;
     }
 
-    if (isInvalidEmail) {
+    if (isInvalidEmail || isInvalidPasswordCriteria) {
+      setIsInvalidPassword(isInvalidPasswordCriteria);
       toast.error("Please check your inputs.");
 
       return;
@@ -135,7 +147,7 @@ export default function LogInForm() {
             )}
           </button>
         }
-        errorMessage="Passwords do not match"
+        errorMessage="Password is incorrect"
         isInvalid={isInvalidPassword}
         label="Password"
         type={isVisible ? "text" : "password"}
@@ -155,9 +167,9 @@ export default function LogInForm() {
           onValueChange={setIsSelected}
         >
           <p className="text-sm">
-            I Agree to{" "}
+            I’ve read and agree with
             <Button
-              className="bg-transparent border-none py-0 px-4 pl-3.5"
+              className="bg-transparent border-none py-0 px-4 pl-2.5"
               onPress={onOpen}
             >
               <p className={style["section-login__privacy"]}>Privacy Policy</p>
@@ -201,79 +213,124 @@ export default function LogInForm() {
         backdrop="blur"
         isOpen={isOpen}
         scrollBehavior="inside"
-        size="2xl"
+        size="5xl"
         onOpenChange={onOpenChange}
       >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+              <ModalHeader className="flex items-center flex-row justify-center gap-1">
+                <p className="mr-auto">PRANGATI</p>
+                <p
+                  className={classNames(
+                    style["section-login__form-modal-title"],
+                    "w-3/6 mx-auto",
+                    poppins.className,
+                  )}
+                >
+                  Privacy Policy
+                </p>
               </ModalHeader>
               <ModalBody>
-                <p>
+                <p
+                  className={classNames(
+                    style["section-login__form-modal-body"],
+                    poppins.className,
+                  )}
+                >
                   At Prangati, we value and respect the privacy of our visitors
                   and customers. This Privacy Policy explains how we collect,
                   use, and protect your personal information when you visit our
-                  website and make purchases. 1. Information We Collect We
-                  collect the following types of information when you visit our
-                  website: Personal Information: This includes your name, email
-                  address, shipping address, phone number, and payment
-                  information. We collect this information when you make a
-                  purchase, subscribe to our newsletter, or create an account.
-                  Non-Personal Information: This includes data such as your IP
-                  address, browser type, device type, and browsing behavior on
-                  our website. We collect this automatically through cookies and
-                  other tracking technologies. 2. How We Use Your Information We
-                  use your information for the following purposes: To process
-                  and fulfill orders, including shipping and customer support.
-                  To send promotional emails, newsletters, or product updates,
-                  if you have opted in. To improve our website, products, and
-                  services by analyzing customer behavior and preferences. To
-                  comply with legal obligations and resolve disputes. 3. Sharing
-                  Your Information We do not sell, rent, or trade your personal
-                  information to third parties. However, we may share your
-                  information with trusted third-party service providers who
-                  help us run our business, such as: Payment processors (e.g.,
-                  credit card companies) Shipping companies (e.g., FedEx, UPS)
-                  Email marketing providers Analytics services (e.g., Google
-                  Analytics) These service providers have access to your
-                  information only as needed to perform their services and are
-                  obligated to protect your data. 4. Cookies and Tracking
-                  Technologies We use cookies to enhance your browsing
+                  website and make purchases. <br /> <br /> 1. Information We
+                  Collect <br /> We collect the following types of information
+                  when you visit our website: <br />{" "}
+                  <li>
+                    Personal Information: This includes your name, email
+                    address, shipping address, phone number, and payment
+                    information. We collect this information when you make a
+                    purchase, subscribe to our newsletter, or create an account.
+                  </li>
+                  <li>
+                    Non-Personal Information: This includes data such as your IP
+                    address, browser type, device type, and browsing behavior on
+                    our website. We collect this automatically through cookies
+                    and other tracking technologies.
+                  </li>{" "}
+                  <br /> <br /> 2. How We Use Your Information <br /> <br /> We
+                  use your information for the following purposes: <br />{" "}
+                  <li>
+                    To process and fulfill orders, including shipping and
+                    customer support.
+                  </li>
+                  <li>
+                    To send promotional emails, newsletters, or product updates,
+                    if you have opted in.
+                  </li>{" "}
+                  <li>
+                    To improve our website, products, and services by analyzing
+                    customer behavior and preferences.
+                  </li>{" "}
+                  <li>
+                    To comply with legal obligations and resolve disputes.
+                  </li>{" "}
+                  <br /> <br /> 3. Sharing Your Information <br /> We do not
+                  sell, rent, or trade your personal information to third
+                  parties. However, we may share your information with trusted
+                  third-party service providers who help us run our business,
+                  such as: <br />{" "}
+                  <li>Payment processors (e.g., credit card companies)</li>{" "}
+                  <li>Shipping companies (e.g., FedEx, UPS)</li>
+                  <li>Email marketing providers </li>{" "}
+                  <li> Analytics services (e.g., Google Analytics)</li> These
+                  service providers have access to your information only as
+                  needed to perform their services and are obligated to protect
+                  your data. <br /> <br /> 4. Cookies and Tracking Technologies{" "}
+                  <br /> <br /> We use cookies to enhance your browsing
                   experience, analyze website usage, and personalize content.
                   You can control cookie settings in your browser, but please
                   note that disabling cookies may affect your ability to use
-                  some features of our website. 5. Data Security We implement
-                  security measures to protect your personal information from
-                  unauthorized access, alteration, or disclosure. However, no
-                  data transmission over the internet is completely secure, so
-                  we cannot guarantee 100% security. 6. Your Rights Depending on
-                  your location and applicable laws, you may have the right to:
-                  Access and correct your personal data. Request the deletion of
-                  your personal data. Opt out of marketing communications. To
-                  exercise these rights, please contact us at email. 7.
-                  Third-Party Links Our website may contain links to external
-                  websites that are not operated by us. We are not responsible
-                  for the content or privacy practices of these third-party
-                  sites. 8. Children&apos;s Privacy Our website is not intended
-                  for children under the age of 13. We do not knowingly collect
+                  some features of our website. <br /> <br /> 5. Data Security{" "}
+                  <br /> We implement security measures to protect your personal
+                  information from unauthorized access, alteration, or
+                  disclosure. However, no data transmission over the internet is
+                  completely secure, so we cannot guarantee 100% security.{" "}
+                  <br /> <br /> 6. Your Rights <br /> Depending on your location
+                  and applicable laws, you may have the right to:
+                  <li>Access and correct your personal data.</li>{" "}
+                  <li> Request the deletion of your personal data.</li>{" "}
+                  <li>Opt out of marketing communications.</li>{" "}
+                  <li>To exercise these rights, please contact us at email.</li>{" "}
+                  <br /> <br /> 7. Third-Party Links <br /> Our website may
+                  contain links to external websites that are not operated by
+                  us. We are not responsible for the content or privacy
+                  practices of these third-party sites. <br /> <br /> 8.
+                  Children&apos;s Privacy <br /> Our website is not intended for
+                  children under the age of 13. We do not knowingly collect
                   personal information from children. If we become aware that we
                   have collected personal information from a child, we will take
-                  steps to delete that information. 9. Changes to This Privacy
-                  Policy We reserve the right to update or modify this Privacy
-                  Policy at any time. Any changes will be posted on this page
-                  with an updated effective date. We encourage you to review
-                  this policy periodically to stay informed about how we protect
-                  your information.
+                  steps to delete that information. <br /> <br /> 9. Changes to
+                  This Privacy Policy <br /> We reserve the right to update or
+                  modify this Privacy Policy at any time. Any changes will be
+                  posted on this page with an updated effective date. We
+                  encourage you to review this policy periodically to stay
+                  informed about how we protect your information.
                 </p>
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
+              <ModalFooter className="flex items-center flex-row justify-center">
+                <Button
+                  className={style["section-login__modal-button-accept"]}
+                  radius="full"
+                  onPress={onClose}
+                >
+                  Accept
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
+                <Button
+                  className={style["section-login__modal-button-decline"]}
+                  radius="full"
+                  variant="light"
+                  onPress={onClose}
+                >
+                  Decline
                 </Button>
               </ModalFooter>
             </>
