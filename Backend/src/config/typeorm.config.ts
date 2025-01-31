@@ -12,6 +12,11 @@ import { Cart } from '../models/Cart.entity';
 import { CartItem } from '../models/CartItem.entity';
 import { FailedRequest } from 'src/models/failed-request.entity';
 import { PasswordResetToken } from 'src/models/password-reset-token.entity';
+import { Category } from 'src/models/Category.entity';
+import { ProductColor } from 'src/models/Product_Colors.entity';
+import { ProductImage } from 'src/models/Product_Images.entity';
+import { ProductSize } from 'src/models/Product_Sizes.entity';
+import { Wishlist } from 'src/models/Wishlist.entity';
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
@@ -32,11 +37,16 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         Order,
         OrderItem,
         Product,
+        Wishlist,
         ViewedProducts,
         Cart,
         CartItem,
         FailedRequest,
         PasswordResetToken,
+        Category,
+        ProductColor,
+        ProductImage,
+        ProductSize,
       ],
     };
   }

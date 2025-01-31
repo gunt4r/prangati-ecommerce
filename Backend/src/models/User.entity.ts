@@ -9,7 +9,7 @@ import {
 import { Cart } from './Cart.entity';
 import { Order } from './Order.entity';
 import { PasswordResetToken } from './password-reset-token.entity';
-
+import { Wishlist } from './Wishlist.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -50,6 +50,9 @@ export class User {
 
   @OneToMany(() => PasswordResetToken, (token) => token.user)
   passwordResetTokens: PasswordResetToken[];
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.user)
+  wishlists: Wishlist[];
 
   @CreateDateColumn()
   created_at: Date;

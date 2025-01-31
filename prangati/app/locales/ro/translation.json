@@ -1,5 +1,7 @@
 {
     "search" : "Caută",
     "cookieConsentTitle" : "Noi folosim cookie",
-    "cookieConsentSubtitle" : "Utilizăm cookie-uri pentru a vă îmbunătăți experiența de navigare, pentru a analiza traficul pe site și pentru a personaliza conținutul. Continuând să utilizați site-ul nostru, sunteți de acord cu utilizarea de către noi a modulelor cookie. Pentru mai multe informații, vă rugăm să consultați Politica noastră privind cookie-urile."
+    "cookieConsentSubtitle" : "Utilizăm cookie-uri pentru a vă îmbunătăți experiența de navigare, pentru a analiza traficul pe site și pentru a personaliza conținutul. Continuând să utilizați site-ul nostru, sunteți de acord cu utilizarea de către noi a modulelor cookie. Pentru mai multe informații, vă rugăm să consultați Politica noastră privind cookie-urile.",
+    "cookieConsentAccept" : "Acceptați toate cookie-urile",
+    "cookieConsentDecline" : "Gestionați preferințele"
 }

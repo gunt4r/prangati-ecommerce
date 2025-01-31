@@ -1,17 +1,24 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import classNames from "classnames";
 import { useTranslation, Trans } from "react-i18next";
 import { Button } from "@nextui-org/button";
+import Cookies from "js-cookie";
 
 import styles from "./styleCookieConsent.module.css";
 
 import { useCookieConsent } from "@/Hooks/useCookieConsent";
 import { archivo, poppins } from "@/config/fonts";
 const CookieConsentModal: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { hasConsented, acceptCookies, declineCookies } = useCookieConsent();
+  const currentLanguage = Cookies.get("language");
 
+  useEffect(() => {
+    if (currentLanguage) {
+      i18n.changeLanguage(currentLanguage);
+    }
+  }, [currentLanguage]);
   if (hasConsented) return null;
 
   return (
@@ -65,7 +72,7 @@ const CookieConsentModal: React.FC = () => {
               size="lg"
               onClick={acceptCookies}
             >
-              Accept all cookies
+              {t('cookieConsentAccept')}
             </Button>
             <Button
               className={classNames(
@@ -76,8 +83,8 @@ const CookieConsentModal: React.FC = () => {
               size="lg"
               onClick={declineCookies}
             >
-              Manage Preferences{" "}
-            </Button>
+              {t('cookieConsentDecline')}
+              </Button>
           </div>
         </div>
       </div>

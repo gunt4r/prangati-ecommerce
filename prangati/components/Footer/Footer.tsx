@@ -188,7 +188,7 @@ export default function Footer() {
             poppins.className,
           )}
         >
-          ©2024 Prangati
+          ©{new Date().getFullYear()} Prangati
         </p>
       </div>
     </footer>

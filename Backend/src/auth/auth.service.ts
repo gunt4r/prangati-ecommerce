@@ -68,7 +68,11 @@ export class AuthService implements OnModuleInit {
         throw new Error('Incorrect email or password');
       }
 
-      const payload = { email: user.email, sub: user.id };
+      const payload = {
+        email: user.email,
+        sub: user.id,
+        isAdmin: user.isAdmin,
+      };
       const token = this.jwtService.sign(payload);
       return { ...user, token };
     } catch (error) {

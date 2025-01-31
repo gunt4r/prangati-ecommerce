@@ -16,6 +16,7 @@ import { CreateAuthDto } from '../dto/create-auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { AuthUserDto } from 'src/dto/auth-user.dto';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { AdminGuard } from 'src/admin/admin.guard';
 @UseGuards(ThrottlerGuard)
 @Controller('auth')
 export class AuthController {
@@ -32,7 +33,7 @@ export class AuthController {
     return this.authService.logIn(authUserDto);
   }
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   findAll() {
     return this.authService.findAll();
   }
@@ -45,7 +46,7 @@ export class AuthController {
   findOne(@Param('id') id: string) {
     return this.authService.findOne(+id);
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Delete('deleteAllEntities')
   removeAll() {
     return this.authService.removeAll();

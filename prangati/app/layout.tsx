@@ -9,8 +9,7 @@ import { siteConfig } from "@/config/site";
 import { archivo} from "@/config/fonts.ts";
 
 import "@theme-toggles/react/css/Around.css"
-
-const CookieConsentModal = dynamic(() => import('@/components/CookieConsentModal/CookieConsentModal'), { ssr: true });
+const CookieConsentModalWrapper = dynamic(() => import('@/components/CookieConsentModal/CookieConsentModalWrapper/CookieConsentModalWrapper'), { ssr: false });
 
 export const metadata: Metadata = {
   title: {
@@ -41,7 +40,7 @@ export default function RootLayout({
       <body className={archivo.className}>
         <Providers>
           <main>{children}</main>
-          <CookieConsentModal />
+          <CookieConsentModalWrapper />
         </Providers>
       </body>
     </html>

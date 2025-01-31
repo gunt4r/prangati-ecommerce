@@ -34,9 +34,9 @@ export default function CardProduct({ product }: { product: Product }) {
 
   const handleToggleCart = () => {
     if (isAddedCart) {
-      toast.success(`You successfully added ${product.title} to the cart`);
-    } else {
       toast.error(`You removed ${product.title} from the cart`);
+    } else {
+      toast.success(`You successfully added ${product.title} to the cart`);
     }
     setisAddedCart((prev) => !prev);
     dispatch(addItemToCart(product));

@@ -2,9 +2,16 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  OneToMany,
+  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from './Category.entity';
+import { ProductImage } from './Product_Images.entity';
+import { ProductColor } from './Product_Colors.entity';
+import { ProductSize } from './Product_Sizes.entity';
+import { Wishlist } from './Wishlist.entity';
 
 @Entity('products')
 export class Product {
@@ -20,14 +27,17 @@ export class Product {
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
-  @Column()
-  category: string;
+  @ManyToOne(() => Category, (category) => category.products)
+  category: Category;
 
-  @Column()
-  color: string;
+  @OneToMany(() => ProductImage, (image) => image.product)
+  images: ProductImage[];
 
-  @Column()
-  size: string;
+  @OneToMany(() => ProductColor, (color) => color.product)
+  colors: ProductColor[];
+
+  @OneToMany(() => ProductSize, (size) => size.product)
+  sizes: ProductSize[];
 
   @Column({ default: 0 })
   stock: number;
@@ -35,8 +45,11 @@ export class Product {
   @Column({ default: false })
   isFeatured: boolean;
 
-  @Column({ nullable: true })
-  imageUrl: string;
+  @Column({ type: 'float', default: 0 })
+  rating: number;
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.product)
+  wishlists: Wishlist[];
 
   @CreateDateColumn()
   createdAt: Date;

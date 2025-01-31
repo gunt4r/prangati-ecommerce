@@ -7,9 +7,7 @@ import { User } from 'src/models/User.entity';
 import { MailService } from 'src/mail/mail.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([PasswordResetToken, User]), // Подключаем репозитории
-  ],
+  imports: [TypeOrmModule.forFeature([PasswordResetToken, User])],
   controllers: [PasswordResetController],
   providers: [PasswordResetService, MailService],
   exports: [PasswordResetService],
