@@ -9,20 +9,14 @@ import style from "./stylePopularProducts.module.css";
 
 import { poppins } from "@/config/fonts";
 import CardProduct from "@/components/CardProduct/CardProduct";
+import { Product } from "@/config/interfaces";
 export default function PopularProducts() {
   const [productsData, setProductsData] = useState<Product[]>([]);
 
-  interface Product {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    images: string[];
-  }
   const handlerData = async () => {
     try {
       const response = await axios.get<Product[]>(
-        `${process.env.NEXT_PUBLIC_API_PRODUCT}?offset=0&limit=3`,
+        `${process.env.NEXT_PUBLIC_SERVER}product`,
       );
 
       setProductsData(response.data);

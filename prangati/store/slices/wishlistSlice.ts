@@ -1,40 +1,62 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-}
-
+import { Product } from "@/config/interfaces";
 interface WishlistState {
   items: Product[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
 }
 
 const initialState: WishlistState = {
   items: [],
+  status: "idle",
+  error: null,
 };
+
+export const fetchWishlist = createAsyncThunk(
+  "wishlist/fetchWishlist",
+  async () => {
+    const userUUID = localStorage.getItem("user_uuid");
+    const data = JSON.stringify({ userId: userUUID });
+    const response = await axios.get<Product[]>(
+      `${process.env.NEXT_PUBLIC_SERVER}wishlist`,
+      {
+        data,
+      },
+    );
+
+    return response.data;
+  },
+);
 
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
   reducers: {
-    addItemToWishlist: (state, action: PayloadAction<Product>) => {
-      const existingItem = state.items.find(
-        (item) => item.id === action.payload.id,
-      );
-
-      if (!existingItem) {
-        state.items.push(action.payload);
-      }
+    addItemToWishlist: (state, action) => {
+      state.items.push(action.payload);
     },
-    removeItemFromWishlist: (state, action: PayloadAction<number>) => {
+    removeItemFromWishlist: (state, action) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
     },
     clearWishlist: (state) => {
       state.items = [];
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchWishlist.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchWishlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+      })
+      .addCase(fetchWishlist.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to fetch wishlist";
+      });
   },
 });
 

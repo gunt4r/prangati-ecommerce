@@ -1,45 +1,85 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+"use client";
 import classNames from "classnames";
 import { Link } from "@nextui-org/link";
 import { IoCartOutline } from "react-icons/io5";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 import style from "./styleCardProduct.module.css";
 
 import { oswald, poppins } from "@/config/fonts";
 import { addItemToCart } from "@/store/slices/cartSlice";
 import { addItemToWishlist } from "@/store/slices/wishlistSlice";
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-}
-
+import { Product } from "@/config/interfaces";
+import { useUUID } from "@/Hooks/useUUID";
 export default function CardProduct({ product }: { product: Product }) {
   const dispatch = useDispatch();
   const descriptionProduct = product.description.substring(0, 10);
   const [isLiked, setIsLiked] = useState(false);
   const [isAddedCart, setisAddedCart] = useState(false);
-  const handleToggleLike = () => {
+  const userID = useUUID();
+  const handleToggleLike = async () => {
     setIsLiked((prev) => !prev);
-    dispatch(addItemToWishlist(product));
+    dispatch(
+      addItemToWishlist({
+        ...product,
+        images: Array.isArray(product.images)
+          ? product.images.map((image) => image.url)
+          : [],
+      }),
+    );
+    const data = JSON.stringify({ userID: userID, productID: product.id });
+
+    if (!isLiked) {
+      await axios.post(`${process.env.NEXT_PUBLIC_SERVER}wishlist`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } else {
+      await axios.delete(`${process.env.NEXT_PUBLIC_SERVER}wishlist`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      });
+    }
   };
 
+  useEffect(() => {
+    async function checkWishlist() {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER}wishlist/check/${product.id}/${userID}`,
+        );
+
+        setIsLiked(response.status === 200);
+      } catch (error) {
+        setIsLiked(false);
+      }
+    }
+    if (userID) checkWishlist();
+  }, [product.id, userID]);
   const handleToggleCart = () => {
     if (isAddedCart) {
-      toast.error(`You removed ${product.title} from the cart`);
+      toast.error(`You removed ${product.name} from the cart`);
     } else {
-      toast.success(`You successfully added ${product.title} to the cart`);
+      toast.success(`You successfully added ${product.name} to the cart`);
     }
     setisAddedCart((prev) => !prev);
-    dispatch(addItemToCart(product));
+    dispatch(
+      addItemToCart({
+        ...product,
+        images: Array.isArray(product.images)
+          ? product.images.map((image) => image.url)
+          : [],
+      }),
+    );
   };
 
   return (
@@ -59,7 +99,11 @@ export default function CardProduct({ product }: { product: Product }) {
         <img
           alt=""
           className={classNames(style["section-card__image"])}
-          src={product.images[0]}
+          src={
+            product.images && product.images.length > 0
+              ? product.images[0].url
+              : "https://via.placeholder.com/150"
+          }
         />
       </Link>
       <hr className={classNames(style["section-card__line"])} />
@@ -73,7 +117,7 @@ export default function CardProduct({ product }: { product: Product }) {
             poppins.className,
           )}
         >
-          {product.title}
+          {product.name}
         </p>
       </Link>
       <div className={classNames(style["section-card__wrapper-details"])}>
@@ -99,7 +143,7 @@ export default function CardProduct({ product }: { product: Product }) {
               style["section-card__wrapper-details__price"],
             )}
           >
-            ${product.price}.00
+            ${product.price}
           </p>
         </Link>
       </div>

@@ -3,43 +3,40 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
   Delete,
+  BadRequestException,
+  Param,
 } from '@nestjs/common';
 import { WishlistService } from './wishlist.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
-import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 
 @Controller('wishlist')
 export class WishlistController {
   constructor(private readonly wishlistService: WishlistService) {}
 
-  @Post('addProduct')
+  @Post()
   create(@Body() createWishlistDto: CreateWishlistDto) {
     return this.wishlistService.create(createWishlistDto);
   }
-
-  @Get()
-  findAll() {
-    return this.wishlistService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.wishlistService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateWishlistDto: UpdateWishlistDto,
+  @Get('check/:productId/:userId')
+  async checkInWishlist(
+    @Param('productId') productId: string,
+    @Param('userId') userId: string,
   ) {
-    return this.wishlistService.update(+id, updateWishlistDto);
+    return this.wishlistService.findOne({
+      productID: productId,
+      userID: userId,
+    });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishlistService.remove(+id);
+  @Get('getAllWishlist/:userId')
+  findAll(@Param('userId') userId: string) {
+    if (!userId) throw new BadRequestException('User ID required');
+    return this.wishlistService.findAll(userId);
+  }
+
+  @Delete()
+  remove(@Body() deleteFromWishlist: CreateWishlistDto) {
+    return this.wishlistService.remove(deleteFromWishlist);
   }
 }

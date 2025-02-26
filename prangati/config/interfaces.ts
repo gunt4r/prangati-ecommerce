@@ -1,9 +1,14 @@
 export interface Product {
-  id: number;
-  title: string;
+  id: string;
+  name: string;
   description: string;
   price: number;
-  images: string[];
+  images: { url: string }[];
+  stock?: number;
+  colors?: { color: string }[];
+  sizes?: { size: string }[];
+  isFeatured?: boolean;
+  rating?: number;
 }
 
 export interface ProductCart extends Product {

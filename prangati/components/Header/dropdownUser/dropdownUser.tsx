@@ -5,24 +5,25 @@ import {
   DropdownSection,
   DropdownItem,
 } from "@nextui-org/dropdown";
-import { User } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { BiUser } from "react-icons/bi";
 import classNames from "classnames";
 import { FaRegCircleUser } from "react-icons/fa6";
-import {
-  IoMdNotificationsOutline,
-  IoIosHelpCircleOutline,
-} from "react-icons/io";
+import { IoIosHelpCircleOutline } from "react-icons/io";
 import { SlSettings } from "react-icons/sl";
 import { CiLogout } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useDisclosure } from "@nextui-org/modal";
+import AccountSettings from "@/components/AccountSettings/accountSettings";
 import style from "./styleDropdownUser.module.css";
+
+import { poppins } from "@/config/fonts";
 export default function DropdownUser() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const router = useRouter();
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
@@ -56,7 +57,7 @@ export default function DropdownUser() {
   const handleLogin = () => {
     router.push("/logIn");
   };
-  const handleSingIn = () => {
+  const handleSignIn = () => {
     router.push("/signIn");
   };
   const handleLogOut = () => {
@@ -84,7 +85,7 @@ export default function DropdownUser() {
         <Dropdown
           classNames={{
             base: "before:bg-default-200",
-            content: "p-0 border-small border-divider bg-background",
+            content: "p-0 border-small border-divider bg-[#FEFEFE]",
           }}
           radius="sm"
         >
@@ -117,46 +118,39 @@ export default function DropdownUser() {
               ],
             }}
           >
-            <DropdownSection showDivider aria-label="Profile & Actions">
+            <DropdownSection
+              showDivider
+              aria-label="Profile & Actions"
+              classNames={{
+                base: ` w-5/6   ${poppins.className}  `,
+                divider: "mt-2",
+              }}
+            >
               <DropdownItem
                 key="profile"
                 isReadOnly
-                className="h-14 gap-2 opacity-100"
+                className="h-10 gap-2 opacity-100"
+                classNames={{
+                  base: "w-full",
+                }}
               >
-                <User
-                  avatarProps={{
-                    size: "sm",
-                    src: "https://avatars.githubusercontent.com/u/30373425?v=4",
-                  }}
-                  classNames={{
-                    name: "text-default-600",
-                    description: "text-default-500",
-                  }}
-                  description="aniston2@gmail.com"
-                  name="Junior Garcia"
-                />
+                <section>
+                  <p className="text-default-900 text-[10px] font-light">
+                    Aniston Harper
+                  </p>
+                  <p className="text-default-500 text-[8px]">
+                    aniston2@gmail.com{" "}
+                  </p>
+                </section>
               </DropdownItem>
             </DropdownSection>
             <DropdownSection>
               <DropdownItem
-                key="dashboard"
-                startContent={<FaRegCircleUser className={iconClasses} />}
-              >
-                View Profile
-              </DropdownItem>
-              <DropdownItem
                 key="settings"
+                onClick={onOpen}
                 startContent={<SlSettings className={iconClasses} />}
               >
                 Account Settings
-              </DropdownItem>
-              <DropdownItem
-                key="new_project"
-                startContent={
-                  <IoMdNotificationsOutline className={iconClasses} />
-                }
-              >
-                Notifications
               </DropdownItem>
               <DropdownItem
                 key="help_and_feedback"
@@ -226,7 +220,7 @@ export default function DropdownUser() {
               <DropdownItem
                 key="dashboard"
                 startContent={<FaRegCircleUser className={iconClasses} />}
-                onClick={handleSingIn}
+                onClick={handleSignIn}
               >
                 <p>Sign in</p>
               </DropdownItem>
@@ -234,6 +228,7 @@ export default function DropdownUser() {
           </DropdownMenu>
         </Dropdown>
       )}
+      <AccountSettings isOpen={isOpen} onOpenChange={onOpenChange} />
     </div>
   );
 }

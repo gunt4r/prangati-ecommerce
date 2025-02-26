@@ -1,16 +1,15 @@
 /* eslint-disable prettier/prettier */
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-import dynamic from 'next/dynamic';
 
 import { Providers } from "./providers";
 
-import { siteConfig } from "@/config/site";
 import { archivo} from "@/config/fonts.ts";
 
 import "@theme-toggles/react/css/Around.css"
-const CookieConsentModalWrapper = dynamic(() => import('@/components/CookieConsentModal/CookieConsentModalWrapper/CookieConsentModalWrapper'), { ssr: false });
-
+import ClientPreloader from "@/components/ClientPreloader/ClientPreloader";
+import { siteConfig } from "@/config/site";
+import axios from "axios";
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -29,18 +28,20 @@ export const viewport: Viewport = {
   ],
 };
 
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+ 
   return (
     <html data-theme="light" lang="en">
       <head />
       <body className={archivo.className}>
+        <ClientPreloader />
         <Providers>
           <main>{children}</main>
-          <CookieConsentModalWrapper />
         </Providers>
       </body>
     </html>

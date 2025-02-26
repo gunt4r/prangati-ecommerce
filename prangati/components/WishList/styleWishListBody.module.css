@@ -29,8 +29,8 @@
   margin-bottom: 4rem;
 }
 .section-wish__cards {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,376px);
   width: 100%;
+  gap: 100px;
 }

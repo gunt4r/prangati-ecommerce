@@ -9,8 +9,8 @@ import { User } from './User.entity';
 
 @Entity('failed_requests')
 export class FailedRequest {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => User, (user) => user.failedRequests, { onDelete: 'CASCADE' })
   user: User;

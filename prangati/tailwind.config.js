@@ -18,7 +18,8 @@ module.exports = {
         backgroundColor: "#EAEBED",
         backgroundColorBlack:"#201F2F",
         backgroundColorWhite:"#F8F8F8",
-        textColorWhite: "#FDFDFD"
+        textColorWhite: "#FDFDFD",
+        backgroundUserWhite: "#f3f3f3",
       }
     },
   },

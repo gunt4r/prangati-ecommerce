@@ -21,6 +21,8 @@ import { WishlistController } from './wishlist/wishlist.controller';
 import { ProductModule } from './product/product.module';
 import { AdminModule } from './admin/admin.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CartModule } from './cart/cart.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -47,6 +49,8 @@ import { CategoriesModule } from './categories/categories.module';
     ProductModule,
     AdminModule,
     CategoriesModule,
+    CartModule,
+    UserModule,
   ],
   controllers: [AppController, NewsletterController, ContactsController],
   providers: [AppService, MailService, ContactsService, TypeOrmConfigService],
