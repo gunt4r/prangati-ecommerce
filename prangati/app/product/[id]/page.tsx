@@ -8,25 +8,19 @@ import Header from "@/components/Header/Headerpage";
 import Footer from "@/components/Footer/Footer";
 import { useUUID } from "@/Hooks/useUUID";
 import { addViewedProduct } from "@/services/viewedProductsService";
-// import Head from "next/head";
-
-interface ProductData {
-  title: string;
-  price: number;
-  description: string;
-  images: string[];
-}
+import Head from "next/head";
+import { Product } from "@/config/interfaces";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  const [productData, setProductData] = useState<ProductData | null>(null);
+  const [productData, setProductData] = useState<Product | null>(null);
   const userUUID = useUUID();
 
   useEffect(() => {
     const fetchProductData = async () => {
       try {
         const response = await axios.get(
-          `https://api.escuelajs.co/api/v1/products/${id}`,
+          `${process.env.NEXT_PUBLIC_SERVER}product/${id}`,
         );
 
         setProductData(response.data);
@@ -52,21 +46,21 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     );
   }
 
-  // <Head>
-  //   <title>{productData.title} - Мой магазин</title>
-  //   <meta name="description" content={productData.description} />
-  // </Head>
+  <Head>
+    <title>{productData.name}</title>
+    <meta name="description" content={productData.description} />
+  </Head>
   return (
     <section>
       <Header />
       <main>
-        <h1>{productData.title}</h1>
+        <h1>{productData.name}</h1>
         <h2>Цена: {productData.price} USD</h2>
         <p>{productData.description}</p>
         {productData.images && (
           <img
-            alt={productData.title}
-            src={productData.images[0]}
+            alt={productData.name}
+            src={productData.images[0].url}
             style={{ maxWidth: "100%" }}
           />
         )}

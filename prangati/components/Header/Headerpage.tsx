@@ -25,7 +25,7 @@ import { poppins, archivo } from "@/config/fonts";
 
 function Header() {
   const { t } = useTranslation();
-  const API_PRODUCT = `${process.env.NEXT_PUBLIC_API_PRODUCT}`;
+  const API_PRODUCT = `${process.env.NEXT_PUBLIC_SERVER}`;
   const [showSearch, setShowSearch] = useState(false);
   const [inputDetails, setInputDetails] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -184,10 +184,10 @@ function Header() {
                 style["section-nav__menu-item-link"],
                 animateLink,
               )}
-              href="/"
+              href="/products"
             >
               {" "}
-              Gadgets
+              Shoes
             </Link>
           </li>
           <li className={classNames(style["section-nav__menu-item"])}>

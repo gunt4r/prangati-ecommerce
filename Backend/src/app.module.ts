@@ -15,14 +15,15 @@ import { RecentlyViewedModule } from './recently-viewed/recently-viewed.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordResetModule } from './password-reset/password-reset.module';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { WishlistService } from './wishlist/wishlist.service';
 import { WishlistModule } from './wishlist/wishlist.module';
-import { WishlistController } from './wishlist/wishlist.controller';
 import { ProductModule } from './product/product.module';
 import { AdminModule } from './admin/admin.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoriesModule } from './categories/categories.module';
 import { CartModule } from './cart/cart.module';
 import { UserModule } from './user/user.module';
+import { join } from 'path';
+import { UploadImagesModule } from './upload-images/upload-images.module';
 
 @Module({
   imports: [
@@ -36,6 +37,9 @@ import { UserModule } from './user/user.module';
         limit: 10,
       },
     ]),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../prangati', 'public'),
+    }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
@@ -51,6 +55,7 @@ import { UserModule } from './user/user.module';
     CategoriesModule,
     CartModule,
     UserModule,
+    UploadImagesModule,
   ],
   controllers: [AppController, NewsletterController, ContactsController],
   providers: [AppService, MailService, ContactsService, TypeOrmConfigService],

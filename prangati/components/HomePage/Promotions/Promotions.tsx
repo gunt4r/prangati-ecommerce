@@ -10,14 +10,7 @@ import HeadingSection from "../HeadingSection/HeadingSection";
 import style from "./stylePromotions.module.css";
 
 import CardProduct from "@/components/CardProduct/CardProduct";
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-}
-
+import { Product } from "@/config/interfaces";
 const Promotions = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);

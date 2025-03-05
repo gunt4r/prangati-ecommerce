@@ -1,5 +1,5 @@
 .section-categories__card {
-  background-color: #d9d9d9;
+  background-color: #EAEBED;
   padding: 10px;
 }
 .section-categories__card-image {
@@ -7,6 +7,20 @@
   height: 55%;
   top: 64px;
   left: 38px;
+}
+.section-categories__card-image--wide {
+  width: unset;
+  height: 130px;
+  display: flex;
+  top: 15px;
+  left: 10%;
+}
+.section-categories__card-three-image {
+  height: 170px;
+  width: auto;
+  position: absolute;
+  left: 18%;
+  top: 20%;
 }
 .section-categories__card-wrapper {
   width: 100% !important;
@@ -16,9 +30,19 @@
 }
 .section-categories__card-category {
   font-weight: 200;
-  font-size: 1rem;
   text-transform: uppercase;
   color: #000000;
+  font-size: 20px;
+  line-height: 22px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.section-categories__card-category--wide {
+  top: 0px;
+  position: absolute;
+}
+.section-categories__card-bottom-wrapper--wide {
+  top: 0.5rem;
 }
 .section-categories__card-bottom {
   display: flex;
@@ -27,9 +51,22 @@
   flex-direction: row;
   width: 90%;
 }
+.section-categories__card-bottom--wide {
+  height: 100%;
+}
 .section-categories__card-icon {
   font-size: 24px;
   color: #1e1e1e;
+}
+.section-categories__card-icon--wide {
+  bottom: 0.5rem !important;
+  position: absolute;
+  right: 0;
+}
+.section-categories__card-icon__normal {
+  width: 31px;
+  position: absolute;
+  right: 40px;
 }
 .section-categories__card-long {
   background-color: #d9d9d9;

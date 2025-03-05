@@ -6,27 +6,47 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  UseInterceptors,
+  UploadedFiles,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { UsePipes } from '@nestjs/common';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  @UseInterceptors(FilesInterceptor('images', 10))
+  async create(
+    @UploadedFiles() images: Express.Multer.File[],
+    @Body() createProductDto: CreateProductDto,
+  ) {
+    console.log('Images', images);
+    return this.productService.create(createProductDto, images);
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  findAll(
+    @Query('category') category: string,
+    @Query('limit') limit: number = 12,
+    @Query('page') page: number = 1,
+  ) {
+    return this.productService.findAll(category, +limit, +page);
   }
   @Get('limitedProducts')
-  findLimit(limitProducts: number) {
-    return this.productService.findLimit(limitProducts);
+  findLimit(@Query('limitProducts') limitProducts: string) {
+    return this.productService.findLimit(+limitProducts);
+  }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.productService.findOne(id);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {

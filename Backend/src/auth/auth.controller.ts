@@ -46,7 +46,7 @@ export class AuthController {
   findOne(@Param('id') id: string) {
     return this.authService.findOne(+id);
   }
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  // @UseGuards(JwtAuthGuard, AdminGuard)
   @Delete('deleteAllEntities')
   removeAll() {
     return this.authService.removeAll();

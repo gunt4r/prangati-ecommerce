@@ -1,5 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Product } from './Product.entity';
+import { UploadedImage } from './UploadImage';
 
 @Entity('categories')
 export class Category {
@@ -8,6 +16,13 @@ export class Category {
 
   @Column()
   name: string;
+
+  @Column()
+  cardType: 'tall' | 'wide' | 'normal';
+
+  @OneToOne(() => UploadedImage, { cascade: true, onDelete: 'CASCADE' })
+  @JoinColumn()
+  image: UploadedImage;
 
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];

@@ -16,7 +16,15 @@ export default function PopularProducts() {
   const handlerData = async () => {
     try {
       const response = await axios.get<Product[]>(
-        `${process.env.NEXT_PUBLIC_SERVER}product`,
+        `${process.env.NEXT_PUBLIC_SERVER}product/limitedProducts`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          params: {
+            limitProducts: "3",
+          },
+        },
       );
 
       setProductsData(response.data);

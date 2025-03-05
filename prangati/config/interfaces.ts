@@ -14,3 +14,18 @@ export interface Product {
 export interface ProductCart extends Product {
   quantity: number;
 }
+
+export interface Category {
+  id: string;
+  name: string;
+}
+
+export interface ApiResponse {
+  data: Product[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}

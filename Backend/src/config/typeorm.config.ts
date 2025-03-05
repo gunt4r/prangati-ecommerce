@@ -17,6 +17,7 @@ import { ProductColor } from 'src/models/Product_Colors.entity';
 import { ProductImage } from 'src/models/Product_Images.entity';
 import { ProductSize } from 'src/models/Product_Sizes.entity';
 import { Wishlist } from 'src/models/Wishlist.entity';
+import { UploadedImage } from 'src/models/UploadImage';
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
@@ -47,6 +48,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         ProductColor,
         ProductImage,
         ProductSize,
+        UploadedImage,
       ],
     };
   }

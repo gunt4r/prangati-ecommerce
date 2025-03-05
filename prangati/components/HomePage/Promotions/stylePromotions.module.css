@@ -13,11 +13,12 @@
     flex-direction: column;
 }
 .carousel-content {
-  display: flex;
-  align-items: center;
-  min-height: 200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,376px);
+  width: 100%;
+  gap: 100px;
   overflow: hidden;
-  justify-content: space-between;
+  min-height: 200px;
   
 }
 
