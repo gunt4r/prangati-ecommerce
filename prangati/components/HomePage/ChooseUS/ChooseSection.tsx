@@ -1,5 +1,5 @@
 "use client";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@heroui/react";
 import classNames from "classnames";
 import { GoPlus } from "react-icons/go";
 import { useState } from "react";

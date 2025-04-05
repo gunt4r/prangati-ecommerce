@@ -19,10 +19,18 @@ const Promotions = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get<Product[]>(
-          `${process.env.NEXT_PUBLIC_API_PRODUCT}?offset=0&limit=9`,
+          `${process.env.NEXT_PUBLIC_SERVER}product/limitedProducts`,{
+            headers: {
+              "Content-Type": "application/json",
+            },
+            params: {
+              limitProducts:'9'
+            }
+          }
         );
 
         setProducts(response.data);
+        console.log("Products:", response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }

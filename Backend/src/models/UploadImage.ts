@@ -19,6 +19,12 @@ export class UploadedImage {
 
   @Column()
   originalName: string;
+
+  @Column({ nullable: true })
+  entityType: string;
+
+  @Column({ nullable: true })
+  entityId: string;
   @AfterRemove()
   removeFile() {
     const filePath = path.join(process.cwd(), 'public', this.path);

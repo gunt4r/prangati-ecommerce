@@ -12,7 +12,7 @@ import { SlMenu } from "react-icons/sl";
 import { IoMdHeartEmpty } from "react-icons/io";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import { ScrollShadow } from "@heroui/scroll-shadow";
 import { motion } from "framer-motion";
 import { Around } from "@theme-toggles/react";
 
@@ -21,14 +21,14 @@ import style from "./styleHeader.module.css";
 import SearchBar from "./SearchBar/SearchBar";
 import DropdownUser from "./dropdownUser/dropdownUser";
 
+import { Product } from "@/config/interfaces";
 import { poppins, archivo } from "@/config/fonts";
 
 function Header() {
   const { t } = useTranslation();
-  const API_PRODUCT = `${process.env.NEXT_PUBLIC_SERVER}`;
   const [showSearch, setShowSearch] = useState(false);
   const [inputDetails, setInputDetails] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [showMenuMobile, setShowMenuMobile] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -47,16 +47,24 @@ function Header() {
   };
 
   useEffect(() => {
-    HandleSearch();
+    if (inputDetails === "") {
+      setSearchResults([]);
+      setShowSearch(false);
+    } else {
+      handleSearch();
+    }
   }, [inputDetails]);
 
-  const HandleSearch = async () => {
+  const handleSearch = async () => {
     try {
-      const response = await axios.get(API_PRODUCT, {
-        params: {
-          title: inputDetails,
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER}product/search`,
+        {
+          params: {
+            query: inputDetails,
+          },
         },
-      });
+      );
 
       setShowSearch(true);
       setSearchResults(response.data);
@@ -73,12 +81,6 @@ function Header() {
     };
   }, []);
 
-  interface ListItems {
-    id: string;
-    title: string;
-    price: number;
-    images: string[];
-  }
   const HandleMenu = () => {
     setShowMenuMobile(!showMenuMobile);
   };
@@ -148,8 +150,6 @@ function Header() {
             duration={750}
             placeholder={undefined}
             style={{ marginRight: "15px" }}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
           />
           <Dropdownlanguage />
         </div>
@@ -285,28 +285,23 @@ function Header() {
           <div className={classNames(style["section-nav__search-results"])}>
             <ul className={classNames(style["section-nav__search-list"])}>
               <ScrollShadow className="w-[700px] h-[300px]">
-                {searchResults.map((item: ListItems) => {
-                  const { id, title, images, price } = item;
+                {searchResults.length > 0 &&
+                  searchResults.map((item: Product) => {
+                    const { id, name, price } = item;
 
-                  if (images.length === 0) return "";
-                  if (inputDetails === "") {
-                    setSearchResults([]);
-                    setShowSearch(false);
-                  }
-
-                  return (
-                    <li key={id}>
-                      <img alt="" src={images[0]} />{" "}
-                      <div
-                        className={classNames(
-                          style["section-nav__search-results-description"],
-                        )}
-                      >
-                        <h5>{title}</h5> <p>{price}$</p>
-                      </div>
-                    </li>
-                  );
-                })}
+                    return (
+                      <li key={id}>
+                        {/* <img alt="" src={images[0]} />{" "} */}
+                        <div
+                          className={classNames(
+                            style["section-nav__search-results-description"],
+                          )}
+                        >
+                          <h5>{name}</h5> <p>{price}$</p>
+                        </div>
+                      </li>
+                    );
+                  })}
               </ScrollShadow>
             </ul>
           </div>

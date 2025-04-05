@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { FaFacebookF, FaInstagram, FaTelegramPlane } from "react-icons/fa";
-import { Link } from "@nextui-org/link";
+import { Link } from "@heroui/link";
 
 import style from "./styleFooter.module.css";
 

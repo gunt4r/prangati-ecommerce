@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classNames from "classnames";
-import { Link } from "@nextui-org/link";
+import { Link } from "@heroui/link";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 import style from "./styleHeadingSection.module.css";

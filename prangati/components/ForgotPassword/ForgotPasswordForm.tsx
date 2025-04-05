@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Button } from "@nextui-org/button";
-import { Link } from "@nextui-org/link";
+import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
 import { FaArrowLeft } from "react-icons/fa6";
 import classNames from "classnames";
 
@@ -89,7 +89,7 @@ const ForgotPasswordForm: React.FC = () => {
         <Button
           className="bg-backgroundColorBlack text-textColorWhite w-5/12 text-md mb-6 mx-auto"
           size="md"
-          onClick={handleSubmit}
+          onPress={() => handleSubmit}
         >
           Reset password
         </Button>

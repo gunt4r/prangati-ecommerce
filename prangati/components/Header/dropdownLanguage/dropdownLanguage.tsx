@@ -6,9 +6,9 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from '@nextui-org/dropdown';
-import { Button } from '@nextui-org/button';
-import { SharedSelection } from '@nextui-org/system';
+} from '@heroui/dropdown';
+import { Button } from '@heroui/button';
+import { SharedSelection } from '@heroui/system';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useTranslation } from 'react-i18next';
 import Cookies from 'js-cookie';

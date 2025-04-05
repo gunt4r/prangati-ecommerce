@@ -1,7 +1,7 @@
-import { Card, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardFooter, Image } from "@heroui/react";
 import classNames from "classnames";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { Link } from "@nextui-org/link";
+import { Link } from "@heroui/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 

@@ -26,7 +26,7 @@ export default function PopularProducts() {
           },
         },
       );
-
+      console.log('Products '+response.data)
       setProductsData(response.data);
     } catch (error) {
       throw error;
@@ -51,9 +51,11 @@ export default function PopularProducts() {
           exceptional features and unparalleled performance
         </p>
         <div className={classNames(style["section-popular__products"])}>
-          {productsData.map((item) => (
-            <CardProduct key={item.id} product={item} />
-          ))}
+          {Array.isArray(productsData) &&
+            productsData.length > 0 &&
+            productsData.map((item) => (
+              <CardProduct key={item.id} product={item} />
+            ))}
         </div>
       </section>
     </section>

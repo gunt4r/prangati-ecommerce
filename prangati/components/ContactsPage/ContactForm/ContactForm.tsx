@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import { Input, Textarea } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
+import { Input, Textarea } from "@heroui/input";
+import { Button } from "@heroui/button";
 
 import style from "./styleContactForm.module.css";
 
@@ -115,7 +115,7 @@ export default function ContactForm({
         radius="full"
         size="md"
         variant="flat"
-        onClick={handleSubmit}
+        onPress={handleSubmit}
       >
         Send{" "}
       </Button>{" "}

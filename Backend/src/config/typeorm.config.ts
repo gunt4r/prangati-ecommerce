@@ -14,7 +14,6 @@ import { FailedRequest } from 'src/models/failed-request.entity';
 import { PasswordResetToken } from 'src/models/password-reset-token.entity';
 import { Category } from 'src/models/Category.entity';
 import { ProductColor } from 'src/models/Product_Colors.entity';
-import { ProductImage } from 'src/models/Product_Images.entity';
 import { ProductSize } from 'src/models/Product_Sizes.entity';
 import { Wishlist } from 'src/models/Wishlist.entity';
 import { UploadedImage } from 'src/models/UploadImage';
@@ -46,7 +45,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         PasswordResetToken,
         Category,
         ProductColor,
-        ProductImage,
         ProductSize,
         UploadedImage,
       ],

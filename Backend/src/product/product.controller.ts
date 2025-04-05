@@ -29,6 +29,7 @@ export class ProductController {
     @Body() createProductDto: CreateProductDto,
   ) {
     console.log('Images', images);
+    console.log('Body:', createProductDto);
     return this.productService.create(createProductDto, images);
   }
 
@@ -44,6 +45,11 @@ export class ProductController {
   findLimit(@Query('limitProducts') limitProducts: string) {
     return this.productService.findLimit(+limitProducts);
   }
+  @Get('/search')
+  search(@Query('query') query: string) {
+    return this.productService.search(query);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(id);

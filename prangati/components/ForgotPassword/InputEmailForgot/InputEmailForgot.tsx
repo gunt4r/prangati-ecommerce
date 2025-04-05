@@ -1,5 +1,5 @@
 "use client";
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 import classNames from "classnames";
 import { useState, useMemo, ChangeEvent } from "react";
 

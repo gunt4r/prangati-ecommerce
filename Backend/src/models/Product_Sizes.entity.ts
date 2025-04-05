@@ -1,14 +1,30 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Product } from './Product.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  // ManyToOne,
+  // JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinColumn,
+} from 'typeorm';
+// import { Product } from './Product.entity';
 
 @Entity('product_sizes')
 export class ProductSize {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   size: string;
 
-  @ManyToOne(() => Product, (product) => product.sizes)
-  product: Product;
+  @Column({ nullable: false })
+  @JoinColumn()
+  product: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

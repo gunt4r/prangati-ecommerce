@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class UploadImagesService {
   constructor(
     @InjectRepository(UploadedImage)
-    private imageRepository: Repository<UploadedImage>,
+    public imageRepository: Repository<UploadedImage>,
   ) {}
   async uploadFile(file: Express.Multer.File): Promise<UploadedImage> {
     if (!file?.mimetype) throw new Error('Invalid file');

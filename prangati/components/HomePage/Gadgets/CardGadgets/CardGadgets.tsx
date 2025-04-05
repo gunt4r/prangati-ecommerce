@@ -1,6 +1,6 @@
 "use client";
 import classNames from "classnames";
-import { Link } from "@nextui-org/link";
+import { Link } from "@heroui/link";
 import { motion } from "framer-motion";
 
 import styles from "./styleCardGadgets.module.css";

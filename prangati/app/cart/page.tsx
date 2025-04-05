@@ -1,8 +1,8 @@
 "use client";
 import { useSelector } from "react-redux";
 import classNames from "classnames";
-import { Link } from "@nextui-org/link";
-import { Button } from "@nextui-org/button";
+import { Link } from "@heroui/link";
+import { Button } from "@heroui/button";
 
 import styles from "./styleCart.module.css";
 

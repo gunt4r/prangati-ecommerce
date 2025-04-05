@@ -6,7 +6,7 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 
 class ProductImageDto {
   @IsString()
@@ -31,37 +31,53 @@ export class CreateProductDto {
   description: string;
 
   @IsNumber()
+  @Type(() => Number)
   price: number;
 
   @IsString()
   categoryId: string;
 
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProductImageDto)
-  images: ProductImageDto[];
+  @Transform(({ value }) => {
+    if (!value) return [];
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return [];
+      }
+    }
+    return value;
+  })
+  images?: ProductImageDto[];
 
   @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => ProductColorDto)
   colors: ProductColorDto[];
 
   @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => ProductSizeDto)
   sizes: ProductSizeDto[];
 
   @IsNumber()
+  @Type(() => Number)
   stock: number;
-
-  @IsString()
-  category: string;
 
   @IsBoolean()
   @IsOptional()
-  isFeatured: boolean;
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      return value === 'true';
+    }
+    return value;
+  })
+  isFeatured?: boolean;
 
   @IsNumber()
   @IsOptional()
-  rating: number;
+  @Type(() => Number)
+  rating?: number;
 }

@@ -1,29 +1,34 @@
-"use client";
-import { useEffect, useState } from "react";
-import { HashLoader } from "react-spinners";
-import classNames from "classnames";
+'use client';
+import { useEffect, useState } from 'react';
+import { HashLoader } from 'react-spinners';
+import classNames from 'classnames';
 
-import CardProduct from "../CardProduct/CardProduct";
+import CardProduct from '../CardProduct/CardProduct';
 
-import style from "./styleProducts.module.css";
+import style from './styleProducts.module.css';
 
-import { ApiResponse, Category } from "@/config/interfaces";
-import TitleHeader from "@/utils/TitleHeader/TitleHeader";
-import {Pagination, PaginationItem, PaginationCursor} from "@heroui/pagination";
+import { ApiResponse, Category } from '@/config/interfaces';
+import TitleHeader from '@/utils/TitleHeader/TitleHeader';
+import {
+  Pagination,
+  PaginationItem,
+  PaginationCursor,
+} from '@heroui/pagination';
 export default function ProductsBody() {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [response, setResponse] = useState<ApiResponse>({
     data: [],
     meta: { total: 0, page: 1, limit: 10, totalPages: 1 },
   });
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Загрузка продуктов
   const fetchProducts = async (
     page: number,
     limit: number,
-    category: string,
+    category: string
   ) => {
     try {
       const url = new URL(`${process.env.NEXT_PUBLIC_SERVER}product`);
@@ -35,13 +40,14 @@ export default function ProductsBody() {
 
       const res = await fetch(`${url}?${params}`);
       const data: ApiResponse = await res.json();
-
+      console.log('Data:', data);
+      const meta = data.meta || { total: 0, page: 1, limit: 10, totalPages: 1 };
       setResponse((prev) => ({
         data: page === 1 ? data.data : [...prev.data, ...data.data],
-        meta: data.meta,
+        meta,
       }));
     } catch (error) {
-      console.error("Fetch error:", error);
+      console.error('Fetch error:', error);
     } finally {
       setLoading(false);
     }
@@ -55,7 +61,7 @@ export default function ProductsBody() {
 
       setCategories(data);
     } catch (error) {
-      console.error("Categories error:", error);
+      console.error('Categories error:', error);
     }
   };
 
@@ -65,9 +71,8 @@ export default function ProductsBody() {
 
   useEffect(() => {
     setLoading(true);
-    fetchProducts(response.meta.page, response.meta.limit, selectedCategory);
-  }, [response.meta.page, response.meta.limit, selectedCategory]);
-
+    fetchProducts(page, limit, selectedCategory);
+  }, [page, limit, selectedCategory]);
   // Обработчики изменений
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -76,19 +81,18 @@ export default function ProductsBody() {
 
   const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLimit = Number(e.target.value);
-
+    setLimit(newLimit);
+    setPage(1);
     setResponse((prev) => ({
+      ...prev,
       data: [],
       meta: { ...prev.meta, limit: newLimit, page: 1 },
     }));
   };
 
   const loadMore = () => {
-    if (response.meta.page < response.meta.totalPages) {
-      setResponse((prev) => ({
-        ...prev,
-        meta: { ...prev.meta, page: prev.meta.page + 1 },
-      }));
+    if (response.meta && page < response.meta.totalPages) {
+      setPage(page + 1);
     }
   };
 
@@ -100,7 +104,7 @@ export default function ProductsBody() {
     );
 
   return (
-    <section className={classNames(style["section-products__wrapper"])}>
+    <section className={classNames(style['section-products__wrapper'])}>
       {/* Фильтры */}
       <TitleHeader text="shoes" />
       <div className={style.filters}>
@@ -129,7 +133,7 @@ export default function ProductsBody() {
       </div>
 
       {/* Список товаров */}
-      <div className={style["section-products__cards"]}>
+      <div className={style['section-products__cards']}>
         {response.data.map((product) => (
           <CardProduct key={product.id} product={product} />
         ))}

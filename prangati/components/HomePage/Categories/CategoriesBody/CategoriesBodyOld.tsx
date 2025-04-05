@@ -1,7 +1,7 @@
-// import { Card, CardHeader, CardFooter, Image } from "@nextui-org/react";
+// import { Card, CardHeader, CardFooter, Image } from "@heroui/react";
 // import classNames from "classnames";
 // import { MdKeyboardArrowRight } from "react-icons/md";
-// import { Link } from "@nextui-org/link";
+// import { Link } from "@heroui/link";
 
 // import style from "./styleCategoriesBody.module.css";
 

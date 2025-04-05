@@ -2,20 +2,24 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 export const useUUID = (): string => {
-  const [uuid, setUuid] = useState<string>(() => {
-    if (typeof window === "undefined") return "";
-
-    return localStorage.getItem("user_uuid") || "";
-  });
+  const [uuid, setUuid] = useState<string>("");
 
   useEffect(() => {
-    async function handlerUUID() {
-      if (!uuid && typeof window !== "undefined") {
-        const newUUID = uuidv4();
+    const storedUUId = localStorage.getItem("user_uuid");
 
-        localStorage.setItem("user_uuid", newUUID);
-        setUuid(newUUID);
-        const data = JSON.stringify({ uuid: newUUID });
+    if (storedUUId) {
+      setUuid(storedUUId);
+    } else {
+      const newUUID = uuidv4();
+
+      setUuid(newUUID);
+
+      localStorage.setItem("user_uuid", newUUID);
+    }
+    async function handlerUUID() {
+      try {
+        const uuidToSend = storedUUId || localStorage.getItem("user_uuid");
+        const data = JSON.stringify({ uuid: uuidToSend });
 
         await axios.post(
           `${process.env.NEXT_PUBLIC_SERVER}user/addUUID`,
@@ -26,10 +30,14 @@ export const useUUID = (): string => {
             },
           },
         );
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Error sending UUID: " + error);
       }
     }
+
     handlerUUID();
-  }, [uuid]);
+  }, []);
 
   return uuid;
 };

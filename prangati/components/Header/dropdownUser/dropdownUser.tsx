@@ -4,7 +4,7 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownItem,
-} from "@nextui-org/dropdown";
+} from "@heroui/dropdown";
 import { motion } from "framer-motion";
 import { BiUser } from "react-icons/bi";
 import classNames from "classnames";
@@ -15,10 +15,11 @@ import { CiLogout } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useDisclosure } from "@nextui-org/modal";
-import AccountSettings from "@/components/AccountSettings/accountSettings";
+import { useDisclosure } from "@heroui/modal";
+
 import style from "./styleDropdownUser.module.css";
 
+import AccountSettings from "@/components/AccountSettings/accountSettings";
 import { poppins } from "@/config/fonts";
 export default function DropdownUser() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -147,8 +148,8 @@ export default function DropdownUser() {
             <DropdownSection>
               <DropdownItem
                 key="settings"
-                onClick={onOpen}
                 startContent={<SlSettings className={iconClasses} />}
+                onPress={onOpen}
               >
                 Account Settings
               </DropdownItem>
@@ -165,7 +166,7 @@ export default function DropdownUser() {
                 startContent={
                   <CiLogout className={classNames(iconClasses, "rotate-180")} />
                 }
-                onClick={handleLogOut}
+                onPress={handleLogOut}
               >
                 Log Out
               </DropdownItem>
@@ -213,14 +214,14 @@ export default function DropdownUser() {
               <DropdownItem
                 key="dashboard"
                 startContent={<FaRegCircleUser className={iconClasses} />}
-                onClick={handleLogin}
+                onPress={handleLogin}
               >
                 <p>Log in</p>
               </DropdownItem>
               <DropdownItem
                 key="dashboard"
                 startContent={<FaRegCircleUser className={iconClasses} />}
-                onClick={handleSignIn}
+                onPress={handleSignIn}
               >
                 <p>Sign in</p>
               </DropdownItem>

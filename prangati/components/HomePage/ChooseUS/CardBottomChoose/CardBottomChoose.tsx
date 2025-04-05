@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Link } from "@nextui-org/link";
+import { Link } from "@heroui/link";
 import { SlArrowRight } from "react-icons/sl";
 
 import style from "./styleCardBottomChoose.module.css";

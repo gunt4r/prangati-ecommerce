@@ -65,7 +65,7 @@ export class UserService {
   async addUUIDtoDatabase(uuid: string) {
     const user = await this.userRepository.findOne({ where: { id: uuid } });
     if (user) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+      return { message: 'User already exists', id: uuid, exists: true };
     }
     try {
       const user = new User();

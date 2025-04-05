@@ -1,5 +1,5 @@
 "use client";
-import { Input, Button } from "@nextui-org/react";
+import { Input, Button } from "@heroui/react";
 import classNames from "classnames";
 import { useState, useMemo, ChangeEvent } from "react";
 
@@ -52,7 +52,7 @@ export default function InputEmail({
         radius="sm"
         size="lg"
         variant="flat"
-        onClick={handleClick}
+        onPress={handleClick}
       >
         Subscribe
       </Button>

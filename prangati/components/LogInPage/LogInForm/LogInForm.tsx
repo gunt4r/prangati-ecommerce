@@ -1,12 +1,12 @@
 "use client";
 import axios from "axios";
 import classNames from "classnames";
-import { Checkbox, Input } from "@nextui-org/react";
+import { Checkbox, Input } from "@heroui/react";
 import { useMemo, useState } from "react";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { FaGoogle } from "react-icons/fa";
-import { Button } from "@nextui-org/button";
-import { Link } from "@nextui-org/link";
+import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -16,7 +16,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 
 import style from "./styleLogInForm.module.css";
@@ -189,7 +189,7 @@ export default function LogInForm() {
       <Button
         className="bg-backgroundColorBlack text-textColorWhite w-6/12 text-lg mb-3"
         size="md"
-        onClick={handleSubmit}
+        onPress={handleSubmit}
       >
         Log in
       </Button>

@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 "use client";
 import classNames from "classnames";
-import { Link } from "@nextui-org/link";
+import { Link } from "@heroui/link";
 import { IoCartOutline } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -29,7 +29,7 @@ export default function CardProduct({ product }: { product: Product }) {
       addItemToWishlist({
         ...product,
         images: Array.isArray(product.images)
-          ? product.images.map((image) => image.url)
+          ? product.images.map((image) => image.path)
           : [],
       }),
     );
@@ -76,7 +76,7 @@ export default function CardProduct({ product }: { product: Product }) {
       addItemToCart({
         ...product,
         images: Array.isArray(product.images)
-          ? product.images.map((image) => image.url)
+          ? product.images.map((image) => ({ path: image.path }))
           : [],
       }),
     );
@@ -101,7 +101,7 @@ export default function CardProduct({ product }: { product: Product }) {
           className={classNames(style["section-card__image"])}
           src={
             product.images && product.images.length > 0
-              ? product.images[0].url
+              ? product.images[0].path
               : "https://via.placeholder.com/150"
           }
         />

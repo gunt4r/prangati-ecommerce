@@ -5,11 +5,9 @@ import { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
 
 import { archivo} from "@/config/fonts.ts";
-
 import "@theme-toggles/react/css/Around.css"
 import ClientPreloader from "@/components/ClientPreloader/ClientPreloader";
 import { siteConfig } from "@/config/site";
-import axios from "axios";
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -36,7 +34,7 @@ export default function RootLayout({
 }) {
  
   return (
-    <html data-theme="light" lang="en">
+    <html suppressHydrationWarning lang="en" >
       <head />
       <body className={archivo.className}>
         <ClientPreloader />

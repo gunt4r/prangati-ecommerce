@@ -4,10 +4,10 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/modal";
+} from "@heroui/modal";
 import classNames from "classnames";
-import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/input";
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -220,8 +220,7 @@ export default function AccountSettings({
                 className="bg-backgroundColorButtonBlack text-white ml-auto"
                 radius="sm"
                 size="lg"
-                onClick={handleClick}
-                onPress={onClose}
+                onPress={handleClick}
               >
                 Update
               </Button>

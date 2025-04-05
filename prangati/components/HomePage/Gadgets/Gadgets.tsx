@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { Button } from "@nextui-org/button";
-import { Switch } from "@nextui-org/switch";
-import { cn } from "@nextui-org/react";
+import { Button } from "@heroui/button";
+import { Switch } from "@heroui/switch";
+import { cn } from "@heroui/react";
 
 import style from "./styleGadgets.module.css";
 import CardGadgets from "./CardGadgets/CardGadgets";

@@ -4,10 +4,10 @@ import { useMemo, useState } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import classNames from "classnames";
-import { Link } from "@nextui-org/link";
-import { Input } from "@nextui-org/input";
+import { Link } from "@heroui/link";
+import { Input } from "@heroui/input";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 import styles from "./styleResetPassword.module.css";
@@ -204,7 +204,7 @@ const PasswordResetPage = () => {
         <Button
           className="bg-backgroundColorBlack text-textColorWhite w-5/12 text-md mb-6 mx-auto"
           size="md"
-          onClick={handleSubmit}
+          onPress={() => handleSubmit}
         >
           Reset password
         </Button>

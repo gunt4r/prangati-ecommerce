@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import classNames from "classnames";
 import { useTranslation, Trans } from "react-i18next";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import Cookies from "js-cookie";
 
 import styles from "./styleCookieConsent.module.css";
@@ -47,6 +47,7 @@ const CookieConsentModal: React.FC = () => {
                 linkToServices: (
                   // eslint-disable-next-line jsx-a11y/anchor-has-content
                   <a
+                    key={"linkToServices"}
                     href="/services"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -70,9 +71,9 @@ const CookieConsentModal: React.FC = () => {
               )}
               radius="sm"
               size="lg"
-              onClick={acceptCookies}
+              onPress={acceptCookies}
             >
-              {t('cookieConsentAccept')}
+              {t("cookieConsentAccept")}
             </Button>
             <Button
               className={classNames(
@@ -81,10 +82,10 @@ const CookieConsentModal: React.FC = () => {
               )}
               radius="sm"
               size="lg"
-              onClick={declineCookies}
+              onPress={declineCookies}
             >
-              {t('cookieConsentDecline')}
-              </Button>
+              {t("cookieConsentDecline")}
+            </Button>
           </div>
         </div>
       </div>

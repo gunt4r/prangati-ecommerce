@@ -3,15 +3,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { HashLoader } from "react-spinners";
+import Head from "next/head";
+import { useParams } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 import Header from "@/components/Header/Headerpage";
 import Footer from "@/components/Footer/Footer";
 import { useUUID } from "@/Hooks/useUUID";
 import { addViewedProduct } from "@/services/viewedProductsService";
-import Head from "next/head";
 import { Product } from "@/config/interfaces";
-
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default function ProductPage() {
+  const params = useParams();
   const { id } = params;
   const [productData, setProductData] = useState<Product | null>(null);
   const userUUID = useUUID();
@@ -24,9 +26,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         );
 
         setProductData(response.data);
-        addViewedProduct(userUUID, id);
+        console.log(response.data);
+        addViewedProduct(userUUID, String(id));
       } catch (error) {
-        console.error("Ошибка при загрузке данных продукта:", error);
+        toast.error("Ошибка при загрузке данных продукта:");
       }
     };
 
@@ -48,10 +51,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
   <Head>
     <title>{productData.name}</title>
-    <meta name="description" content={productData.description} />
-  </Head>
+    <meta content={productData.description} name="description" />
+  </Head>;
+
   return (
     <section>
+      <Toaster position="bottom-right" />
       <Header />
       <main>
         <h1>{productData.name}</h1>
@@ -60,7 +65,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         {productData.images && (
           <img
             alt={productData.name}
-            src={productData.images[0].url}
+            src={productData.images[0].path}
             style={{ maxWidth: "100%" }}
           />
         )}

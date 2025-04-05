@@ -3,9 +3,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/models/Product.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Category } from 'src/models/Category.entity';
-import { ProductImage } from 'src/models/Product_Images.entity';
 import { ProductColor } from 'src/models/Product_Colors.entity';
 import { ProductSize } from 'src/models/Product_Sizes.entity';
 import { UploadImagesService } from 'src/upload-images/upload-images.service';
@@ -18,8 +17,6 @@ export class ProductService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
     private readonly uploadService: UploadImagesService,
-    @InjectRepository(ProductImage)
-    private readonly imageRepository: Repository<ProductImage>,
     @InjectRepository(ProductColor)
     private readonly colorRepository: Repository<ProductColor>,
     @InjectRepository(ProductSize)
@@ -34,7 +31,6 @@ export class ProductService {
       description,
       price,
       categoryId,
-      images,
       colors,
       sizes,
       stock,
@@ -46,7 +42,6 @@ export class ProductService {
       !description ||
       !price ||
       !categoryId ||
-      !images ||
       !colors ||
       !sizes ||
       !stock
@@ -61,7 +56,7 @@ export class ProductService {
       throw new Error('Product already exists');
     }
 
-    if (images.length === 0 || colors.length === 0 || sizes.length === 0) {
+    if (colors.length === 0 || sizes.length === 0) {
       throw new Error(
         'Images, colors and sizes must have at least one element',
       );
@@ -83,53 +78,34 @@ export class ProductService {
     const product = this.productRepository.create({
       ...createProductDto,
       category,
-      images: uploadedImages.map((img) => ({
-        url: img.path,
-      })),
     });
-
-    // Сохраняем продукт сначала
     const savedProduct = await this.productRepository.save(product);
 
-    // Создаем и сохраняем изображения
-    const imagesSaved = await Promise.all(
-      uploadedImages.map(async (img) => {
-        const image = this.imageRepository.create({
-          url: img.path,
-          product: savedProduct,
-        });
-        return this.imageRepository.save(image);
-      }),
-    );
-
-    // Создаем и сохраняем цвета
-    const colorsSaved = await Promise.all(
-      createProductDto.colors.map(async (color) => {
-        const colorEntity = this.colorRepository.create({
-          color: color.color,
-          product: savedProduct,
-        });
-        return this.colorRepository.save(colorEntity);
-      }),
-    );
-
-    // Создаем и сохраняем размеры
-    const sizesSaved = await Promise.all(
-      createProductDto.sizes.map(async (size) => {
-        const sizeEntity = this.sizeRepository.create({
-          size: size.size,
-          product: savedProduct,
-        });
-        return this.sizeRepository.save(sizeEntity);
-      }),
-    );
-
-    // Обновляем продукт с связями
+    for (const img of uploadedImages) {
+      img.entityType = 'product';
+      img.entityId = savedProduct.id;
+      await this.uploadService.imageRepository.save(img);
+    }
+    for (const color of createProductDto.colors) {
+      const colorValue = typeof color === 'string' ? color : color.color;
+      const colorEntity = this.colorRepository.create({
+        color: colorValue,
+        product: savedProduct.id,
+      });
+      await this.colorRepository.save(colorEntity);
+    }
+    for (const size of createProductDto.sizes) {
+      const sizeValue = typeof size === 'string' ? size : size.size;
+      const sizeEntity = this.sizeRepository.create({
+        size: sizeValue,
+        product: savedProduct.id,
+      });
+      await this.sizeRepository.save(sizeEntity);
+    }
     return this.productRepository.save({
       ...savedProduct,
-      imagesSaved,
-      colorsSaved,
-      sizesSaved,
+      colors: createProductDto.colors,
+      sizes: createProductDto.sizes,
     });
   }
 
@@ -142,11 +118,18 @@ export class ProductService {
 
     const [products, total] = await this.productRepository.findAndCount({
       where,
-      relations: ['category', 'images'],
+      relations: ['category'],
       take: limit,
       skip: (page - 1) * limit,
       order: { createdAt: 'DESC' },
     });
+
+    for (const product of products) {
+      const images = await this.uploadService.imageRepository.find({
+        where: { entityType: 'product', entityId: product.id },
+      });
+      (product as any).images = images;
+    }
 
     return {
       data: products,
@@ -161,17 +144,41 @@ export class ProductService {
 
   async findOne(id: string) {
     const product = await this.productRepository.findOne({
-      where: { id: `${id}` },
+      where: { id: id },
+      relations: ['category'],
     });
     if (!product) {
       throw new Error('Product not found');
     }
-    return product;
+    const images = await this.uploadService.imageRepository.find({
+      where: { entityType: 'product', entityId: id },
+    });
+    const colors = await this.colorRepository.find({
+      where: { product: id },
+    });
+    const sizes = await this.sizeRepository.find({
+      where: { product: id },
+    });
+    return {
+      ...product,
+      images,
+      colors,
+      sizes,
+    };
   }
 
   async findLimit(limitProducts: number) {
     const products = await this.productRepository.find({
       take: limitProducts,
+    });
+    return products;
+  }
+  async search(query: string): Promise<Product[]> {
+    const products = await this.productRepository.find({
+      where: [
+        { name: ILike(`%${query}%`) },
+        { description: ILike(`%${query}%`) },
+      ],
     });
     return products;
   }
@@ -188,21 +195,17 @@ export class ProductService {
     product.category = await this.categoryRepository.findOne({
       where: { id: updateProductDto.categoryId },
     });
-    // product.images = updateProductDto.images.map((imageDto) => {
-    //   const image = new ProductImage();
-    //   image.url = imageDto.url;
-    //   return image;
+
+    // product.colors = updateProductDto.colors.map((colorDto) => {
+    //   const color = new ProductColor();
+    //   color.color = colorDto.color;
+    //   return color;
     // });
-    product.colors = updateProductDto.colors.map((colorDto) => {
-      const color = new ProductColor();
-      color.color = colorDto.color;
-      return color;
-    });
-    product.sizes = updateProductDto.sizes.map((sizeDto) => {
-      const size = new ProductSize();
-      size.size = sizeDto.size;
-      return size;
-    });
+    // product.sizes = updateProductDto.sizes.map((sizeDto) => {
+    //   const size = new ProductSize();
+    //   size.size = sizeDto.size;
+    //   return size;
+    // });
     product.stock = updateProductDto.stock;
     product.isFeatured = updateProductDto.isFeatured;
     product.rating = updateProductDto.rating;
