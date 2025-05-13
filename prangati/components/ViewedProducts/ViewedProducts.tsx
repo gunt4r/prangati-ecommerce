@@ -2,23 +2,21 @@ import { useEffect, useState } from "react";
 import { HashLoader } from "react-spinners";
 
 import CardProduct from "../CardProduct/CardProduct";
+import HeadingSectionTitle from "../HomePage/HeadingSection/HeadingSectionTitle/HeadingSectionTitle";
 
-import style from "./styleViewedProducts.module.css";
+import styles from "./styleViewedProducts.module.css";
 
 import { getRecentViewedProducts } from "@/services/viewedProductsService";
 import { useUUID } from "@/Hooks/useUUID";
+import { Product } from "@/config/interfaces";
 
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-}
-
-export default function ViewedProducts() {
+export default function ViewedProducts({
+  style,
+}: {
+  style?: { [key: string]: string };
+}) {
   const [data, setData] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const userUUID = useUUID();
 
   useEffect(() => {
@@ -29,6 +27,7 @@ export default function ViewedProducts() {
 
           setData(response || []);
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.error("Error fetching recently viewed products:", error);
         } finally {
           setIsLoading(false);
@@ -55,16 +54,19 @@ export default function ViewedProducts() {
   }
 
   return (
-    <section className={style.viewedProductsSection}>
+    <section className={styles["section-viewed-products"]} style={{ ...style }}>
       {data.length > 0 ? (
-       (
         <>
-            <h2 className={style['section-viewed-products__title']}>Recently Viewed Products</h2>
-          {data.map((item) => (
-            <CardProduct key={item.id} product={item} />
-          ))}
+          <HeadingSectionTitle
+            style={{ textTransform: "uppercase" }}
+            textHeading=" Recently View"
+          />
+          <article className={styles["section-viewed-products__wrapper"]}>
+            {data.map((item) => (
+              <CardProduct key={item.id} product={item} />
+            ))}
+          </article>
         </>
-      ) 
       ) : (
         <br />
       )}

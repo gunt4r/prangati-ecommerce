@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Param,
   Delete,
   UseGuards,
   Options,
@@ -42,19 +41,10 @@ export class AuthController {
   checkAuth(@Request() req) {
     return { authorized: true, user: req.user };
   }
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
   // @UseGuards(JwtAuthGuard, AdminGuard)
   @Delete('deleteAllEntities')
   removeAll() {
     return this.authService.removeAll();
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
   }
   @Options('register')
   options() {

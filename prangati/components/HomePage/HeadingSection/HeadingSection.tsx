@@ -4,9 +4,9 @@ import { Link } from "@heroui/link";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 import style from "./styleHeadingSection.module.css";
+import HeadingSectionTitle from "./HeadingSectionTitle/HeadingSectionTitle";
 
-import { oswald, poppins,archivo } from "@/config/fonts";
-
+import { poppins } from "@/config/fonts";
 export default function HeadingSection({
   textHeading,
 }: {
@@ -23,14 +23,7 @@ export default function HeadingSection({
 
   return (
     <div className={classNames(style["section-popular__header"])}>
-      <h5
-        className={classNames(
-          style["section-popular__title"],
-          archivo.className,
-        )}
-      >
-        {textHeading}
-      </h5>
+      <HeadingSectionTitle textHeading={textHeading} />
       <Link
         className={classNames(style["section-popular__header-link__wrapper"])}
         href="/"

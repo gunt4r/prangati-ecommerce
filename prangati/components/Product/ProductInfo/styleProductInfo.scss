@@ -1,0 +1,204 @@
+.section-product__info {
+  flex: 1;
+  max-width: 40%;
+  background-color: #ffff;
+  border-radius: 10px;
+  padding: 50px 30px 50px;
+  margin-top: 2rem;
+  &--name {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 24px;
+    letter-spacing: 0.03em;
+    color: #000000;
+    margin-bottom: 1rem;
+  }
+  &--stock {
+    opacity: 0.6;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin-bottom: 1rem;
+    &__true {
+      color: #007aff;
+    }
+    &__false {
+      color: #9d0404;
+      opacity: 0.8;
+    }
+  }
+  &--price {
+    font-size: 24px;
+    line-height: 24px;
+    letter-spacing: 0.03em;
+    color: #000000;
+    margin-bottom: 1rem;
+  }
+  &--description {
+    font-size: 10px;
+    line-height: 18px;
+    color: #454545;
+    margin-bottom: 1rem;
+  }
+  &--line {
+    height: 1.5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+  }
+  &--colors {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    &--title {
+      font-size: 20px;
+      line-height: 20px;
+      letter-spacing: 0.03em;
+      color: #000000;
+      margin-right: 1rem;
+    }
+    &--container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      &--color {
+        &:hover {
+          opacity: 0.7;
+          transition: 0.4s ease-in-out;
+        }
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.2s;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        &.selected {
+          transform: scale(1.1);
+          transition: all 0.4s;
+          .selected-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -51%);
+            width: 75%;
+            height: 75%;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: transparent;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s;
+          }
+        }
+      }
+    }
+  }
+  &--sizes {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    &--title {
+      font-size: 20px;
+      line-height: 20px;
+      letter-spacing: 0.03em;
+      color: #000000;
+      margin-right: 1rem;
+    }
+    &--container {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      &--size {
+        &:hover {
+          opacity: 0.7;
+          transition: 0.4s ease-in-out;
+        }
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        border-radius: 9px;
+        padding: 0.2rem 0.6rem;
+        &.selected {
+          background: #000;
+          color: white;
+          transform: scale(1.05);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+  }
+  &--buttons {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    justify-content: space-between;
+    &__wrapper {
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      border-radius: 9px;
+      margin-right: 1rem;
+    }
+    &--input_wrapper {
+      height: 40px;
+      border-radius: 0;
+      background-color: transparent;
+      border-left: 1px solid rgba(0, 0, 0, 0.5);
+      border-right: 1px solid rgba(0, 0, 0, 0.5);
+    }
+    &--input {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      color: #000000;
+      font-size: 20px;
+    }
+    &--increment {
+      &:hover {
+        color: #201f2f;
+        transition: 0.3s ease-in;
+      }
+      color: #fff;
+      background-color: #201f2f;
+    }
+    &--decrement {
+      &:hover {
+        color: #fff;
+        background-color: #201f2f;
+        transition: 0.3s ease-in;
+      }
+      color: #000;
+      background-color: #fff;
+      font-size: 25px;
+    }
+    &--add {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      color: #fafafa;
+      letter-spacing: 0.03em;
+      background-color: #201f2f;
+      border-radius: 4px;
+      padding: 0.5rem 2.8rem;
+      margin-right: 1rem;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.7;
+        transition: 0.4s ease-in-out;
+      }
+    }
+    &--like {
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      border-radius: 4px;
+      padding: 0.5rem 0.5rem;
+      display: flex;
+      align-items: center;
+      place-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.7;
+        transition: 0.4s ease-in-out;
+      }
+    }
+  }
+}

@@ -43,6 +43,7 @@ const CookieConsentModal: React.FC = () => {
             )}
           >
             <Trans
+              key={i18n.language}
               components={{
                 linkToServices: (
                   // eslint-disable-next-line jsx-a11y/anchor-has-content
@@ -53,7 +54,7 @@ const CookieConsentModal: React.FC = () => {
                     target="_blank"
                   />
                 ),
-                underline: <u />,
+                underline: <u key={"underline"} />,
               }}
               i18nKey="cookieConsentSubtitle"
             />

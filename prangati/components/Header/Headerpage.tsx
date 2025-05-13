@@ -24,7 +24,13 @@ import DropdownUser from "./dropdownUser/dropdownUser";
 import { Product } from "@/config/interfaces";
 import { poppins, archivo } from "@/config/fonts";
 
-function Header() {
+function Header({
+  styleNav,
+  styleLine,
+}: {
+  styleNav?: { [key: string]: string };
+  styleLine?: { [key: string]: string };
+}) {
   const { t } = useTranslation();
   const [showSearch, setShowSearch] = useState(false);
   const [inputDetails, setInputDetails] = useState("");
@@ -144,6 +150,7 @@ function Header() {
       <section
         className={classNames(style["section-nav"])}
         color="backgroundColor"
+        style={{ ...styleNav }}
       >
         <div className={classNames(style["section-nav__utils"])}>
           <Around
@@ -307,7 +314,10 @@ function Header() {
           </div>
         )}
       </section>
-      <hr className={classNames(style["section-nav__underline"])} />
+      <hr
+        className={classNames(style["section-nav__underline"])}
+        style={{ ...styleLine }}
+      />
     </div>
   );
 }

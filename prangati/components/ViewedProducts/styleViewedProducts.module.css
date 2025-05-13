@@ -1,25 +1,13 @@
-.viewedProductsSection {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 90%;
-    margin: 0 auto; /* Центрируем секцию */
-  }
-  
-  .viewedProductsSection > * {
-    flex: 1 1 calc(30% - 16px); /* Три колонки с учетом отступа */
-    margin: 8px; /* Отступ между карточками */
-  }
-  
-  @media (max-width: 1024px) {
-    .viewedProductsSection > * {
-      flex: 1 1 calc(50% - 16px); /* Две колонки на средней ширине */
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .viewedProductsSection > * {
-      flex: 1 1 100%; /* Одна колонка на узких экранах */
-    }
-  }
-  
+.section-viewed-products {
+  width: 90%;
+  display: grid;
+  place-self: center;
+}
+.section-viewed-products__wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 376px);
+  width: 100%;
+  gap: 50px;
+  margin-bottom: 5rem;
+  justify-content: space-around;
+}

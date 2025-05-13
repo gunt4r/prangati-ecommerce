@@ -4,6 +4,7 @@ import {
   Poppins,
   Oswald,
   Manrope,
+  Inter,
   // Montserrat
 } from "next/font/google";
 
@@ -38,4 +39,9 @@ export const manrope = Manrope({
   subsets: ["latin"],
   display: "swap",
   variable: "--Manrope",
+});
+export const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--Inter",
 });

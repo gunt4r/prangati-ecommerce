@@ -19,10 +19,10 @@ export class AuthService implements OnModuleInit {
 
   async signIn(createAuthDto: CreateAuthDto) {
     try {
-      const { fullName, email, password } = createAuthDto;
+      const { id, fullName, email, password } = createAuthDto;
 
       const existingUser = await this.userRepository.findOne({
-        where: { email },
+        where: { email, id },
       });
 
       if (existingUser) {
@@ -31,6 +31,9 @@ export class AuthService implements OnModuleInit {
 
       if (!fullName || !email || !password) {
         throw new Error('Full name, email and password are required');
+      }
+      if (password.length < 8) {
+        throw new Error('Password must be at least 8 characters long');
       }
 
       const firstName = fullName.split(' ')[0];
@@ -42,6 +45,7 @@ export class AuthService implements OnModuleInit {
       user.lastName = lastName;
       user.password = hashedPassword;
       user.email = email;
+      user.id = id;
       const savedUser = await this.userRepository.save(user);
       const payload = { email: savedUser.email, sub: savedUser.id };
       const token = this.jwtService.sign(payload);
@@ -83,14 +87,6 @@ export class AuthService implements OnModuleInit {
 
   async findAll() {
     return await this.userRepository.find();
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
   }
 
   async removeAll() {

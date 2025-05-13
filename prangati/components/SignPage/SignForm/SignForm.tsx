@@ -13,6 +13,7 @@ import toast, { Toaster } from "react-hot-toast";
 import style from "./styleSignForm.module.css";
 
 import { poppins } from "@/config/fonts";
+import { useUUID } from "@/Hooks/useUUID";
 
 export default function SignForm() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function SignForm() {
   const [isChecked, setIsChecked] = useState(false);
   const [isInvalidPasswordMatch, setIsInvalidPasswordMatch] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
+  const userUUID = useUUID();
   const toggleVisibilityRepeated = () =>
     setIsVisibleRepeated(!isVisibleRepeated);
 
@@ -91,6 +93,7 @@ export default function SignForm() {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_SERVER + "auth/register",
         {
+          id: userUUID,
           fullName: valueFullName,
           email: valueEmail,
           password: password,

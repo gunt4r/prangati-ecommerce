@@ -1,0 +1,16 @@
+.section-product__category__content {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  &--products {
+    text-transform: uppercase;
+    color: #5C5C5C;
+    &__content {
+      opacity: 0.5;
+    }
+  }
+  &--category {
+    text-transform: uppercase;
+  }
+}

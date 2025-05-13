@@ -171,6 +171,12 @@ export class ProductService {
     const products = await this.productRepository.find({
       take: limitProducts,
     });
+    for (const product of products) {
+      const images = await this.uploadService.imageRepository.find({
+        where: { entityType: 'product', entityId: product.id },
+      });
+      (product as any).images = images;
+    }
     return products;
   }
   async search(query: string): Promise<Product[]> {

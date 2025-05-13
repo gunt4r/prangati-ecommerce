@@ -25,17 +25,7 @@ export const getRecentViewedProducts = async (userUuid: string) => {
     );
     const viewedProducts = response.data;
 
-    const productsData = await Promise.all(
-      viewedProducts.map(async (viewedProduct: any) => {
-        const productResponse = await axios.get(
-          `https://api.escuelajs.co/api/v1/products/${viewedProduct.productId}`,
-        );
-
-        if (productResponse) return productResponse.data;
-      }),
-    );
-
-    return productsData;
+    return viewedProducts;
   } catch (error) {
     console.error(`Error fetching recent viewed products:`, error);
   }

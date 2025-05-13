@@ -3,7 +3,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
-  Column,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
@@ -18,9 +17,6 @@ export class Cart {
 
   @ManyToOne(() => User, (user) => user.carts, { nullable: true })
   user: User;
-
-  @Column({ nullable: true })
-  sessionId: string;
 
   @CreateDateColumn()
   createdAt: Date;

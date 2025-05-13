@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 import { Cart } from './Cart.entity';
 import { Product } from './Product.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('cart_items')
 export class CartItem {
@@ -8,6 +9,7 @@ export class CartItem {
   id: string;
 
   @ManyToOne(() => Cart, (cart) => cart.items)
+  @Exclude()
   cart: Cart;
 
   @ManyToOne(() => Product, { eager: true })

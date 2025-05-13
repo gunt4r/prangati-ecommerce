@@ -29,3 +29,10 @@ export interface ApiResponse {
     totalPages: number;
   };
 }
+export interface Image {
+  path: string;
+  entityTipe: string;
+}
+export interface Handlers {
+  setThumbIndex: (index: number) => void;
+}

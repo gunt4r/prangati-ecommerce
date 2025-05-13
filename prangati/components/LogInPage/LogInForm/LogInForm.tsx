@@ -86,6 +86,7 @@ export default function LogInForm() {
         const { token } = response.data;
 
         localStorage.setItem("token", token);
+        localStorage.setItem("user_uuid", response.data.id);
         setTimeout(() => {
           router.push("/");
         }, 1500);

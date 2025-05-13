@@ -29,7 +29,6 @@ export class ViewedProductsController {
     return this.recentlyViewedService.getRecentViewedProducts(userUuid);
   }
   @Get()
-  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.recentlyViewedService.getAll();
   }

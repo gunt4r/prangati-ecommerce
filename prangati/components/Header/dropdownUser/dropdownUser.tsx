@@ -24,7 +24,6 @@ import { poppins } from "@/config/fonts";
 export default function DropdownUser() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
   const router = useRouter();
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
@@ -63,6 +62,7 @@ export default function DropdownUser() {
   };
   const handleLogOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user_uuid");
     checkAuth();
   };
   const motionUserIcon = {
@@ -212,14 +212,14 @@ export default function DropdownUser() {
           >
             <DropdownSection>
               <DropdownItem
-                key="dashboard"
+                key="dashboardLogin"
                 startContent={<FaRegCircleUser className={iconClasses} />}
                 onPress={handleLogin}
               >
                 <p>Log in</p>
               </DropdownItem>
               <DropdownItem
-                key="dashboard"
+                key="dashboardSignIn"
                 startContent={<FaRegCircleUser className={iconClasses} />}
                 onPress={handleSignIn}
               >
