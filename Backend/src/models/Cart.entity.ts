@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Column,
 } from 'typeorm';
 import { User } from './User.entity';
 import { CartItem } from './CartItem.entity';
@@ -26,4 +27,7 @@ export class Cart {
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.cart, { cascade: true })
   items: CartItem[];
+
+  @Column({ nullable: true, default: 0 })
+  subtotalPrice: number;
 }

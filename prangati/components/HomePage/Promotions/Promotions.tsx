@@ -18,21 +18,18 @@ const Promotions = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get<Product[]>(
-          `${process.env.NEXT_PUBLIC_SERVER}product/limitedProducts`,{
-            headers: {
-              "Content-Type": "application/json",
-            },
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER}product`,
+          {
             params: {
-              limitProducts:'9'
-            }
-          }
+              limit: 9,
+            },
+          },
         );
 
-        setProducts(response.data);
-        console.log("Products:", response.data);
+        setProducts(response.data.data);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        throw error;
       }
     };
 

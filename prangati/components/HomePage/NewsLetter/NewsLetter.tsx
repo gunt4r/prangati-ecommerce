@@ -45,7 +45,7 @@ export default function NewsLetter() {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER}newsletter/send`,
+        `${process.env.NEXT_PUBLIC_SERVER}newsletter`,
         data,
       );
     } catch (error) {

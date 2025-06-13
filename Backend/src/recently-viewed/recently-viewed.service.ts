@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { ViewedProducts } from '../models/ViewedProducts.entity';
 import { UploadImagesService } from 'src/upload-images/upload-images.service';
 import { Product } from 'src/models/Product.entity';
+import { ProductService } from 'src/product/product.service';
 
 @Injectable()
 export class RecentlyViewedService {
@@ -14,6 +15,7 @@ export class RecentlyViewedService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
     private readonly uploadImagesService: UploadImagesService,
+    private readonly productService: ProductService,
   ) {}
 
   async addOrUpdateViewedProduct(
@@ -57,6 +59,8 @@ export class RecentlyViewedService {
           take: 1,
         });
         (product as any).images = images;
+        (product as any).hasAttributes =
+          await this.productService.productHasAttributes(product.id);
         products.push(product);
       }
     }

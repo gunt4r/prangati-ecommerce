@@ -1,6 +1,6 @@
 .section-account__form-modal-title {
-  font-family: 'Ablation';
-  font-weight: 700;
+  font-weight: 200;
+  text-transform: uppercase;
   font-size: 24px;
   line-height: 23px;
   text-align: center;

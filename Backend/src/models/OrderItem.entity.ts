@@ -16,6 +16,9 @@ export class OrderItem {
   @Column()
   quantity: number;
 
+  @Column({ type: 'json', nullable: true })
+  attributes: Array<Record<string, string>>;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 }

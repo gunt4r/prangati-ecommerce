@@ -1,5 +1,5 @@
 .section-viewed-products {
-  width: 90%;
+  width: 100%;
   display: grid;
   place-self: center;
 }
@@ -9,5 +9,5 @@
   width: 100%;
   gap: 50px;
   margin-bottom: 5rem;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }

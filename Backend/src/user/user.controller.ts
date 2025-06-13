@@ -23,7 +23,10 @@ export class UserController {
   addUUIDtoDatabase(@Body('uuid') uuid: string) {
     return this.userService.addUUIDtoDatabase(uuid);
   }
-
+  @Get()
+  findAll() {
+    return this.userService.findAll();
+  }
   @Get(':id')
   findOne(@Param('id') uuid: string) {
     return this.userService.findOne(uuid);
@@ -31,6 +34,7 @@ export class UserController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    console.log('DTO received for update:', updateUserDto);
     return this.userService.update(id, updateUserDto);
   }
 

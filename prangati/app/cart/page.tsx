@@ -1,108 +1,87 @@
 "use client";
-import { useSelector } from "react-redux";
-import classNames from "classnames";
 import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
-import styles from "./styleCart.module.css";
+import "./styleCart.scss";
 
-import { RootState } from "@/store";
+import Container from "@/components/Container/Container";
+import CartItem from "@/components/Cart/CartItem/CartItem";
 import Header from "@/components/Header/Headerpage";
 import Footer from "@/components/Footer/Footer";
 import ViewedProducts from "@/components/ViewedProducts/ViewedProducts";
-import CardProduct from "@/components/CardProduct/CardProduct";
-import { ProductCart } from "@/config/interfaces";
 import TitleHeader from "@/utils/TitleHeader/TitleHeader";
 import { poppins } from "@/config/fonts";
+import { useCartItems } from "@/api/cart/useCart";
+import Preloader from "@/components/ClientPreloader/Preloader";
+import CartInfo from "@/components/Cart/CartInfo/CartInfo";
+import { useGetAuth } from "@/api/auth/useAuth";
 
 const Cart = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const cart = useSelector((state: RootState) => state.cart.items);
-  const checkAuth = async () => {
-    const token = localStorage.getItem("token");
+  const { isLoading, data } = useCartItems();
+  const { data: auth, isLoading: authLoading } = useGetAuth();
+  const isAuthenticated = Boolean(auth && auth.status === 200);
 
-    if (token) {
-      try {
-        const res = await axios.get(
-          process.env.NEXT_PUBLIC_SERVER + "auth/check",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        if (res.status === 200) {
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
-      }
-    } else {
-      setIsAuthenticated(false);
-    }
-  };
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  if (isLoading || authLoading) {
+    return <Preloader />;
+  }
 
   return (
     <div>
       <Header />
-      <TitleHeader text="Cart" />
-      {cart.length === 0 ? (
-        <div>
-          <p
-            className={classNames(
-              styles["section-wish__title"],
-              poppins.className,
-            )}
-          >
-            Your cart is empty
-          </p>
-          {!isAuthenticated && (
+      <Container>
+        <TitleHeader styles={{ marginBottom: "0" }} text="Cart" />
+        {!data || data.items.length == 0 ? (
+          <div>
             <p
-              className={classNames(
-                styles["section-wish__subtitle"],
-                poppins.className,
-              )}
+              className={`section-wish__title
+                ${poppins.className}
+              `}
             >
-              Log in to see if you saved some products in cart
+              Your cart is empty
             </p>
-          )}
-          <Link className=" mt-20 flex mx-auto mb-5" href="/logIn">
-            <Button
-              className={`bg-default-900 text-default-50 w-40 flex mx-auto text-lg ${poppins.className}`}
-              color="default"
-              radius="full"
-              size="lg"
-              variant="flat"
-            >
-              Log in
-            </Button>
-          </Link>
-          <Link
-            className={classNames(
-              " flex mx-auto",
-              poppins.className,
-              styles["section-cart__continue"],
+            {!isAuthenticated && (
+              <p
+                className={`section-wish__subtitle
+                  ${poppins.className}`}
+              >
+                Log in to see if you saved some products in cart
+              </p>
             )}
-            href="/category"
-          >
-            Continue Shopping
-          </Link>
-        </div>
-      ) : (
-        <div className={classNames(styles["section-wish__cards"])}>
-          {cart.map((product: ProductCart) => (
-            <CardProduct key={product.id} product={product} />
-          ))}
-        </div>
-      )}
-      <ViewedProducts />
+            <Link className=" mt-20 flex mx-auto mb-5" href="/logIn">
+              <Button
+                className={`bg-default-900 text-default-50 w-40 flex mx-auto text-lg ${poppins.className}`}
+                color="default"
+                radius="full"
+                size="lg"
+                variant="flat"
+              >
+                Log in
+              </Button>
+            </Link>
+            <Link
+              className={`flex mx-auto ${poppins.className} section-cart__continue`}
+              href="/category"
+            >
+              Continue Shopping
+            </Link>
+          </div>
+        ) : (
+          <div className="section-cart">
+            <div className={"section-cart__cards"}>
+              {data.items.map((product: any) => {
+                const images = product.images;
+
+                product.product.images = images;
+                product.product.quantity = product.quantity;
+
+                return <CartItem key={product.id} product={product.product} />;
+              })}
+            </div>
+            <CartInfo subtotal={data.subtotalPrice} />
+          </div>
+        )}
+        <ViewedProducts />
+      </Container>
       <Footer />
     </div>
   );

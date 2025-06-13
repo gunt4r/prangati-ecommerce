@@ -1,0 +1,40 @@
+.section-cart__info {
+  max-width: 350px;
+  width: 100%;
+  box-sizing: border-box;
+  background: #eaebed;
+  border: 1px solid rgba(241, 241, 241, 0.2);
+  box-shadow:
+    -6px -6px 16px rgba(255, 255, 255, 0.5),
+    6px 6px 16px rgba(209, 205, 199, 0.5);
+  border-radius: 5px;
+  height: fit-content;
+  padding: 35px;
+  &-title {
+    font-weight: 200;
+    font-size: 32px;
+    line-height: 18px;
+    text-transform: uppercase;
+    color: #000000;
+  }
+  &-subtitle {
+    font-size: 14px;
+    line-height: 127%;
+    color: rgba(79, 79, 79, 0.8);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  &-subtitle:last-child {
+    margin-bottom: 3rem;
+  }
+  &-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 200;
+    font-size: 20px;
+    line-height: 18px;
+    text-transform: uppercase;
+    color: #000000;
+  }
+}

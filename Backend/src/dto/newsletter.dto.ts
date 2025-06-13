@@ -5,9 +5,7 @@ export class NewsletterDto {
   @IsNotEmpty()
   email: string;
 
-  @IsNotEmpty()
-  subject: string;
+  subject?: string;
 
-  @IsNotEmpty()
-  body: string;
+  body?: string;
 }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from 'src/models/Product.entity';
 import { Category } from 'src/models/Category.entity';
 import { UploadImagesModule } from 'src/upload-images/upload-images.module';
@@ -15,5 +15,6 @@ import { ProductSize } from 'src/models/Product_Sizes.entity';
   ],
   controllers: [ProductController],
   providers: [ProductService],
+  exports: [ProductService],
 })
 export class ProductModule {}

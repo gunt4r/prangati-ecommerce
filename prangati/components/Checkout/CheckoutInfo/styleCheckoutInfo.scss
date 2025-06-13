@@ -1,0 +1,13 @@
+.section-checkout {
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    width: 30%;
+  }
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+}

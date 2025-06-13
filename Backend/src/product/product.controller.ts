@@ -28,22 +28,16 @@ export class ProductController {
     @UploadedFiles() images: Express.Multer.File[],
     @Body() createProductDto: CreateProductDto,
   ) {
-    console.log('Images', images);
-    console.log('Body:', createProductDto);
     return this.productService.create(createProductDto, images);
   }
 
   @Get()
   findAll(
-    @Query('category') category: string,
+    @Query('category') category?: string,
     @Query('limit') limit: number = 12,
     @Query('page') page: number = 1,
   ) {
     return this.productService.findAll(category, +limit, +page);
-  }
-  @Get('limitedProducts')
-  findLimit(@Query('limitProducts') limitProducts: string) {
-    return this.productService.findLimit(+limitProducts);
   }
   @Get('/search')
   search(@Query('query') query: string) {

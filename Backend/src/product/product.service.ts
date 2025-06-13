@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { ILike, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/models/Product.entity';
-import { ILike, Repository } from 'typeorm';
 import { Category } from 'src/models/Category.entity';
 import { ProductColor } from 'src/models/Product_Colors.entity';
 import { ProductSize } from 'src/models/Product_Sizes.entity';
@@ -109,9 +109,8 @@ export class ProductService {
     });
   }
 
-  async findAll(category?: string, limit: number = 10, page: number = 1) {
+  async findAll(category?: string, limit: number = 12, page: number = 1) {
     const where: any = {};
-
     if (category) {
       where.category = { id: category };
     }
@@ -129,6 +128,7 @@ export class ProductService {
         where: { entityType: 'product', entityId: product.id },
       });
       (product as any).images = images;
+      (product as any).hasAttributes = this.productHasAttributes(product.id);
     }
 
     return {
@@ -159,6 +159,7 @@ export class ProductService {
     const sizes = await this.sizeRepository.find({
       where: { product: id },
     });
+    (product as any).hasAttributes = this.productHasAttributes(id);
     return {
       ...product,
       images,
@@ -167,18 +168,6 @@ export class ProductService {
     };
   }
 
-  async findLimit(limitProducts: number) {
-    const products = await this.productRepository.find({
-      take: limitProducts,
-    });
-    for (const product of products) {
-      const images = await this.uploadService.imageRepository.find({
-        where: { entityType: 'product', entityId: product.id },
-      });
-      (product as any).images = images;
-    }
-    return products;
-  }
   async search(query: string): Promise<Product[]> {
     const products = await this.productRepository.find({
       where: [
@@ -226,5 +215,27 @@ export class ProductService {
       throw new Error('Product not found');
     }
     return this.productRepository.remove(product);
+  }
+
+  async productHasAttributes(id: string) {
+    const product = await this.productRepository.findOne({
+      where: { id: id },
+      relations: ['category'],
+    });
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    const colors = await this.colorRepository.find({
+      where: { product: id },
+    });
+    const sizes = await this.sizeRepository.find({
+      where: { product: id },
+    });
+    if (colors.length > 0 || sizes.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

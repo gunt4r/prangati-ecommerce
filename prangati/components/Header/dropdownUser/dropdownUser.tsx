@@ -8,52 +8,28 @@ import {
 import { motion } from "framer-motion";
 import { BiUser } from "react-icons/bi";
 import classNames from "classnames";
-import { FaRegCircleUser } from "react-icons/fa6";
-import { IoIosHelpCircleOutline } from "react-icons/io";
+import { BiUserCircle } from "react-icons/bi";
 import { SlSettings } from "react-icons/sl";
 import { CiLogout } from "react-icons/ci";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { useDisclosure } from "@heroui/modal";
+import { PiUserCirclePlusBold } from "react-icons/pi";
 
 import style from "./styleDropdownUser.module.css";
 
 import AccountSettings from "@/components/AccountSettings/accountSettings";
 import { poppins } from "@/config/fonts";
+import { useGetAuth } from "@/api/auth/useAuth";
+import Preloader from "@/components/ClientPreloader/Preloader";
+import { queryClient } from "@/api/react-query";
+import { REACT_QUERY_AUTH_KEY } from "@/config/const";
+import { useGetUser } from "@/api/user/useUser";
 export default function DropdownUser() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
-  const checkAuth = async () => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      try {
-        const res = await axios.get(
-          process.env.NEXT_PUBLIC_SERVER + "auth/check",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        if (res.status === 200) {
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
-      }
-    } else {
-      setIsAuthenticated(false);
-    }
-  };
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
+  const { data, isLoading } = useGetAuth();
+  const isAuthenticated = Boolean(data && data.status === 200);
+  const { data: user, isLoading: isLoadingUser } = useGetUser();
   const handleLogin = () => {
     router.push("/logIn");
   };
@@ -63,7 +39,7 @@ export default function DropdownUser() {
   const handleLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_uuid");
-    checkAuth();
+    queryClient.invalidateQueries({ queryKey: [REACT_QUERY_AUTH_KEY] });
   };
   const motionUserIcon = {
     hover: {
@@ -79,6 +55,8 @@ export default function DropdownUser() {
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
+
+  if (isLoading || isLoadingUser) return <Preloader />;
 
   return (
     <div>
@@ -136,12 +114,10 @@ export default function DropdownUser() {
                 }}
               >
                 <section>
-                  <p className="text-default-900 text-[10px] font-light">
-                    Aniston Harper
+                  <p className="text-default-900 text-[14px] font-light">
+                    {user?.firstName} {user?.lastName}
                   </p>
-                  <p className="text-default-500 text-[8px]">
-                    aniston2@gmail.com{" "}
-                  </p>
+                  <p className="text-default-500 text-[10px]">{user?.email}</p>
                 </section>
               </DropdownItem>
             </DropdownSection>
@@ -152,14 +128,6 @@ export default function DropdownUser() {
                 onPress={onOpen}
               >
                 Account Settings
-              </DropdownItem>
-              <DropdownItem
-                key="help_and_feedback"
-                startContent={
-                  <IoIosHelpCircleOutline className={iconClasses} />
-                }
-              >
-                Help Center
               </DropdownItem>
               <DropdownItem
                 key="logout"
@@ -213,14 +181,18 @@ export default function DropdownUser() {
             <DropdownSection>
               <DropdownItem
                 key="dashboardLogin"
-                startContent={<FaRegCircleUser className={iconClasses} />}
+                startContent={<BiUserCircle className={iconClasses} />}
                 onPress={handleLogin}
               >
                 <p>Log in</p>
               </DropdownItem>
               <DropdownItem
                 key="dashboardSignIn"
-                startContent={<FaRegCircleUser className={iconClasses} />}
+                startContent={
+                  <PiUserCirclePlusBold
+                    className={`${iconClasses} -m-0.5 w-6 text-2xl`}
+                  />
+                }
                 onPress={handleSignIn}
               >
                 <p>Sign in</p>

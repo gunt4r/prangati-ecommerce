@@ -1,20 +1,23 @@
 import "./styleProductInfo.scss";
-import { Button, ButtonGroup } from "@heroui/button";
+import { Button } from "@heroui/button";
 import { useEffect, useState } from "react";
-import { NumberInput } from "@heroui/number-input";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { TbTruckDelivery } from "react-icons/tb";
 import { BsArrowRepeat } from "react-icons/bs";
-import { GoPlus } from "react-icons/go";
-import { FiMinus } from "react-icons/fi";
 
 import ProductBenefit from "../ProductBenefit/ProductBenefit";
 
+import QuantitySelector from "./quantitySelector/QuantitySelector";
+
+import { useUUID } from "@/Hooks/useUUID";
+import { useAddProductToCart } from "@/api/cart/useCart";
 import { poppins, inter } from "@/config/fonts";
 import LikeProduct from "@/components/CardProduct/LikeProduct/LikeProduct";
 import { Product } from "@/config/interfaces";
 export default function ProductInfo({ product }: { product: Product }) {
+  const { mutate: addProductToCart } = useAddProductToCart();
+  const userID = useUUID();
   const [quantityValue, setQuantityValue] = useState(1);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -54,18 +57,37 @@ export default function ProductInfo({ product }: { product: Product }) {
   };
 
   const handleSubmit = () => {
-    if (product.colors && selectedColors.length === 0) {
-      toast.error("Please select color(s)");
+    if (
+      !selectedColors.length ||
+      !selectedSizes.length ||
+      (!product.colors && !product.sizes)
+    ) {
+      toast.error(`Please select colors and sizes`);
 
       return;
     }
-    if (product.sizes && selectedSizes.length === 0) {
-      toast.error("Please select size(s)");
+    const items = Array.from({ length: quantityValue }, (_, index) => ({
+      color: product.colors ? selectedColors[index] : undefined,
+      size: product.sizes ? selectedSizes[index] : undefined,
+    }));
 
-      return;
-    }
+    addProductToCart(
+      {
+        userId: userID,
+        productId: product.id,
+        quantity: quantityValue,
+        attributes: items,
+      },
+      {
+        onSuccess: () => {
+          router.push("/cart");
+        },
+        onError: () => {
+          toast.error(`Error adding ${product.name} to the cart`);
+        },
+      },
+    );
     toast.success(`You successfully added ${product.name} to the cart`);
-    router.push(`/cart?product=${product.id}&quantity=${quantityValue}`);
   };
   const incrementValue = () =>
     setQuantityValue((prev) => Math.min(product.stock as number, prev + 1));
@@ -148,37 +170,13 @@ export default function ProductInfo({ product }: { product: Product }) {
         </div>
       )}
       <div className="section-product__info--buttons">
-        <ButtonGroup className="section-product__info--buttons__wrapper w-2/5">
-          <Button
-            className="section-product__info--buttons--decrement min-w-10"
-            radius="sm"
-            variant="light"
-            onPress={decrementValue}
-          >
-            <FiMinus size={20} />
-          </Button>
-          <NumberInput
-            hideStepper
-            className={`${poppins.className}`}
-            classNames={{
-              inputWrapper: "section-product__info--buttons--input_wrapper",
-              input: `section-product__info--buttons--input ${poppins.className}`,
-            }}
-            defaultValue={1}
-            maxValue={product.stock}
-            minValue={1}
-            value={quantityValue}
-            onValueChange={setQuantityValue}
-          />
-          <Button
-            className="section-product__info--buttons--increment min-w-10"
-            radius="sm"
-            variant="light"
-            onPress={incrementValue}
-          >
-            <GoPlus size={60} />
-          </Button>
-        </ButtonGroup>
+        <QuantitySelector
+          maxValue={product.stock}
+          value={quantityValue}
+          onDecrement={decrementValue}
+          onIncrement={incrementValue}
+          onValueChange={setQuantityValue}
+        />
         <Button
           className={`section-product__info--buttons--add ${poppins.className}`}
           radius="sm"
@@ -200,8 +198,8 @@ export default function ProductInfo({ product }: { product: Product }) {
         title={"Free Delivery"}
       >
         {" "}
-        <p className="section-product__info--delivery">
-          Enter your postal code for Delivery Availability
+        <p className="section-product__info--delivery underline">
+          You may be eligible for free delivery.
         </p>{" "}
       </ProductBenefit>
       <ProductBenefit
@@ -215,13 +213,14 @@ export default function ProductInfo({ product }: { product: Product }) {
         {" "}
         <p className="section-product__info--delivery">
           Free 30 Days Delivery Returns.{" "}
-          <Button
-            onPress={() => {
+          <button
+            className="underline hover:cursor-pointer hover:opacity-70"
+            onClick={() => {
               router.push("/return");
             }}
           >
             Details
-          </Button>
+          </button>
         </p>{" "}
       </ProductBenefit>
     </article>

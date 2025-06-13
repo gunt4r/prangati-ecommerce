@@ -8,27 +8,28 @@ import {
 import classNames from "classnames";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { useState, useEffect, useRef } from "react";
+import { Form, SharedSelection } from "@heroui/react";
+import { isEqual } from "lodash";
+import { Select, SelectItem } from "@heroui/react";
 
-import ClientPreloader from "../ClientPreloader/ClientPreloader";
+import Preloader from "../ClientPreloader/Preloader";
 
 import style from "./styleAccountSettings.module.css";
 
-import { poppins } from "@/config/fonts";
+import { archivo } from "@/config/fonts";
 import { useUUID } from "@/Hooks/useUUID";
-
-interface User {
-  firstName: string;
-  lastName: string;
-  phone: number;
-  email: string;
-  city: string;
-  address: string;
-  country: string;
-  postalCode: string;
-}
-
+import { useGetUser } from "@/api/user/useUser";
+import { useUpdateUser } from "@/api/user/useUser";
+import { queryClient } from "@/api/react-query";
+import {
+  REACT_QUERY_COUNTRIES_KEY,
+  REACT_QUERY_USER_KEY,
+} from "@/config/const";
+import { useGetCountries } from "@/api/countries/useCountries";
+import { CountryType } from "@/config/interfaces";
 interface AccountSettingsProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
@@ -38,61 +39,101 @@ export default function AccountSettings({
   isOpen,
   onOpenChange,
 }: AccountSettingsProps) {
-  const [userData, setUserData] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: user, isLoading } = useGetUser();
   const userId = useUUID();
+  const { mutate } = useUpdateUser();
+  const [errors, setErrors] = useState({});
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const { data: countries, isLoading: isLoadingCountries } = useGetCountries();
+  const defaultValues = {
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    address: user?.address || "",
+    city: user?.city || "",
+    postalCode: user?.postalCode || "",
+    phone: user?.phone || "",
+    country: user?.country || "",
+  };
+
+  const { register, handleSubmit, reset, setValue } = useForm({
+    defaultValues,
+  });
+  const defaultRef = useRef(defaultValues);
 
   useEffect(() => {
-    async function fetchUserData() {
-      if (!userId) {
-        setLoading(false);
+    if (!isLoading && user) {
+      const newDefaults = {
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        address: user.address || "",
+        city: user.city || "",
+        postalCode: user.postalCode || "",
+        phone: user.phone || "",
+        country: user.country || "",
+      };
 
-        return;
-      }
-      try {
-        const url = new URL(`${process.env.NEXT_PUBLIC_SERVER}user/${userId}`);
-        const response = await fetch(url.toString(), {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const result: User = await response.json();
-
-        setUserData(result);
-      } catch (error) {
-        toast.error("Error fetching user data");
-      } finally {
-        setLoading(false);
-      }
+      reset(newDefaults);
+      defaultRef.current = newDefaults;
+      setSelectedCountry(user.country || "");
     }
-    fetchUserData();
-  }, [userId]);
+  }, [isLoading, user, reset]);
+  useEffect(() => {
+    setValue("country", selectedCountry);
+  }, [selectedCountry, setValue]);
 
-  async function handleClick() {
-    if (!userData) return;
+  async function handleClick(data: any) {
+    if (!data) return;
+    if (!userId) return;
+    if (isEqual(data, defaultRef.current))
+      return toast.error("No changes made");
+    if (!data.country) {
+      toast.error("Country is required");
+
+      return;
+    }
+
     try {
-      const url = `${process.env.NEXT_PUBLIC_SERVER}user/${userId}`;
-      const response = await fetch(url, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+      const flatData = {
+        address: {
+          addressLine1: data.address,
+          city: data.city,
+          zip: data.postalCode,
+          country: selectedCountry ?? data.country,
+          state: data.state || undefined,
         },
-        body: JSON.stringify(userData),
-      });
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone,
+        userId: userId,
+      };
 
-      if (!response.ok) {
-        toast.error("Failed to update user data");
-        throw new Error("Failed to update user data");
-      }
-      toast.success("User data updated successfully");
+      mutate(flatData, {
+        onSuccess: () => {
+          toast.success("User has been updated");
+          queryClient.invalidateQueries({ queryKey: [REACT_QUERY_USER_KEY] });
+          onOpenChange(false);
+          setErrors({});
+        },
+
+        onError: (error: any) => {
+          setErrors(error?.response?.data?.errors ?? {});
+          toast.error("Error updating user data");
+        },
+      });
     } catch (error) {
       toast.error("Error updating user data");
     }
   }
 
-  if (loading) return <ClientPreloader />;
-  if (!userData) return null;
+  useEffect(() => {
+    if (selectedCountry) {
+      queryClient.invalidateQueries({ queryKey: [REACT_QUERY_COUNTRIES_KEY] });
+    }
+  }, [selectedCountry]);
+  if (isLoading || isLoadingCountries) return <Preloader />;
 
   return (
     <Modal
@@ -102,16 +143,19 @@ export default function AccountSettings({
       size="5xl"
       onOpenChange={onOpenChange}
     >
-      <Toaster position="bottom-right" />
       <ModalContent>
-        {(onClose: () => void) => (
-          <>
-            <ModalHeader className="flex items-center flex-row justify-center gap-1">
+        {(_onClose: () => void) => (
+          <Form
+            autoComplete="on"
+            className="checkout-form w-full"
+            validationErrors={errors}
+            onSubmit={handleSubmit(handleClick)}
+          >
+            <ModalHeader className="flex items-center flex-row mx-auto justify-center gap-1">
               <p
                 className={classNames(
                   style["section-account__form-modal-title"],
-                  "mx-auto",
-                  poppins.className,
+                  archivo.className,
                 )}
               >
                 Account settings
@@ -124,22 +168,16 @@ export default function AccountSettings({
                   labelPlacement="outside"
                   radius="none"
                   type="text"
-                  value={userData.firstName}
+                  {...register("firstName")}
                   variant="bordered"
-                  onChange={(e) =>
-                    setUserData({ ...userData, firstName: e.target.value })
-                  }
                 />
                 <Input
                   label="LAST NAME"
                   labelPlacement="outside"
                   radius="none"
                   type="text"
-                  value={userData.lastName}
                   variant="bordered"
-                  onChange={(e) =>
-                    setUserData({ ...userData, lastName: e.target.value })
-                  }
+                  {...register("lastName")}
                 />
               </div>
               <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-36">
@@ -148,22 +186,16 @@ export default function AccountSettings({
                   labelPlacement="outside"
                   radius="none"
                   type="tel"
-                  value={String(userData.phone)}
                   variant="bordered"
-                  onChange={(e) =>
-                    setUserData({ ...userData, phone: Number(e.target.value) })
-                  }
+                  {...register("phone")}
                 />
                 <Input
                   label="EMAIL"
                   labelPlacement="outside"
                   radius="none"
                   type="email"
-                  value={userData.email}
                   variant="bordered"
-                  onChange={(e) =>
-                    setUserData({ ...userData, email: e.target.value })
-                  }
+                  {...register("email")}
                 />
               </div>
               <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-36">
@@ -172,60 +204,56 @@ export default function AccountSettings({
                   labelPlacement="outside"
                   radius="none"
                   type="text"
-                  value={userData.city}
                   variant="bordered"
-                  onChange={(e) =>
-                    setUserData({ ...userData, city: e.target.value })
-                  }
+                  {...register("city")}
                 />
                 <Input
                   label="ADDRESS"
                   labelPlacement="outside"
                   radius="none"
                   type="text"
-                  value={userData.address}
                   variant="bordered"
-                  onChange={(e) =>
-                    setUserData({ ...userData, address: e.target.value })
-                  }
+                  {...register("address")}
                 />
               </div>
               <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-36">
-                <Input
+                <Select
+                  items={countries}
                   label="COUNTRY"
                   labelPlacement="outside"
+                  name="country"
                   radius="none"
-                  type="text"
-                  value={userData.country}
+                  selectedKeys={new Set([selectedCountry])}
                   variant="bordered"
-                  onChange={(e) =>
-                    setUserData({ ...userData, country: e.target.value })
-                  }
-                />
+                  onSelectionChange={(keys: SharedSelection) => {
+                    setSelectedCountry(keys.currentKey ?? "");
+                  }}
+                >
+                  {(item: CountryType) => (
+                    <SelectItem key={item.value}>{item.name}</SelectItem>
+                  )}
+                </Select>
                 <Input
                   label="POSTCODE"
                   labelPlacement="outside"
                   radius="none"
                   type="text"
-                  value={userData.postalCode}
                   variant="bordered"
-                  onChange={(e) =>
-                    setUserData({ ...userData, postalCode: e.target.value })
-                  }
+                  {...register("postalCode")}
                 />
               </div>
             </ModalBody>
             <ModalFooter className="flex w-5/6 items-center flex-row m-auto mb-6 mt-6">
               <Button
-                className="bg-backgroundColorButtonBlack text-white ml-auto"
+                className="bg-backgroundColorButtonBlack text-white ml-auto uppercase"
                 radius="sm"
                 size="lg"
-                onPress={handleClick}
+                type="submit"
               >
                 Update
               </Button>
             </ModalFooter>
-          </>
+          </Form>
         )}
       </ModalContent>
     </Modal>

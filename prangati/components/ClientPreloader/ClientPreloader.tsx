@@ -1,7 +1,10 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+
 import Preloader from "./Preloader";
+
+import { useUUID } from "@/Hooks/useUUID";
 const CookieConsentModalWrapper = dynamic(
   () =>
     import(
@@ -11,6 +14,8 @@ const CookieConsentModalWrapper = dynamic(
 
 export default function ClientPreloader() {
   const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const userUUID = useUUID();
 
   useEffect(() => {
     if (document.readyState === "complete") {

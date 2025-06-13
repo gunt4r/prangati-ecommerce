@@ -5,7 +5,6 @@ import {
   OneToMany,
   ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { Category } from './Category.entity';
 // import { ProductColor } from './Product_Colors.entity';
@@ -43,7 +42,4 @@ export class Product {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

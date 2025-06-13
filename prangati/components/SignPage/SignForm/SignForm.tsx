@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import classNames from "classnames";
 import { Checkbox, Input } from "@heroui/react";
 import { useMemo, useState } from "react";
@@ -14,9 +13,10 @@ import style from "./styleSignForm.module.css";
 
 import { poppins } from "@/config/fonts";
 import { useUUID } from "@/Hooks/useUUID";
-
+import { usePostRegister } from "@/api/auth/useAuth";
 export default function SignForm() {
   const router = useRouter();
+  const { mutate } = usePostRegister();
   const [valueFullName, setValueFullname] = useState("");
   const [valueEmail, setValueEmail] = useState("");
   const [isVisible, setIsVisible] = useState(false);
@@ -39,7 +39,7 @@ export default function SignForm() {
     return valueEmail !== "" && !validateEmail(valueEmail);
   }, [valueEmail]);
 
-  const validateFullName = (value: string) => {
+  const validateFullName = (value: string): Boolean => {
     return value.trim().split(" ").length === 2;
   };
 
@@ -89,32 +89,30 @@ export default function SignForm() {
 
       return;
     }
-    try {
-      const response = await axios.post(
-        process.env.NEXT_PUBLIC_SERVER + "auth/register",
-        {
-          id: userUUID,
-          fullName: valueFullName,
-          email: valueEmail,
-          password: password,
+    mutate(
+      {
+        id: userUUID,
+        fullName: valueFullName,
+        email: valueEmail,
+        password: password,
+      },
+      {
+        onSuccess: (response) => {
+          toast.success("Registration successful!");
+          const { token } = response;
+
+          localStorage.setItem("token", token);
+          setTimeout(() => {
+            router.push("/");
+          }, 1500);
         },
-        { withCredentials: true },
-      );
-
-      if (response.status == 201) {
-        toast.success("Registration successful!");
-        const { token } = response.data;
-
-        localStorage.setItem("token", token);
-        setTimeout(() => {
-          router.push("/");
-        }, 1500);
-      } else {
-        toast.error("Registration failed. Please try again.");
-      }
-    } catch (error) {
-      toast.error("Registration failed. Please try again.");
-    }
+        onError: (error) => {
+          toast.error(
+            error.message || "Registration failed. Please try again.",
+          );
+        },
+      },
+    );
   };
 
   return (

@@ -1,33 +1,11 @@
-// import { MailerModule } from '@nestjs-modules/mailer';
-// import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
-import { MailService } from './mail.service';
 import { JwtService } from '@nestjs/jwt';
-// import { join } from 'path';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MailService } from './mail.service';
+import { Newsletter } from 'src/models/Newsletter.entity';
 
 @Module({
-  // imports: [
-  //   MailerModule.forRoot({
-  //     transport: {
-  //       host: 'localhost:3000',
-  //       secure: false,
-  //       auth: {
-  //         user: 'vladprangati2005@gmail.com',
-  //         pass: `${process.env.APP_PASSWORD_GMAIL}`,
-  //       },
-  //     },
-  //     defaults: {
-  //       from: '"No Reply" <noreply@gmail.com>',
-  //     },
-  //     template: {
-  //       dir: join(__dirname, 'templates'),
-  //       adapter: new HandlebarsAdapter(),
-  //       options: {
-  //         strict: true,
-  //       },
-  //     },
-  //   }),
-  // ],
+  imports: [TypeOrmModule.forFeature([Newsletter])],
   providers: [MailService, JwtService],
   exports: [MailService],
 })

@@ -1,7 +1,7 @@
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { Product } from '../models/Product.entity';
 import { Wishlist } from '../models/Wishlist.entity';
 import { User } from '../models/User.entity';
@@ -75,9 +75,9 @@ export class WishlistService {
       },
     });
     if (!entry) {
-      throw new BadRequestException('Wishlist not found');
+      return { status: HttpStatus.NOT_FOUND };
     }
-    return HttpStatus.OK;
+    return { status: HttpStatus.OK };
   }
   async remove(deleteFromWishlist: CreateWishlistDto) {
     const { productID, userID } = deleteFromWishlist;

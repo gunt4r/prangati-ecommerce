@@ -1,7 +1,6 @@
 .section-wish__wrapper {
   display: flex;
   align-items: center;
-  width: 90%;
   margin-right: auto;
   margin-left: auto;
   flex-direction: column;
@@ -32,5 +31,5 @@
   display: grid;
   grid-template-columns: repeat(auto-fit,376px);
   width: 100%;
-  gap: 100px;
+  gap: 50px;
 }

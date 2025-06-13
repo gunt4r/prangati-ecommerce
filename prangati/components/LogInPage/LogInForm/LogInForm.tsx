@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import classNames from "classnames";
 import { Checkbox, Input } from "@heroui/react";
 import { useMemo, useState } from "react";
@@ -22,9 +21,12 @@ import React from "react";
 import style from "./styleLogInForm.module.css";
 
 import { poppins } from "@/config/fonts";
-
+import { queryClient } from "@/api/react-query";
+import { REACT_QUERY_AUTH_KEY } from "@/config/const";
+import { usePostLogin } from "@/api/auth/useAuth";
 export default function LogInForm() {
   const router = useRouter();
+  const { mutate } = usePostLogin();
   const [valueEmail, setValueEmail] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [password, setPassword] = useState("");
@@ -70,32 +72,27 @@ export default function LogInForm() {
 
       return;
     }
+    mutate(
+      { email: valueEmail, password: password },
+      {
+        onSuccess: (response) => {
+          toast.success("Authentication is successful!");
+          const { token } = response;
 
-    try {
-      const response = await axios.post(
-        process.env.NEXT_PUBLIC_SERVER + "auth/login",
-        {
-          email: valueEmail,
-          password: password,
+          localStorage.setItem("token", token);
+          localStorage.setItem("user_uuid", response.id);
+          queryClient.invalidateQueries({ queryKey: [REACT_QUERY_AUTH_KEY] });
+          setTimeout(() => {
+            router.push("/");
+          }, 1500);
         },
-        { withCredentials: true },
-      );
-
-      if (response.status == 201) {
-        toast.success("Authentication is successful!");
-        const { token } = response.data;
-
-        localStorage.setItem("token", token);
-        localStorage.setItem("user_uuid", response.data.id);
-        setTimeout(() => {
-          router.push("/");
-        }, 1500);
-      } else {
-        toast.error("Registration failed. Please try again.");
-      }
-    } catch (error) {
-      toast.error("Registration failed. Please try again.");
-    }
+        onError: (error) => {
+          toast.error(
+            error.message || "Authentication failed. Please try again.",
+          );
+        },
+      },
+    );
   };
 
   return (

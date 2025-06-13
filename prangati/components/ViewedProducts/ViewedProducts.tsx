@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { HashLoader } from "react-spinners";
 
 import CardProduct from "../CardProduct/CardProduct";
 import HeadingSectionTitle from "../HomePage/HeadingSection/HeadingSectionTitle/HeadingSectionTitle";
+import Preloader from "../ClientPreloader/Preloader";
+import Container from "../Container/Container";
 
 import styles from "./styleViewedProducts.module.css";
 
 import { getRecentViewedProducts } from "@/services/viewedProductsService";
 import { useUUID } from "@/Hooks/useUUID";
 import { Product } from "@/config/interfaces";
-
 export default function ViewedProducts({
   style,
 }: {
@@ -41,22 +41,13 @@ export default function ViewedProducts({
   }, [userUUID]);
 
   if (isLoading) {
-    return (
-      <HashLoader
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      />
-    );
+    return <Preloader />;
   }
 
   return (
     <section className={styles["section-viewed-products"]} style={{ ...style }}>
       {data.length > 0 ? (
-        <>
+        <Container>
           <HeadingSectionTitle
             style={{ textTransform: "uppercase" }}
             textHeading=" Recently View"
@@ -66,7 +57,7 @@ export default function ViewedProducts({
               <CardProduct key={item.id} product={item} />
             ))}
           </article>
-        </>
+        </Container>
       ) : (
         <br />
       )}

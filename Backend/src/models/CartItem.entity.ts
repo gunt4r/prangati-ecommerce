@@ -17,4 +17,7 @@ export class CartItem {
 
   @Column({ default: 1 })
   quantity: number;
+
+  @Column({ type: 'jsonb', nullable: true })
+  attributes: Array<Record<string, string>> | null;
 }

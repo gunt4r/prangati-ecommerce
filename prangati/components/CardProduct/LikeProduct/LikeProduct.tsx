@@ -23,7 +23,7 @@ export default function LikeProduct({
           `${process.env.NEXT_PUBLIC_SERVER}wishlist/check/${product.id}/${userID}`,
         );
 
-        setIsLiked(response.status === 200);
+        setIsLiked(response.data.status === 200);
       } catch (error) {
         setIsLiked(false);
       }

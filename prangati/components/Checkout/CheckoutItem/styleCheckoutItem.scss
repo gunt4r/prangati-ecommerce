@@ -1,0 +1,33 @@
+.section-checkout {
+  &__item {
+    display: flex;
+    align-items: center;
+    &-image {
+      width: 100px;
+      height: 100px;
+    }
+    &-name {
+      font-size: 14px;
+      line-height: 127%;
+      text-transform: uppercase;
+      color: #000000;
+      
+    }
+    &-info {
+      display: flex;
+      flex-direction: column;
+      width: 90%;
+      margin-left: 1rem;
+      &-quantity {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+      &-name {
+      }
+      &-price {
+      }
+    }
+  }
+}

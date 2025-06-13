@@ -1,0 +1,16 @@
+.section-nav__helpers-cart {
+  padding: 5px;
+  border-radius: 6px;
+  transition: 0.6s ease-in-out;
+}
+.section-nav__helpers-cart:hover {
+    background-color: rgba(122, 122, 122, 0.1);
+  }
+.section-nav__helpers-cart-icon {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+.section-nav__helpers-cart-clicked {
+  background-color: rgba(122, 122, 122, 0.2);
+}

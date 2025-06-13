@@ -40,6 +40,46 @@
     color: #454545;
     margin-bottom: 1rem;
   }
+  .section-product__info {
+    &--buttons {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      justify-content: space-between;
+      &--add {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        color: #fafafa;
+        letter-spacing: 0.03em;
+        background-color: #201f2f;
+        border-radius: 4px;
+        padding: 0.5rem 2.8rem;
+        margin-right: 1rem;
+        cursor: pointer;
+        &:hover {
+          opacity: 0.7;
+          transition: 0.4s ease-in-out;
+        }
+      }
+      &--like {
+        border: 2px solid rgba(0, 0, 0, 0.5);
+        border-radius: 4px;
+        padding: 0.5rem 0.5rem;
+        display: flex;
+        align-items: center;
+        place-items: center;
+        justify-content: center;
+        cursor: pointer;
+        &:hover {
+          opacity: 0.7;
+          transition: 0.4s ease-in-out;
+        }
+      }
+    }
+  }
+
   &--line {
     height: 1.5px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -124,80 +164,6 @@
           transform: scale(1.05);
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-      }
-    }
-  }
-  &--buttons {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    width: 100%;
-    justify-content: space-between;
-    &__wrapper {
-      border: 1px solid rgba(0, 0, 0, 0.5);
-      border-radius: 9px;
-      margin-right: 1rem;
-    }
-    &--input_wrapper {
-      height: 40px;
-      border-radius: 0;
-      background-color: transparent;
-      border-left: 1px solid rgba(0, 0, 0, 0.5);
-      border-right: 1px solid rgba(0, 0, 0, 0.5);
-    }
-    &--input {
-      display: flex;
-      justify-content: center;
-      text-align: center;
-      color: #000000;
-      font-size: 20px;
-    }
-    &--increment {
-      &:hover {
-        color: #201f2f;
-        transition: 0.3s ease-in;
-      }
-      color: #fff;
-      background-color: #201f2f;
-    }
-    &--decrement {
-      &:hover {
-        color: #fff;
-        background-color: #201f2f;
-        transition: 0.3s ease-in;
-      }
-      color: #000;
-      background-color: #fff;
-      font-size: 25px;
-    }
-    &--add {
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 24px;
-      color: #fafafa;
-      letter-spacing: 0.03em;
-      background-color: #201f2f;
-      border-radius: 4px;
-      padding: 0.5rem 2.8rem;
-      margin-right: 1rem;
-      cursor: pointer;
-      &:hover {
-        opacity: 0.7;
-        transition: 0.4s ease-in-out;
-      }
-    }
-    &--like {
-      border: 2px solid rgba(0, 0, 0, 0.5);
-      border-radius: 4px;
-      padding: 0.5rem 0.5rem;
-      display: flex;
-      align-items: center;
-      place-items: center;
-      justify-content: center;
-      cursor: pointer;
-      &:hover {
-        opacity: 0.7;
-        transition: 0.4s ease-in-out;
       }
     }
   }

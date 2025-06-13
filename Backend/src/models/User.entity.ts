@@ -12,7 +12,7 @@ import { PasswordResetToken } from './password-reset-token.entity';
 import { Wishlist } from './Wishlist.entity';
 @Entity('users')
 export class User {
-  @PrimaryColumn('uuid')
+  @PrimaryColumn('uuid', { unique: true })
   id: string;
 
   @Column({ nullable: true })
@@ -41,6 +41,9 @@ export class User {
 
   @Column({ nullable: true })
   country: string;
+
+  @Column({ nullable: true })
+  state: string;
 
   @Column({ nullable: true })
   phone: string;

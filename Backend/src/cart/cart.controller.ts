@@ -19,7 +19,8 @@ export class CartController {
   constructor(private readonly cartService: CartService) {}
 
   @Post()
-  create(@Param('userId') userId: string) {
+  create(@Body('userId') userId: string) {
+    console.log('userID : ', userId);
     return this.cartService.createCart(userId);
   }
   @Post('add-product')
@@ -43,9 +44,17 @@ export class CartController {
       deleteFromCart.productId,
     );
   }
+  @Delete('remove-and-add-to-wishlist')
+  removeAndAddToWishlist(@Body() deleteFromCart: CreateCartDto) {
+    return this.cartService.removeAndAddToWishlist(
+      deleteFromCart.userId,
+      deleteFromCart.productId,
+    );
+  }
   @Delete('remove-items')
-  removeItems(@Param('userId') userId: string) {
-    return this.cartService.removeItemsCart(userId);
+  removeItems(@Body('userId') userId: string) {
+    console.log('userID : ', userId);
+    return this.cartService.clearCart(userId);
   }
   // @UseGuards(JwtAuthGuard, AdminGuard)
   @Delete('deleteAllEntities')

@@ -1,8 +1,8 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { MailService } from 'src/mail/mail.service';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MailService } from 'src/mail/mail.service';
 import { PasswordResetToken } from '../models/password-reset-token.entity';
 import { User } from '../models/User.entity';
 

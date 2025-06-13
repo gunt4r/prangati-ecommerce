@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
+import { Toaster } from "react-hot-toast";
 
 import { Providers } from "./providers";
 
@@ -10,6 +11,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ClientPreloader from "@/components/ClientPreloader/ClientPreloader";
 import { siteConfig } from "@/config/site";
+
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -39,8 +42,16 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en" >
       <head />
       <body className={archivo.className}>
-        <ClientPreloader />
+        <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            fontSize: "15px",
+          },
+        }}
+      />
         <Providers>
+        <ClientPreloader />
           <main>{children}</main>
         </Providers>
       </body>

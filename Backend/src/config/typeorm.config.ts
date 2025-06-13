@@ -1,9 +1,8 @@
-// src/config/typeorm.config.ts
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { User } from '../models/User.entity';
-import { MailingList } from '../models/Newsletter.entity';
+import { Newsletter } from 'src/models/Newsletter.entity';
 import { Order } from '../models/Order.entity';
 import { OrderItem } from '../models/OrderItem.entity';
 import { Product } from '../models/Product.entity';
@@ -17,6 +16,7 @@ import { ProductColor } from 'src/models/Product_Colors.entity';
 import { ProductSize } from 'src/models/Product_Sizes.entity';
 import { Wishlist } from 'src/models/Wishlist.entity';
 import { UploadedImage } from 'src/models/UploadImage';
+
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
@@ -33,7 +33,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       logging: true,
       entities: [
         User,
-        MailingList,
+        Newsletter,
         Order,
         OrderItem,
         Product,

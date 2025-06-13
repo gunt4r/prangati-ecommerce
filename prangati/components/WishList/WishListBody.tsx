@@ -5,8 +5,10 @@ import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
 import { useEffect, useState } from "react";
 import { HashLoader } from "react-spinners";
+import { FaArrowRight } from "react-icons/fa6";
 
 import CardProduct from "../CardProduct/CardProduct";
+import Container from "../Container/Container";
 
 import style from "./styleWishListBody.module.css";
 
@@ -19,6 +21,7 @@ export default function WishlistBody() {
   const [wishlist, setWishlist] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const userId = useUUID();
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     async function getWishlist() {
@@ -66,45 +69,63 @@ export default function WishlistBody() {
       ...item,
       images:
         item.images?.map((img) =>
-          typeof img === "string" ? { url: img } : img,
+          typeof img === "string" ? { path: img } : img,
         ) || [],
     })) || [];
+  const handleShowMore = () => {
+    setShowMore(true);
+  };
 
   return (
     <div className={classNames(style["section-wish__wrapper"])}>
-      <TitleHeader text="WishList" />
-      {wishlist.length === 0 ? (
-        <div>
-          <p
-            className={classNames(
-              style["section-wish__subtitle"],
-              poppins.className,
-            )}
-          >
-            Explore the products you’ve added to your wishlist. Share them with
-            friends, family, or even our experts to help you find the perfect
-            match!
-          </p>
-          <hr className={classNames(style["section-wish__line"])} />
-          <Link className=" flex mx-auto" href="/gadgets">
-            <Button
-              className={`bg-default-900 text-default-50 w-40 flex mx-auto text-lg ${poppins.className}`}
-              color="default"
-              radius="full"
-              size="lg"
-              variant="flat"
+      <Container>
+        <TitleHeader text="WishList" />
+        {wishlist.length === 0 ? (
+          <div>
+            <p
+              className={classNames(
+                style["section-wish__subtitle"],
+                poppins.className,
+              )}
             >
-              Explore
-            </Button>
-          </Link>
-        </div>
-      ) : (
-        <div className={classNames(style["section-wish__cards"])}>
-          {formattedWishlist.map((item: Product) => (
-            <CardProduct key={item.id} product={item} />
-          ))}
-        </div>
-      )}
+              Explore the products you’ve added to your wishlist. Share them
+              with friends, family, or even our experts to help you find the
+              perfect match!
+            </p>
+            <hr className={classNames(style["section-wish__line"])} />
+            <Link className=" flex mx-auto" href="/products">
+              <Button
+                className={`bg-default-900 text-default-50 w-40 flex mx-auto text-lg ${poppins.className}`}
+                color="default"
+                radius="full"
+                size="lg"
+                variant="flat"
+              >
+                Explore
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <div>
+            <div className={classNames(style["section-wish__cards"])}>
+              {formattedWishlist.map((item: Product) => (
+                <CardProduct key={item.id} product={item} />
+              ))}
+            </div>
+            <Link className=" flex mx-auto" href="/products">
+              <Button
+                className={` uppercase  flex mx-auto text-lg mt-12 ${poppins.className}`}
+                isLoading={showMore}
+                size="lg"
+                variant="light"
+                onPress={handleShowMore}
+              >
+                Show more <FaArrowRight className="text-lg" size={60} />
+              </Button>
+            </Link>
+          </div>
+        )}
+      </Container>
     </div>
   );
 }

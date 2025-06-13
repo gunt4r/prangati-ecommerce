@@ -36,10 +36,9 @@ export class AuthController {
   findAll() {
     return this.authService.findAll();
   }
-  @UseGuards(JwtAuthGuard)
   @Get('check')
   checkAuth(@Request() req) {
-    return { authorized: true, user: req.user };
+    return this.authService.validateToken(req);
   }
   // @UseGuards(JwtAuthGuard, AdminGuard)
   @Delete('deleteAllEntities')
