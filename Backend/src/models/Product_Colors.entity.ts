@@ -4,20 +4,35 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
+import { Product } from './Product.entity';
 
 @Entity('product_colors')
 export class ProductColor {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
-  color: string;
+  @Column({ nullable: false, unique: true, length: 20 })
+  name: string;
 
-  @Column({ nullable: false })
-  @JoinColumn()
-  product: string;
+  @Column({ nullable: true, unique: true, length: 20 })
+  hexCode: string;
+
+  @ManyToMany(() => Product, (product) => product.colors)
+  @JoinTable({
+    name: 'product_productColors',
+    joinColumn: {
+      name: 'product_color_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'product_id',
+      referencedColumnName: 'id',
+    },
+  })
+  products: Product[];
 
   @CreateDateColumn()
   createdAt: Date;

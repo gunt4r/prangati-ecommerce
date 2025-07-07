@@ -111,7 +111,6 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    console.log('updateuser ', updateUserDto);
     const errors = validateCreateOrder(updateUserDto);
     if (errors) {
       console.log(errors);

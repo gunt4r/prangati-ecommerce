@@ -5,9 +5,11 @@ import {
   AfterRemove,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 import path from 'path';
 import * as fs from 'fs';
+import { Product } from './Product.entity';
 
 @Entity('uploadimage')
 export class UploadedImage {
@@ -20,11 +22,8 @@ export class UploadedImage {
   @Column()
   originalName: string;
 
-  @Column({ nullable: true })
-  entityType: string;
-
-  @Column({ nullable: true })
-  entityId: string;
+  @ManyToOne(() => Product, (product) => product.images)
+  product: Product;
   @AfterRemove()
   removeFile() {
     const filePath = path.join(process.cwd(), 'public', this.path);

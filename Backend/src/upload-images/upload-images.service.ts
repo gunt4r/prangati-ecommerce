@@ -1,7 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UploadedImage } from 'src/models/UploadImage';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import * as path from 'path';
 import * as fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,12 +16,12 @@ export class UploadImagesService {
     public imageRepository: Repository<UploadedImage>,
   ) {}
   async uploadFile(file: Express.Multer.File): Promise<UploadedImage> {
-    if (!file?.mimetype) throw new Error('Invalid file');
+    if (!file?.mimetype) throw new BadRequestException('Invalid file');
     if (!file.mimetype.startsWith('image/')) {
-      throw new Error('Only image files are allowed');
+      throw new BadRequestException('Only image files are allowed');
     }
     if (file.size > 5 * 1024 * 1024) {
-      throw new Error('File size exceeds 5MB limit');
+      throw new BadRequestException('File size exceeds 5MB limit');
     }
 
     const uploadDir = path.join(
@@ -38,7 +42,7 @@ export class UploadImagesService {
 
     fs.writeFileSync(fullPath, file.buffer);
     if (!fs.existsSync(fullPath)) {
-      throw new Error('File was not saved');
+      throw new BadRequestException('File was not saved');
     }
     return this.imageRepository.save({
       path: `/uploads/${fileName}`,
@@ -49,11 +53,15 @@ export class UploadImagesService {
     files: Express.Multer.File[],
   ): Promise<UploadedImage[]> {
     const uploadPromises = files.map((file) => this.uploadFile(file));
-    return Promise.all(uploadPromises);
+    const results = await Promise.allSettled(uploadPromises);
+    const successfulUploads = results.filter(
+      (result) => result.status === 'fulfilled',
+    );
+    return Promise.all(successfulUploads.map((result) => result.value));
   }
 
   async getImagesByIds(ids: string[]): Promise<UploadedImage[]> {
-    const images = await this.imageRepository.findByIds(ids);
+    const images = await this.imageRepository.findBy({ id: In(ids) });
     if (images.length !== ids.length) {
       throw new NotFoundException('Some images not found');
     }

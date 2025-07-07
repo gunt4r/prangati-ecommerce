@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCartDto } from './dto/create-cart.dto';
@@ -52,14 +58,8 @@ export class CartService {
     }
     const items = await this.cartItemRepository.find({
       where: { cart: { id: cart.id } },
-      relations: ['product', 'product.category'],
+      relations: ['product', 'product.category', 'product.images'],
     });
-    for (const item of items) {
-      const images = await this.uploadImagesService.imageRepository.find({
-        where: { entityType: 'product', entityId: item.product.id },
-      });
-      (item as any).images = images;
-    }
     const subtotalPrice = items.reduce(
       (acc, item) => acc + item.product.price * item.quantity,
       0,
@@ -81,18 +81,18 @@ export class CartService {
       if (!cart) {
         cart = await this.createCart(userId);
       }
-
+      console.log('cart:', cart);
       const product = await this.productRepository.findOne({
         where: { id: productId },
       });
       if (!product) {
-        throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+        throw new NotFoundException('Product not found');
       }
       const user = await this.userRepository.findOne({
         where: { id: userId },
       });
       if (!user) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        throw new NotFoundException('User not found');
       }
       if (quantity <= 0) {
         throw new HttpException(
@@ -186,9 +186,8 @@ export class CartService {
       if (error instanceof HttpException) {
         throw error;
       }
-      throw new HttpException(
+      throw new BadRequestException(
         `Error updating cart item: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

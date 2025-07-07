@@ -28,6 +28,6 @@ export class Cart {
   @OneToMany(() => CartItem, (cartItem) => cartItem.cart, { cascade: true })
   items: CartItem[];
 
-  @Column({ nullable: true, default: 0 })
+  @Column('decimal', { precision: 10, scale: 2, nullable: true, default: 0 })
   subtotalPrice: number;
 }

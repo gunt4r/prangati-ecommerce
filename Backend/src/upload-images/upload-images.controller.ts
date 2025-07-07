@@ -23,6 +23,7 @@ export class UploadImagesController {
   @Post('multiple')
   @UseInterceptors(FilesInterceptor('images'))
   uploadMultiple(@UploadedFiles() images: Express.Multer.File[]) {
+    console.log('images', images);
     return this.uploadImagesService.uploadMultipleFiles(images);
   }
   @Get(':id')

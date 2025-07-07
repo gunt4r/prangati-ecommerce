@@ -51,14 +51,9 @@ export class RecentlyViewedService {
     for (const productViewed of await returnedProducts) {
       const product = await this.productRepository.findOne({
         where: { id: productViewed.productId },
-        relations: ['category'],
+        relations: ['category', 'images'],
       });
       if (product) {
-        const images = await this.uploadImagesService.imageRepository.find({
-          where: { entityType: 'product', entityId: productViewed.productId },
-          take: 1,
-        });
-        (product as any).images = images;
         (product as any).hasAttributes =
           await this.productService.productHasAttributes(product.id);
         products.push(product);

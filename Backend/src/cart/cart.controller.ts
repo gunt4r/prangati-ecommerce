@@ -25,6 +25,7 @@ export class CartController {
   }
   @Post('add-product')
   addProduct(@Body() createCartDto: CreateCartDto) {
+    console.log('createCartDto', createCartDto);
     return this.cartService.addProductToCart(createCartDto);
   }
   @Get(':userId')

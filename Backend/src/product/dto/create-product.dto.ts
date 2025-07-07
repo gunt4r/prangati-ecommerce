@@ -5,22 +5,18 @@ import {
   IsBoolean,
   IsOptional,
   ValidateNested,
+  IsUUID,
+  ArrayMinSize,
+  Min,
+  Max,
+  IsUrl,
 } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
 
 class ProductImageDto {
   @IsString()
+  @IsUrl()
   url: string;
-}
-
-class ProductColorDto {
-  @IsString()
-  color: string;
-}
-
-class ProductSizeDto {
-  @IsString()
-  size: string;
 }
 
 export class CreateProductDto {
@@ -31,10 +27,11 @@ export class CreateProductDto {
   description: string;
 
   @IsNumber()
+  @Min(0)
   @Type(() => Number)
   price: number;
 
-  @IsString()
+  @IsUUID()
   categoryId: string;
 
   @IsOptional()
@@ -55,14 +52,17 @@ export class CreateProductDto {
   images?: ProductImageDto[];
 
   @IsArray()
-  @Type(() => ProductColorDto)
-  colors: ProductColorDto[];
+  @ArrayMinSize(1)
+  @IsUUID(4, { each: true })
+  colors: string[];
 
   @IsArray()
-  @Type(() => ProductSizeDto)
-  sizes: ProductSizeDto[];
+  @ArrayMinSize(1)
+  @IsUUID(4, { each: true })
+  sizes: string[];
 
   @IsNumber()
+  @Min(0)
   @Type(() => Number)
   stock: number;
 
@@ -78,6 +78,8 @@ export class CreateProductDto {
 
   @IsNumber()
   @IsOptional()
+  @Min(0)
+  @Max(5)
   @Type(() => Number)
   rating?: number;
 }

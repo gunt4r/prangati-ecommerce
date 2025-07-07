@@ -25,6 +25,8 @@ import { UploadImagesModule } from './upload-images/upload-images.module';
 import { OrderModule } from './order/order.module';
 import { MailModule } from './mail/mail.module';
 import { GenerateModule } from './countries/generate/countries.module';
+import { ColorsModule } from './colors/colors.module';
+import { SizesModule } from './sizes/sizes.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -58,6 +60,8 @@ import { GenerateModule } from './countries/generate/countries.module';
     OrderModule,
     MailModule,
     GenerateModule,
+    ColorsModule,
+    SizesModule,
   ],
   controllers: [AppController, NewsletterController, ContactsController],
   providers: [AppService, ContactsService, TypeOrmConfigService],
