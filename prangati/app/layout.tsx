@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import "@/styles/globals.css";
+import "@/styles/globals.scss";
 import { Metadata, Viewport } from "next";
 import { Toaster } from "react-hot-toast";
 

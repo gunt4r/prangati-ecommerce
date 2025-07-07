@@ -12,6 +12,7 @@ export default function Preloader() {
         width: "100vw",
         height: "100vh",
         top: "0px",
+        left: "0px",
       }}
     />
   );

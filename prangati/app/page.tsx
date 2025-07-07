@@ -1,5 +1,5 @@
 import HomePage from "@/components/HomePage";
-import "@/styles/globals.css";
+import "@/styles/globals.scss";
 function App() {
   return (
     <>

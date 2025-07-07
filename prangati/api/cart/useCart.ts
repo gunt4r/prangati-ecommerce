@@ -20,7 +20,7 @@ export function useCartItems() {
 
         return res.data || [];
       } catch (error) {
-        console.error("Ошибка при загрузке корзины:", error);
+        console.error("Error:", error);
 
         return [];
       }
@@ -35,12 +35,24 @@ export function useCreateCart() {
   return useMutation({
     mutationKey: [REACT_QUERY_CART_KEY],
     mutationFn: async (userId: any) => {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER}cart`,
-        userId,
-      );
+      if (!userId) {
+        throw new Error("User ID is required");
+      }
 
-      return res.data;
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER}cart`,
+          userId,
+        );
+
+        return res.data;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Error creating cart:", error);
+        }
+
+        throw error;
+      }
     },
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [REACT_QUERY_CART_KEY] }),
@@ -76,6 +88,7 @@ export function useUpdateProductToCart() {
       queryClient.invalidateQueries({ queryKey: [REACT_QUERY_CART_KEY] }),
   });
 }
+
 export function useDeleteProductFromCart() {
   return useMutation({
     mutationKey: [REACT_QUERY_CART_KEY],

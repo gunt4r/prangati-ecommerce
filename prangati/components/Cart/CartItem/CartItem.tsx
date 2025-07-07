@@ -16,8 +16,14 @@ import {
 } from "@/api/cart/useCart";
 import { useUUID } from "@/Hooks/useUUID";
 import { poppins } from "@/config/fonts";
-export default function CartItem({ product }: { product: ProductCart }) {
-  const [quantityValue, setQuantityValue] = useState(product.quantity);
+export default function CartItem({
+  product,
+  quantity,
+}: {
+  product: ProductCart;
+  quantity: number;
+}) {
+  const [quantityValue, setQuantityValue] = useState(quantity);
   const { mutate: deleteProductFromCart } = useDeleteProductFromCart();
   const { mutate: removeFromCartAndAddProductToWishlist } =
     useDeleteProductAddToWishlist();
@@ -122,10 +128,10 @@ export default function CartItem({ product }: { product: ProductCart }) {
               onValueChange={setQuantityValue}
             />
             <PriceProduct
-              addZeroes={true}
               className="section-card__wrapper-details__price--cart"
               link={product.id}
-              price={product.price * quantityValue}
+              price={Number(product.price)}
+              quantity={quantityValue}
             />
           </div>
           <div className="section-cart-item__wrapper-info-actions">

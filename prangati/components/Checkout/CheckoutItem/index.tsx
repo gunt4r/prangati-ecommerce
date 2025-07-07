@@ -6,7 +6,7 @@ import { ProductCart } from "@/config/interfaces";
 import PriceProduct from "@/components/CardProduct/PriceProduct/PriceProduct";
 import { poppins } from "@/config/fonts";
 
-export default function CheckoutItem({ product }: { product: ProductCart }) {
+export default function CheckoutItem({ product,quantity }: { product: ProductCart,quantity:number }) {
   return (
     <section className="section-checkout__item-wrapper">
       <Divider className="bg-backgroundColorButtonBlack mb-4 h-px" />
@@ -29,14 +29,13 @@ export default function CheckoutItem({ product }: { product: ProductCart }) {
               <p
                 className={`section-checkout__item-info-quantity__text ${poppins.className}`}
               >
-                QTY: {product.quantity}
+                QTY: {quantity}
               </p>
             </Link>
             <PriceProduct
-              addZeroes={true}
               className={`section-card__wrapper-details__price--checkout ${poppins.className}`}
               link={product.id}
-              price={product.price * product.quantity}
+              price={product.price * quantity}
             />
           </div>
         </section>

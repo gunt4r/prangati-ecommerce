@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { useUUID } from "@/Hooks/useUUID";
-import { Product } from "@/config/interfaces";
 
 export default function LikeProduct({
-  product,
+  productID,
   style,
 }: {
-  product: Product;
+  productID: string;
   style?: { [key: string]: string };
 }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -20,7 +19,7 @@ export default function LikeProduct({
     async function checkWishlist() {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}wishlist/check/${product.id}/${userID}`,
+          `${process.env.NEXT_PUBLIC_SERVER}wishlist/check/${productID}/${userID}`,
         );
 
         setIsLiked(response.data.status === 200);
@@ -29,10 +28,10 @@ export default function LikeProduct({
       }
     }
     if (userID) checkWishlist();
-  }, [product.id, userID]);
+  }, [productID, userID]);
   const handleToggleLike = async () => {
     setIsLiked((prev) => !prev);
-    const data = JSON.stringify({ userID: userID, productID: product.id });
+    const data = JSON.stringify({ userID: userID, productID: productID });
 
     if (!isLiked) {
       await axios.post(`${process.env.NEXT_PUBLIC_SERVER}wishlist`, data, {

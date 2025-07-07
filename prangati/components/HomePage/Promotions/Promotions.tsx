@@ -1,40 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
-import axios from "axios";
 
 import HeadingSection from "../HeadingSection/HeadingSection";
 
 import style from "./stylePromotions.module.css";
 
 import CardProduct from "@/components/CardProduct/CardProduct";
-import { Product } from "@/config/interfaces";
+import Preloader from "@/components/ClientPreloader/Preloader";
+import { useGetProducts } from "@/api/products/useProducts";
 const Promotions = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const { data, isLoading } = useGetProducts({
+    limit: 9,
+  });
+
+  const products = data?.data || [];
   const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}product`,
-          {
-            params: {
-              limit: 9,
-            },
-          },
-        );
-
-        setProducts(response.data.data);
-      } catch (error) {
-        throw error;
-      }
-    };
-
-    fetchProducts();
-  }, []);
 
   const itemsPerPage = 3;
 
@@ -71,6 +54,8 @@ const Promotions = () => {
     activeIndex * itemsPerPage,
     activeIndex * itemsPerPage + itemsPerPage,
   );
+
+  if (isLoading) return <Preloader />;
 
   return (
     <div className={style["carousel-container"]}>

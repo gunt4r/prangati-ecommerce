@@ -1,49 +1,32 @@
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
+/* eslint-disable no-console */
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
-import { useCreateCart } from "@/api/cart/useCart";
+import { useGetOrCreateUUID } from "@/api/user/useUser";
 
 export const useUUID = (): string => {
-  const [uuid, setUuid] = useState<string>("");
-  const { mutate: createCart } = useCreateCart();
+  const { data: finalUUID, isLoading, error } = useGetOrCreateUUID();
 
   useEffect(() => {
-    let isMounted = true;
+    const handleUUID = async () => {
+      if (isLoading) return;
 
-    (async () => {
-      try {
-        let finalUUID = localStorage.getItem("user_uuid");
+      if (error) {
+        toast.error("Error getting user UUID");
+        console.error(error);
 
-        if (!finalUUID) {
-          finalUUID = uuidv4();
-          localStorage.setItem("user_uuid", finalUUID);
-        }
-
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER}user/addUUID`,
-          { uuid: finalUUID },
-          { headers: { "Content-Type": "application/json" } },
-        );
-
-        createCart(
-          { newUUID: finalUUID },
-          {
-            onError: () => toast.error("Error creating cart"),
-          },
-        );
-
-        if (isMounted) setUuid(finalUUID);
-      } catch (error) {
-        toast.error("Error creating user");
+        return;
       }
-    })();
 
-    return () => {
-      isMounted = false;
+      if (!finalUUID) {
+        toast.error("Error with user UUID");
+
+        return;
+      }
     };
-  }, [createCart]);
 
-  return uuid;
+    handleUUID();
+  }, [finalUUID, isLoading, error]);
+
+  return finalUUID || "";
 };

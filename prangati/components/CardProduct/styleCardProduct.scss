@@ -28,13 +28,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .section-card__wrapper-details__description {
   font-weight: 500;
   font-size: 14px;
   line-height: 21px;
   color: #7a7a7a;
+  text-align: left;
 }
 
 .section-card__bottom {

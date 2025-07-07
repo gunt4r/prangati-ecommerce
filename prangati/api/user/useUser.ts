@@ -1,11 +1,15 @@
+/* eslint-disable no-console */
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 import { queryClient } from "../react-query";
 
-import { REACT_QUERY_USER_KEY } from "@/config/const";
+import {
+  REACT_QUERY_USER_KEY,
+  REACT_QUERY_USER_UUID_KEY,
+} from "@/config/const";
 import { useUUID } from "@/Hooks/useUUID";
-
 export function useGetUser() {
   const userID = useUUID();
 
@@ -51,7 +55,7 @@ export function useUpdateUser() {
           `${process.env.NEXT_PUBLIC_SERVER}user/${userId}`,
           data,
         );
-        console.log(res);
+
         if (res.data?.status === 400 || res.status === 400) {
           throw res.data;
         }
@@ -64,7 +68,6 @@ export function useUpdateUser() {
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [REACT_QUERY_USER_KEY] }),
     onError: (error: unknown) => {
-      console.log(error);
       if (axios.isAxiosError(error)) {
         const axiosErr = error as AxiosError<{
           errors: Record<string, string>;
@@ -76,10 +79,78 @@ export function useUpdateUser() {
           "errors" in axiosErr.response.data
         ) {
           const serverPayload = axiosErr.response.data;
-          console.log(serverPayload);
+
           return serverPayload;
         }
       }
     },
+  });
+}
+
+export function useGetOrCreateUUID() {
+  return useQuery({
+    queryKey: [REACT_QUERY_USER_UUID_KEY],
+    queryFn: async () => {
+      if (typeof window === "undefined") return null;
+
+      let finalUUID = localStorage.getItem("user_uuid");
+
+      if (!finalUUID) {
+        finalUUID = uuidv4();
+        localStorage.setItem("user_uuid", finalUUID);
+      }
+
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER}user/addUUID`,
+          { uuid: finalUUID },
+          { headers: { "Content-Type": "application/json" } },
+        );
+
+        if (res.data?.status === 400 || res.status === 400) {
+          throw res.data;
+        }
+
+        return finalUUID;
+      } catch (error) {
+        console.error("Error sending UUID to server:", error);
+        throw error;
+      }
+    },
+    refetchOnWindowFocus: false,
+    retry: false,
+    staleTime: 1000 * 60 * 60,
+  });
+}
+
+export function useAddUUID() {
+  return useMutation({
+    mutationKey: [REACT_QUERY_USER_UUID_KEY],
+    mutationFn: async () => {
+      try {
+        let finalUUID = localStorage.getItem("user_uuid");
+
+        if (!finalUUID) {
+          finalUUID = uuidv4();
+          localStorage.setItem("user_uuid", finalUUID);
+        }
+
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER}user/addUUID`,
+          { uuid: finalUUID },
+          { headers: { "Content-Type": "application/json" } },
+        );
+
+        if (res.data?.status === 400 || res.status === 400) {
+          throw res.data;
+        }
+
+        return finalUUID;
+      } catch (error) {
+        throw error;
+      }
+    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: [REACT_QUERY_USER_UUID_KEY] }),
   });
 }

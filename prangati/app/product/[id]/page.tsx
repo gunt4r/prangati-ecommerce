@@ -11,7 +11,7 @@ import Header from "@/components/Header/Headerpage";
 import Footer from "@/components/Footer/Footer";
 import { useUUID } from "@/Hooks/useUUID";
 import { addViewedProduct } from "@/services/viewedProductsService";
-import { Product } from "@/config/interfaces";
+import { ProductDetailed } from "@/config/interfaces";
 import ViewedProducts from "@/components/ViewedProducts/ViewedProducts";
 import ProductGallery from "@/components/Product/ProductGallery/ProductGallery";
 import "./styleProduct.scss";
@@ -21,7 +21,7 @@ import Container from "@/components/Container/Container";
 export default function ProductPage() {
   const params = useParams();
   const { id } = params;
-  const [productData, setProductData] = useState<Product | null>(null);
+  const [productData, setProductData] = useState<ProductDetailed | null>(null);
   const userUUID = useUUID();
   const [category, setCategory] = useState<string>("");
 

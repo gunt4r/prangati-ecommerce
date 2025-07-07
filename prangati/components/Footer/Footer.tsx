@@ -2,195 +2,198 @@ import classNames from "classnames";
 import { FaFacebookF, FaInstagram, FaTelegramPlane } from "react-icons/fa";
 import { Link } from "@heroui/link";
 
+import Container from "../Container/Container";
+
 import style from "./styleFooter.module.css";
 
 import { poppins, archivo } from "@/config/fonts";
-
 export default function Footer() {
   return (
-    <footer className={style["footer"]}>
-      <hr className={classNames(style["section-nav__underline"])} />
-      <div className={classNames(style["section-footer__wrapper"])}>
-        <div className={style["footer-top"]}>
-          <div className={style["footer-column"]}>
-            <Link href="/">
-              {" "}
-              <h4
-                className={classNames(
-                  style["section-footer__heading-columns"],
-                  poppins.className,
-                )}
-              >
-                Home
-              </h4>
-            </Link>{" "}
-            <ul>
+    <Container>
+      <footer className={style["footer"]}>
+        <hr className={classNames(style["section-nav__underline"])} />
+        <div className={classNames(style["section-footer__wrapper"])}>
+          <div className={style["footer-top"]}>
+            <div className={style["footer-column"]}>
               <Link href="/">
                 {" "}
-                <li className={classNames(poppins.className)}>
-                  Popular Products
-                </li>
-              </Link>
-              <Link href="/">
-                {" "}
-                <li className={classNames(poppins.className)}>Why Us</li>
-              </Link>
-              <Link href="/">
-                {" "}
-                <li className={classNames(poppins.className)}>Promotions</li>
+                <h4
+                  className={classNames(
+                    style["section-footer__heading-columns"],
+                    poppins.className,
+                  )}
+                >
+                  Home
+                </h4>
               </Link>{" "}
-            </ul>
-          </div>
+              <ul>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>
+                    Popular Products
+                  </li>
+                </Link>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Why Us</li>
+                </Link>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Promotions</li>
+                </Link>{" "}
+              </ul>
+            </div>
 
-          <div className={style["footer-column"]}>
-            <Link href="/">
-              {" "}
-              <h4
-                className={classNames(
-                  style["section-footer__heading-columns"],
-                  poppins.className,
-                )}
-              >
-                About
-              </h4>
-            </Link>{" "}
-            <ul>
+            <div className={style["footer-column"]}>
               <Link href="/">
                 {" "}
-                <li className={classNames(poppins.className)}>Our Vision</li>
-              </Link>
-              <Link href="/">
-                {" "}
-                <li className={classNames(poppins.className)}>Our Team</li>
-              </Link>
-              <Link href="/">
-                {" "}
-                <li className={classNames(poppins.className)}>Community</li>
+                <h4
+                  className={classNames(
+                    style["section-footer__heading-columns"],
+                    poppins.className,
+                  )}
+                >
+                  About
+                </h4>
               </Link>{" "}
-            </ul>
-          </div>
+              <ul>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Our Vision</li>
+                </Link>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Our Team</li>
+                </Link>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Community</li>
+                </Link>{" "}
+              </ul>
+            </div>
 
-          <div className={style["footer-column"]}>
-            <Link href="/">
-              {" "}
-              <h4
-                className={classNames(
-                  style["section-footer__heading-columns"],
-                  poppins.className,
-                )}
-              >
-                Shoes
-              </h4>
-            </Link>{" "}
-            <ul>
+            <div className={style["footer-column"]}>
               <Link href="/">
                 {" "}
-                <li className={classNames(poppins.className)}>All</li>
-              </Link>
-              <Link href="/">
-                {" "}
-                <li className={classNames(poppins.className)}>Nike</li>
-              </Link>
-              <Link href="/">
-                {" "}
-                <li className={classNames(poppins.className)}>Adidas</li>
+                <h4
+                  className={classNames(
+                    style["section-footer__heading-columns"],
+                    poppins.className,
+                  )}
+                >
+                  Shoes
+                </h4>
               </Link>{" "}
-            </ul>
-          </div>
+              <ul>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>All</li>
+                </Link>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Nike</li>
+                </Link>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Adidas</li>
+                </Link>{" "}
+              </ul>
+            </div>
 
-          <div className={style["footer-column"]}>
+            <div className={style["footer-column"]}>
+              <Link href="/">
+                {" "}
+                <h4
+                  className={classNames(
+                    style["section-footer__heading-columns"],
+                    poppins.className,
+                  )}
+                >
+                  Contacts
+                </h4>
+              </Link>{" "}
+              <ul>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Call Us</li>
+                </Link>
+                <Link href="/">
+                  {" "}
+                  <li className={classNames(poppins.className)}>Visit Us</li>
+                </Link>{" "}
+              </ul>
+            </div>
+          </div>
+          <div className={classNames(style["section-footer__logo-wrapper"])}>
             <Link href="/">
-              {" "}
               <h4
                 className={classNames(
-                  style["section-footer__heading-columns"],
-                  poppins.className,
+                  style["section-footer__logo"],
+                  archivo.className,
                 )}
               >
-                Contacts
+                Prangati
               </h4>
-            </Link>{" "}
-            <ul>
-              <Link href="/">
-                {" "}
-                <li className={classNames(poppins.className)}>Call Us</li>
-              </Link>
-              <Link href="/">
-                {" "}
-                <li className={classNames(poppins.className)}>Visit Us</li>
-              </Link>{" "}
-            </ul>
-          </div>
-        </div>
-        <div className={classNames(style["section-footer__logo-wrapper"])}>
-          <Link href="/">
-            <h4
+            </Link>
+            <p
               className={classNames(
-                style["section-footer__logo"],
-                archivo.className,
+                style["section-footer__logo-text"],
+                poppins.className,
               )}
             >
-              Prangati
-            </h4>
-          </Link>
+              Innovation at a click away
+            </p>
+            <div className={classNames(style["footer-icons"])}>
+              <Link
+                className={classNames(style["section-footer__icon-wrapper"])}
+                href="/"
+              >
+                {" "}
+                <FaTelegramPlane
+                  className={classNames(style["section-footer__icon"])}
+                />
+              </Link>
+              <Link
+                className={classNames(style["section-footer__icon-wrapper"])}
+                href="/"
+              >
+                {" "}
+                <FaFacebookF
+                  className={classNames(style["section-footer__icon"])}
+                />
+              </Link>
+              <Link
+                className={classNames(style["section-footer__icon-wrapper"])}
+                href="/"
+              >
+                {" "}
+                <FaInstagram
+                  className={classNames(style["section-footer__icon"])}
+                />
+              </Link>{" "}
+            </div>
+          </div>
+        </div>
+        <hr className={classNames(style["section-footer__underline-bottom"])} />
+        <div className={classNames(style["section-footer__bottom"])}>
           <p
             className={classNames(
-              style["section-footer__logo-text"],
+              style["section-footer__bottom-text"],
               poppins.className,
             )}
           >
-            Innovation at a click away
+            With love for Prangati
           </p>
-          <div className={classNames(style["footer-icons"])}>
-            <Link
-              className={classNames(style["section-footer__icon-wrapper"])}
-              href="/"
-            >
-              {" "}
-              <FaTelegramPlane
-                className={classNames(style["section-footer__icon"])}
-              />
-            </Link>
-            <Link
-              className={classNames(style["section-footer__icon-wrapper"])}
-              href="/"
-            >
-              {" "}
-              <FaFacebookF
-                className={classNames(style["section-footer__icon"])}
-              />
-            </Link>
-            <Link
-              className={classNames(style["section-footer__icon-wrapper"])}
-              href="/"
-            >
-              {" "}
-              <FaInstagram
-                className={classNames(style["section-footer__icon"])}
-              />
-            </Link>{" "}
-          </div>
+          <p
+            className={classNames(
+              style["section-footer__bottom-text"],
+              poppins.className,
+            )}
+          >
+            ©{new Date().getFullYear()} Prangati
+          </p>
         </div>
-      </div>
-      <hr className={classNames(style["section-footer__underline-bottom"])} />
-      <div className={classNames(style["section-footer__bottom"])}>
-        <p
-          className={classNames(
-            style["section-footer__bottom-text"],
-            poppins.className,
-          )}
-        >
-          With love for Prangati
-        </p>
-        <p
-          className={classNames(
-            style["section-footer__bottom-text"],
-            poppins.className,
-          )}
-        >
-          ©{new Date().getFullYear()} Prangati
-        </p>
-      </div>
-    </footer>
+      </footer>
+    </Container>
   );
 }

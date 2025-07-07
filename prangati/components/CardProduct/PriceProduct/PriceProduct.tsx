@@ -5,18 +5,20 @@ export default function PriceProduct({
   price,
   link,
   className,
-  addZeroes,
+  quantity,
 }: {
   price: number;
   link: string;
   className?: string;
-  addZeroes?: boolean;
+  quantity?: number;
 }) {
+  const finalPrice = price * (quantity ? quantity : 1);
+
   return (
     <Link className={"section-card__wrapper-details"} href={`/product/${link}`}>
       <p className={`section-card__wrapper-details__price ${className}`}>
-        ${price}
-        {addZeroes ? ".00" : ""}
+        ${finalPrice.toFixed(2)}
+        {String(price).includes(".") ? "" : ".00"}
       </p>
     </Link>
   );

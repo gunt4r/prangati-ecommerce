@@ -20,7 +20,6 @@
       height: 44px;
       &:before {
         color: #474747;
-        
       }
       &:hover {
         color: #a8a8a8;
@@ -30,14 +29,13 @@
         opacity: 0.3;
         cursor: not-allowed;
       }
-
     }
     .slick-prev:before {
-      content: "🢐" !important;
+      content: '🢐' !important;
       font-size: 38px !important;
     }
     .slick-next:before {
-      content: "🢒" !important;
+      content: '🢒' !important;
       font-size: 38px !important;
     }
     .slick {
@@ -53,5 +51,8 @@
   &__main--item {
     width: 220px !important;
     height: 133px;
+    &-img {
+      height: 100%;
+    }
   }
 }

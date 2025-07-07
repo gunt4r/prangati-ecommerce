@@ -47,6 +47,9 @@ export default function ProductGallery({ images }: { images: Image[] }) {
           <div key={`${i}`} className="thumbs__main--item" data-value={i + 1}>
             <NextImage
               alt={`Slide ${i}`}
+              classNames={{
+                wrapper: "thumbs__main--item-img",
+              }}
               height="100%"
               radius="none"
               src={img.path}

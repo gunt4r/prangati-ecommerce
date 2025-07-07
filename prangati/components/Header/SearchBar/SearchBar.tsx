@@ -2,9 +2,6 @@
 import classNames from "classnames";
 import { IoSearchOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
-
-import style from "../styleHeader.module.css";
-
 const SearchBar = ({
   handleSearch,
 }: {
@@ -18,7 +15,7 @@ const SearchBar = ({
   return (
     <>
       <input
-        className={classNames(style["section-nav__helpers-search-input"])}
+        className="section-nav__helpers-search-input"
         id="search"
         name="search"
         placeholder={t("search")}
@@ -28,10 +25,7 @@ const SearchBar = ({
         }}
       />{" "}
       <label
-        className={classNames(
-          style["section-nav__helpers-search-label"],
-          "w-4",
-        )}
+        className="section-nav__helpers-search-label w-4"
         htmlFor="search"
       >
         <IoSearchOutline

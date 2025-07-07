@@ -3,19 +3,53 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  stock?: number;
+  rating?: number;
+  isFeatured?: boolean;
+  gender?: string;
+  createdAt: string;
+  category?: {
+    id: string;
+    name: string;
+  };
+  colors?: Array<{
+    id: string;
+    name: string;
+    hexCode: string;
+  }>;
+  sizes?: Array<{
+    id: string;
+    size: string;
+  }>;
+  images: Array<{
+    id: string;
+    path: string;
+    originalName: string;
+  }>;
+}
+
+export interface ProductDetailed {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
   images: { path: string }[];
   stock?: number;
-  colors?: { color: string }[];
-  sizes?: { size: string }[];
+  colors?: {
+    id: string;
+    name: string;
+    hexCode: string;
+  }[];
+  sizes?: {
+    id: string;
+    size: string;
+  }[];
   isFeatured?: boolean;
   rating?: number;
   hasAttributes?: boolean;
 }
 
 export interface ProductCart extends Product {
-  category: {
-    name: string;
-  };
   quantity: number;
 }
 
@@ -79,4 +113,59 @@ export interface UserAddress {
   country: string;
   state: string;
   phone: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: {
+    itemsPerPage: number;
+    totalItems: number;
+    currentPage: number;
+    totalPages: number;
+    sortBy: Array<[string, string]>;
+    searchBy: string[];
+    search: string;
+    filter: Record<string, any>;
+  };
+  links: {
+    first: string;
+    previous: string;
+    current: string;
+    next: string;
+    last: string;
+  };
+  priceRange?: PriceRange;
+}
+
+export interface PriceRange {
+  minPrice: number;
+  maxPrice: number;
+}
+export interface ProductFilters {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  search?: string;
+  "filter.category.id"?: string;
+  "filter.colors.id"?: string;
+  "filter.sizes.id"?: string;
+  "filter.price"?: string;
+  "filter.rating"?: string;
+  "filter.isFeatured"?: boolean;
+  "filter.gender"?: string;
+}
+
+export interface AdvancedFilters {
+  page?: number;
+  limit?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  colorIds?: string[];
+  sizeIds?: string[];
+  categoryIds?: string[];
+  inStock?: boolean;
+  featured?: boolean;
+  minRating?: number;
+  search?: string;
+  sortBy?: string;
 }

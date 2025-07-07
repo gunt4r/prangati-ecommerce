@@ -14,8 +14,8 @@ import { useUUID } from "@/Hooks/useUUID";
 import { useAddProductToCart } from "@/api/cart/useCart";
 import { poppins, inter } from "@/config/fonts";
 import LikeProduct from "@/components/CardProduct/LikeProduct/LikeProduct";
-import { Product } from "@/config/interfaces";
-export default function ProductInfo({ product }: { product: Product }) {
+import { ProductDetailed } from "@/config/interfaces";
+export default function ProductInfo({ product }: { product: ProductDetailed }) {
   const { mutate: addProductToCart } = useAddProductToCart();
   const userID = useUUID();
   const [quantityValue, setQuantityValue] = useState(1);
@@ -122,19 +122,19 @@ export default function ProductInfo({ product }: { product: Product }) {
           </p>
           <div className="section-product__info--colors--container">
             {product.colors.map((color, index) => {
-              const isSelected = selectedColors.includes(color.color);
+              const isSelected = selectedColors.includes(color.name);
 
               return (
                 <div
-                  key={color.color}
+                  key={color.id}
                   className={`section-product__info--colors--container--color ${
                     isSelected ? "selected" : ""
                   }`}
                   role="button"
-                  style={{ backgroundColor: color.color }}
+                  style={{ backgroundColor: color.hexCode }}
                   tabIndex={index}
-                  onClick={() => handleColorClick(color.color)}
-                  onKeyDown={() => handleColorClick(color.color)}
+                  onClick={() => handleColorClick(color.name)}
+                  onKeyDown={() => handleColorClick(color.name)}
                 >
                   {isSelected && <div className="selected-indicator" />}
                 </div>
@@ -185,7 +185,7 @@ export default function ProductInfo({ product }: { product: Product }) {
           Buy now
         </Button>
         <div className="section-product__info--buttons--like">
-          <LikeProduct product={product} />
+          <LikeProduct productID={product.id} />
         </div>
       </div>
       <ProductBenefit

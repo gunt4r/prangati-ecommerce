@@ -9,7 +9,7 @@ import Gadgets from "./Gadgets/Gadgets.tsx";
 
 import Header from "@/components/Header/Headerpage.tsx";
 
-import "@/styles/globals.css";
+import "@/styles/globals.scss";
 function HomePage() {
   return (
     <>

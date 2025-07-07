@@ -23,7 +23,7 @@ export default function PopularProducts() {
           },
         },
       );
-
+      console.log(response);
       setProductsData(response.data.data);
     } catch (error) {
       throw error;

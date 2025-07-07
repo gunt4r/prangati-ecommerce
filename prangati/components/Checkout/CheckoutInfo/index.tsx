@@ -17,13 +17,8 @@ export default function CheckoutInfo() {
   return (
     <section className="section-checkout__info">
       <CheckoutFormTitle title="YOUR ORDER" />
-      {data.items.map((product: any) => {
-        const images = product.images;
-
-        product.product.images = images;
-        product.product.quantity = product.quantity;
-
-        return <CheckoutItem key={product.id} product={product.product} />;
+      {data.items.map((item: any) => {
+        return <CheckoutItem quantity={item.quantity} key={item.id} product={item.product} />;
       })}
       <CartInfoDetails color="black" subtotal={data.subtotalPrice} />
       <Divider className="bg-backgroundColorButtonBlack mt-2 h-px" />

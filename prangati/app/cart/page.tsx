@@ -68,13 +68,14 @@ const Cart = () => {
         ) : (
           <div className="section-cart">
             <div className={"section-cart__cards"}>
-              {data.items.map((product: any) => {
-                const images = product.images;
-
-                product.product.images = images;
-                product.product.quantity = product.quantity;
-
-                return <CartItem key={product.id} product={product.product} />;
+              {data.items.map((item: any) => {
+                return (
+                  <CartItem
+                    key={item.id}
+                    product={item.product}
+                    quantity={item.quantity}
+                  />
+                );
               })}
             </div>
             <CartInfo subtotal={data.subtotalPrice} />
