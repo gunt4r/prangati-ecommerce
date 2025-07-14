@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import axios from "axios";
 
+import { api } from "../api";
 import { queryClient } from "../react-query";
 
 import { REACT_QUERY_SIZES_KEY } from "@/config/const";
@@ -10,9 +10,7 @@ export function useSizes() {
     queryKey: [REACT_QUERY_SIZES_KEY],
     queryFn: async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}sizes`,
-        );
+        const response = await api.get(`/sizes`);
 
         return response.data;
       } catch (error) {
@@ -28,9 +26,7 @@ export function useProductSizes(id: string) {
     queryKey: [REACT_QUERY_SIZES_KEY, id],
     queryFn: async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}sizes/${id}`,
-        );
+        const response = await api.get(`/sizes/${id}`);
 
         return response.data;
       } catch (error) {
@@ -44,10 +40,7 @@ export function useCreateSize() {
   return useMutation({
     mutationFn: async (size: string) => {
       try {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER}sizes`,
-          { size },
-        );
+        const response = await api.post(`/sizes`, { size });
 
         return response.data;
       } catch (error) {
@@ -64,10 +57,7 @@ export function useUpdateSize() {
   return useMutation({
     mutationFn: async ({ id, size }: { id: string; size: string }) => {
       try {
-        const response = await axios.patch(
-          `${process.env.NEXT_PUBLIC_SERVER}sizes/${id}`,
-          { size },
-        );
+        const response = await api.patch(`/sizes/${id}`, { size });
 
         return response.data;
       } catch (error) {
@@ -84,9 +74,7 @@ export function useRemoveSize() {
   return useMutation({
     mutationFn: async (id: string) => {
       try {
-        const response = await axios.delete(
-          `${process.env.NEXT_PUBLIC_SERVER}sizes/remove/${id}`,
-        );
+        const response = await api.delete(`/sizes/remove/${id}`);
 
         return response.data;
       } catch (error) {
@@ -103,9 +91,7 @@ export function useRemoveAllSizes() {
   return useMutation({
     mutationFn: async () => {
       try {
-        const response = await axios.delete(
-          `${process.env.NEXT_PUBLIC_SERVER}sizes/remove-all`,
-        );
+        const response = await api.delete(`/sizes/remove-all`);
 
         return response.data;
       } catch (error) {

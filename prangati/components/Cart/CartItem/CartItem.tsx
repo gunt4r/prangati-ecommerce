@@ -1,5 +1,5 @@
 import "./styleCartItem.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/button";
 import toast from "react-hot-toast";
 import { HttpStatusCode } from "axios";
@@ -14,8 +14,9 @@ import {
   useDeleteProductAddToWishlist,
   useUpdateProductToCart,
 } from "@/api/cart/useCart";
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 import { poppins } from "@/config/fonts";
+import { placeholderCartImage } from "@/config/const";
 export default function CartItem({
   product,
   quantity,
@@ -28,10 +29,12 @@ export default function CartItem({
   const { mutate: removeFromCartAndAddProductToWishlist } =
     useDeleteProductAddToWishlist();
   const { mutate: updateProductToCart } = useUpdateProductToCart();
+  const prevQuantityRef = useRef(quantity);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout>();
   const userID = useUUID();
   const incrementValue = () =>
     setQuantityValue((prev: number) =>
-      Math.min(product.stock as number, prev + 1),
+      Math.min(product.stock as number, prev + 1)
     );
   const decrementValue = () =>
     setQuantityValue((prev: number) => Math.max(1, prev - 1));
@@ -48,7 +51,7 @@ export default function CartItem({
         onError: () => {
           toast.error(`Error removing ${product.name} from the cart`);
         },
-      },
+      }
     );
   };
   const handleMoveFavorite = () => {
@@ -70,25 +73,38 @@ export default function CartItem({
 
           toast.error(`Error moving ${product.name} to the wishlist`);
         },
-      },
+      }
     );
   };
 
   useEffect(() => {
-    if (userID) {
-      updateProductToCart(
-        { userId: userID, productId: product.id, quantity: quantityValue },
-        {
-          onSuccess: () => {
-            toast.success(`You updated ${product.name} quantity in the cart`);
-          },
-          onError: () => {
-            toast.error(`Error updating ${product.name} quantity in the cart`);
-          },
-        },
-      );
+    if (quantityValue == prevQuantityRef.current) {
+      return;
     }
-  }, [quantityValue]);
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      if (userID) {
+        updateProductToCart(
+          { userId: userID, productId: product.id, quantity: quantityValue },
+          {
+            onSuccess: () => {
+              toast.success(`You updated ${product.name} quantity in the cart`);
+            },
+
+            onError: () => {
+              toast.error(
+                `Error updating ${product.name} quantity in the cart`
+              );
+            },
+          }
+        );
+        prevQuantityRef.current = quantityValue;
+      }
+    }, 800);
+  }, [quantityValue, userID, product.id, updateProductToCart]);
 
   return (
     <section className="section-cart-item">
@@ -97,7 +113,7 @@ export default function CartItem({
           <img
             alt={product.name}
             className="section-cart-item__wrapper-image"
-            src={product.images[0].path}
+            src={product.images[0]?.path || placeholderCartImage}
           />
         </Link>
         <section className="section-cart-item__wrapper-info">

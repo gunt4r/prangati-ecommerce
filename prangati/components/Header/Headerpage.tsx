@@ -10,8 +10,8 @@ import {
 } from "react-icons/io5";
 import { SlMenu } from "react-icons/sl";
 import { IoMdHeartEmpty } from "react-icons/io";
-import axios from "axios";
 import { useEffect, useState, useRef } from "react";
+import { Tooltip } from "@heroui/react";
 import { ScrollShadow } from "@heroui/scroll-shadow";
 import { motion, Variants } from "framer-motion";
 import { Around } from "@theme-toggles/react";
@@ -22,7 +22,7 @@ import Dropdownlanguage from "./dropdownLanguage/dropdownLanguage";
 import SearchBar from "./SearchBar/SearchBar";
 import DropdownUser from "./dropdownUser/dropdownUser";
 
-// import { animateLink } from "@/utils/animateLink";
+import { api } from "@/api/api";
 import { Product } from "@/config/interfaces";
 import { poppins, archivo } from "@/config/fonts";
 
@@ -63,14 +63,11 @@ function Header({
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER}product/search`,
-        {
-          params: {
-            query: inputDetails,
-          },
+      const response = await api.get(`product/search`, {
+        params: {
+          query: inputDetails,
         },
-      );
+      });
 
       setShowSearch(true);
       setSearchResults(response.data);
@@ -118,7 +115,10 @@ function Header({
     "relative text-base w-fit block after:block after:content-[''] after:absolute after:h-[1px] after:bg-black after:w-full after:rounded-full after:transition-all after:duration-500  after:bottom-[-0.5rem] after:translate-y-[0.5rem] after:scale-x-0 hover:after:scale-x-100 hover:after:translate-y-[1.35rem]";
 
   return (
-    <header ref={searchRef} className={`section-nav__header ${poppins.className}`}>
+    <header
+      ref={searchRef}
+      className={`section-nav__header ${poppins.className}`}
+    >
       <Container>
         {showMenuMobile && (
           <div className="section-nav__menu-medium">
@@ -148,13 +148,13 @@ function Header({
           style={{ ...styleNav }}
         >
           <div className="section-nav__utils">
-            <Around
-              duration={750}
-              placeholder={undefined}
-              style={{ marginRight: "15px" }}
-              // onPointerEnterCapture={() => console.log("entered")}
-              // onPointerLeaveCapture={() => console.log("left")}
-            />
+            <Tooltip color="foreground" content="Soon">
+              <Around
+                duration={750}
+                placeholder={undefined}
+                style={{ marginRight: "15px" }}
+              />
+            </Tooltip>
             <Dropdownlanguage />
           </div>
           <ul className="section-nav__menu">

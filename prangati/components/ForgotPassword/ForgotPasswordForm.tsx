@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
@@ -11,6 +10,7 @@ import classNames from "classnames";
 import styles from "./styleForgotPassword.module.css";
 import InputEmailForgot from "./InputEmailForgot/InputEmailForgot";
 
+import { api } from "@/api/api";
 import { archivo, poppins } from "@/config/fonts";
 import imageKey from "@/public/keyForgotPassword.svg";
 const ForgotPasswordForm: React.FC = () => {
@@ -28,10 +28,9 @@ const ForgotPasswordForm: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER}password-reset/forgot-password`,
-        { email },
-      );
+      const response = await api.post(`/password-reset/forgot-password`, {
+        email,
+      });
 
       toast.success(response.data.message || "Link has been sent to your emal");
     } catch (err: any) {

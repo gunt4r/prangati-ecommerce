@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  background-color: #EAEBED;
+  background-color: #eaebed;
 }
 .section-nav__header {
   margin-bottom: 2rem;
@@ -215,7 +215,13 @@ body {
   justify-self: center;
   flex-direction: column;
 }
-
+.grid-cards {
+  grid-template-columns: repeat(auto-fit, 376px);
+  justify-content: space-evenly;
+  gap: 50px;
+  width: 100%;
+  display: grid;
+}
 @media screen and (max-width: 1000px) {
   .section-nav__menu,
   .section-nav__helpers-desire,
@@ -251,4 +257,3 @@ body {
 }
 
 /* section-top */
-

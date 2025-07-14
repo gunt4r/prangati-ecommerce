@@ -5,16 +5,18 @@ import { poppins } from "@/config/fonts";
 
 export default function ButtonDark({
   onPress,
-  type,
-  size,
+  type = "button",
+  size = "lg",
   classNames,
   isLoading = false,
+  text = "Checkout",
 }: {
   onPress?: () => void;
   type?: "button" | "submit" | "reset" | undefined;
   size?: "sm" | "md" | "lg" | undefined;
   classNames?: string;
   isLoading?: boolean;
+  text?: string;
 }) {
   return (
     <Button
@@ -28,7 +30,7 @@ export default function ButtonDark({
       variant="flat"
       onPress={onPress}
     >
-      Checkout
+      {text}
     </Button>
   );
 }

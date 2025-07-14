@@ -1,20 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  HttpStatus,
   Injectable,
   OnModuleInit,
   BadRequestException,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { CreateAuthDto } from '../dto/create-auth.dto';
+import { CreateAuthDto } from './dto/create-auth.dto';
 import { User } from 'src/models/User.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { AuthUserDto } from 'src/dto/auth-user.dto';
-
+import { AuthUserDto } from 'src/auth/dto/auth-user.dto';
+import { ResponseWithCookie } from 'src/utils/interfaces';
 @Injectable()
 export class AuthService implements OnModuleInit {
   constructor(
@@ -25,7 +24,27 @@ export class AuthService implements OnModuleInit {
 
   async onModuleInit() {}
 
-  async signIn(createAuthDto: CreateAuthDto) {
+  private seAuthCookies(
+    res: ResponseWithCookie,
+    accessToken: string,
+    refreshToken: string,
+  ) {
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    };
+
+    res.cookie('access_token', accessToken, {
+      ...cookieOptions,
+      maxAge: 10 * 60 * 1000,
+    });
+    res.cookie('refresh_token', refreshToken, {
+      ...cookieOptions,
+      maxAge: 2 * 24 * 60 * 60 * 1000,
+    });
+  }
+  async register(createAuthDto: CreateAuthDto, res: ResponseWithCookie) {
     try {
       const { id, fullName, email, password } = createAuthDto;
 
@@ -70,10 +89,22 @@ export class AuthService implements OnModuleInit {
         throw new InternalServerErrorException('Failed to save user');
       }
 
-      const payload = { email: savedUser.email, sub: savedUser.id };
-      const token = this.jwtService.sign(payload);
+      const payload = {
+        email: savedUser.email,
+        sub: savedUser.id,
+        user_role: savedUser.role,
+      };
 
-      return { ...savedUser, token };
+      const access_token = this.jwtService.sign(payload, {
+        expiresIn: '10m',
+      });
+      const refresh_token = this.jwtService.sign(payload, {
+        expiresIn: '2d',
+      });
+
+      this.seAuthCookies(res, access_token, refresh_token);
+
+      return { ...savedUser };
     } catch (error) {
       console.error('Error during sign in:', error.message);
       if (
@@ -86,7 +117,7 @@ export class AuthService implements OnModuleInit {
     }
   }
 
-  async logIn(authUserDto: AuthUserDto) {
+  async logIn(authUserDto: AuthUserDto, res: ResponseWithCookie) {
     try {
       const { email, password } = authUserDto;
       const user = await this.userRepository.findOne({
@@ -104,10 +135,14 @@ export class AuthService implements OnModuleInit {
       const payload = {
         email: user.email,
         sub: user.id,
-        isAdmin: user.isAdmin,
+        user_role: user.role,
       };
-      const token = this.jwtService.sign(payload);
-      return { ...user, token };
+
+      const access_token = this.jwtService.sign(payload);
+      const refresh_token = this.jwtService.sign(payload);
+      this.seAuthCookies(res, access_token, refresh_token);
+
+      return { ...user };
     } catch (error) {
       console.error(error);
       if (error instanceof BadRequestException) {
@@ -119,11 +154,14 @@ export class AuthService implements OnModuleInit {
 
   async validateToken(req: any) {
     try {
-      const token = this.extractTokenFromHeaders(req.headers.authorization);
+      const token = req.cookies?.access_token;
       if (!token) {
         throw new NotFoundException('Token not found');
       }
       const payload = this.jwtService.verify(token);
+      if (!payload) {
+        throw new NotFoundException('Token is invalid');
+      }
       const user = await this.userRepository.findOne({
         where: { id: payload.sub },
       });
@@ -135,15 +173,50 @@ export class AuthService implements OnModuleInit {
       if (e instanceof NotFoundException) {
         return e;
       }
-      throw new BadRequestException(e.message);
+      if (e instanceof BadRequestException) {
+        return e;
+      }
+      console.error(e);
+      throw new BadRequestException('Error validating token');
     }
   }
 
+  async refresh(res: ResponseWithCookie) {
+    console.log(res);
+    const token = res.cookies?.refresh_token;
+
+    if (!token) throw new UnauthorizedException('Refresh token missing');
+
+    try {
+      const payload = this.jwtService.verify(token);
+      const user = await this.userRepository.findOne({
+        where: { id: payload.sub },
+      });
+
+      if (!user) throw new UnauthorizedException('User not found');
+
+      const access_token = this.jwtService.sign(payload);
+      res.cookie('access_token', access_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+      return { message: 'Refreshed the access token successfully' };
+    } catch (error) {
+      throw new UnauthorizedException(`Invalid refresh token ${error}`);
+    }
+  }
+  async logout(res: ResponseWithCookie) {
+    console.log(res);
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+    return { message: 'Logged out successfully' };
+  }
   async findAll() {
     try {
       return await this.userRepository.find();
     } catch (error) {
-      throw new InternalServerErrorException('Failed to fetch users');
+      throw new InternalServerErrorException(`Failed to fetch users ${error}`);
     }
   }
 
@@ -154,12 +227,7 @@ export class AuthService implements OnModuleInit {
       );
       return 'Users were deleted';
     } catch (error) {
-      throw new InternalServerErrorException('Failed to delete users');
+      throw new InternalServerErrorException(`Failed to delete users ${error}`);
     }
-  }
-
-  private extractTokenFromHeaders(headers: string) {
-    const [type, token] = headers?.split(' ') || [];
-    return type === 'Bearer' ? token : undefined;
   }
 }

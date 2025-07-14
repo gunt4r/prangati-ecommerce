@@ -209,7 +209,7 @@ export class OrderService {
         (item) => `
     <tr>
       <td style="padding: 10px; border-bottom: 1px solid #ddd;">
-        <a href="${process.env.PUBLIC_SERVER}product/${item.product.id}" 
+        <a href="${process.env.PUBLIC_FRONTEND}product/${item.product.id}" 
            style="color: #0066cc; text-decoration: underline;">
           ${item.product.name}
         </a>

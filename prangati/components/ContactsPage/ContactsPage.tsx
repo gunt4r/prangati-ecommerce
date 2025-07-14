@@ -4,7 +4,6 @@ import classNames from "classnames";
 import { MdLocalPhone } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { BiLogoGmail } from "react-icons/bi";
-import axios from "axios";
 import { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 
@@ -12,6 +11,7 @@ import ContactForm from "./ContactForm/ContactForm";
 import style from "./styleContactsPage.module.css";
 import ContactCard from "./ContactCard/ContactCard";
 
+import { api } from "@/api/api";
 import TitleHeader from "@/utils/TitleHeader/TitleHeader";
 interface fieldsContact {
   firstName: string;
@@ -67,12 +67,11 @@ export default function ContactsPage() {
     const data = { firstName, lastName, subject, body };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/contacts/send",
-        data,
-      );
+      const response = await api.post("contacts/send", data);
 
       toast.success("Message sent successfully!");
+
+      return response.data;
     } catch (error) {
       toast.error("Error sending message");
     }

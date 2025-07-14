@@ -57,7 +57,7 @@ export class CartController {
     console.log('userID : ', userId);
     return this.cartService.clearCart(userId);
   }
-  // @UseGuards(JwtAuthGuard, AdminGuard)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('deleteAllEntities')
   removeAll() {
     return this.cartService.removeAll();

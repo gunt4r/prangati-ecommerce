@@ -1,52 +1,27 @@
+"use client";
 import { Button } from "@heroui/button";
 import classNames from "classnames";
 import "./styleCartProduct.scss";
-import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { IoCartOutline } from "react-icons/io5";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 
 import {
   useAddProductToCart,
   useDeleteProductFromCart,
 } from "@/api/cart/useCart";
-import { Product } from "@/config/interfaces";
-import { useUUID } from "@/Hooks/useUUID";
-export default function CartProduct({ product }: { product: Product }) {
+import { ProductDetailed } from "@/config/interfaces";
+import { useUUID } from "@/hooks/useUUID";
+import { IsProductInCart } from "@/services/productInCart";
+export default function CartProduct({ product }: { product: ProductDetailed }) {
   const { mutate: addProductToCart } = useAddProductToCart();
   const { mutate: deleteProductFromCart } = useDeleteProductFromCart();
-  const [isAddedCart, setisAddedCart] = useState(false);
+  const isAddedCart = IsProductInCart(product.id);
   const userID = useUUID();
   const router = useRouter();
-
-  useEffect(() => {
-    const isProductAddedToCart = async () => {
-      if (userID) {
-        try {
-          const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_SERVER}cart/${userID}`,
-          );
-
-          if (res.data && Array.isArray(res.data.items)) {
-            const existingItem = res.data.items.find(
-              (item: any) => item.product.id === product.id,
-            );
-
-            if (existingItem) {
-              setisAddedCart(true);
-            }
-          }
-        } catch (error) {
-          toast.error("Error checking product in cart");
-        }
-      }
-    };
-
-    isProductAddedToCart();
-  });
+  const hasAttributes = [product?.sizes || product?.colors].length > 0;
   const handleToggleCart = () => {
-    if (product.hasAttributes) {
+    if (hasAttributes) {
       toast.success(`You're being redirected to the ${product.name} page`);
       setTimeout(() => {
         router.push(`/product/${product.id}`);
@@ -63,15 +38,14 @@ export default function CartProduct({ product }: { product: Product }) {
         },
         {
           onSuccess: () => {
-            setisAddedCart(true);
             toast.success(
-              `You successfully  added ${product.name} to the cart`,
+              `You successfully  added ${product.name} to the cart`
             );
           },
           onError: () => {
             toast.error(`Error adding ${product.name} to the cart`);
           },
-        },
+        }
       );
     } else {
       deleteProductFromCart(
@@ -81,23 +55,21 @@ export default function CartProduct({ product }: { product: Product }) {
         },
         {
           onSuccess: () => {
-            setisAddedCart(false);
             toast.error(`You removed ${product.name} from the cart`);
           },
           onError: () => {
             toast.error(`Error removing ${product.name} from the cart`);
           },
-        },
+        }
       );
     }
-    setisAddedCart((prev) => !prev);
   };
 
   return (
     <Button
       className={classNames(
         "section-nav__helpers-cart",
-        "text-slate-500 text-2xl",
+        "text-slate-500 text-2xl"
       )}
       variant={isAddedCart ? "solid" : "ghost"}
       onPress={handleToggleCart}
@@ -105,7 +77,7 @@ export default function CartProduct({ product }: { product: Product }) {
       <IoCartOutline
         className={classNames(
           "section-nav__helpers-cart-icon",
-          "text-slate-500 text-2xl",
+          "text-slate-500 text-2xl"
         )}
       />
     </Button>

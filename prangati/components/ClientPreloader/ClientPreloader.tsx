@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 
 import Preloader from "./Preloader";
 
-import { useUUID } from "@/Hooks/useUUID";
-
+import { useUUID } from "@/hooks/useUUID";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 const CookieConsentModalWrapper = dynamic(
   () =>
     import(
@@ -15,9 +15,10 @@ const CookieConsentModalWrapper = dynamic(
 
 export default function ClientPreloader() {
   const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const userID = useUUID();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  useUUID();
+  useAxiosAuth();
   useEffect(() => {
     if (document.readyState === "complete") {
       setIsLoading(false);

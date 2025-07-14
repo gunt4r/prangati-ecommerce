@@ -8,36 +8,78 @@ import {
 import { Accordion, AccordionItem } from "@heroui/react";
 import "./styleDrawer.scss";
 import { CgClose } from "react-icons/cg";
+import { Slider } from "@heroui/react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
+import { useForm } from "react-hook-form";
 
+import { CheckIcon } from "@/utils/icons/checkIcon";
 import { useProductsStore } from "@/store/useProductsStore";
 import { Gender } from "@/utils/enums/gender";
 import { poppins } from "@/config/fonts";
 import { useSizes } from "@/api/sizes/useSizes";
-import Preloader from "@/components/ClientPreloader/Preloader";
-
-import { Slider } from "@heroui/react";
-type CustomDrawerProps = {
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-};
+import { useCategories } from "@/api/categories/useCategories";
+import { useColors } from "@/api/colors/useColors";
+import ProductColors from "@/components/Product/ProductInfo/ProductColors";
+import { CustomDrawerProps, FiltersFormValues } from "@/types/types";
+import ButtonDark from "@/components/Cart/CartInfo/ButtonDark";
+import { COOKIE_PRODUCT_KEY } from "@/config/const";
 export default function DrawerCustom({
   isOpen,
   onOpenChange,
 }: CustomDrawerProps) {
-  const filterParams = useProductsStore((state) => state.filterParams);
   const setFilterParams = useProductsStore((state) => state.setFilterParams);
 
   const priceRange = useProductsStore((state) => state.priceRange);
   const setPriceRange = useProductsStore((state) => state.setPriceRange);
-  const { data: sizes, isLoading, isError } = useSizes();
+  const [sliderValue, setSliderValue] = useState<number[]>([
+    priceRange?.minPrice || 0,
+    priceRange?.maxPrice || 1000,
+  ]);
+  const { data: sizes, isLoading } = useSizes();
+  const { data: categories, isLoading: isLoadingCategories } = useCategories();
+  const { data: colors, isLoading: isLoadingColors } = useColors();
+  const { setValue, handleSubmit, watch, getValues, reset } =
+    useForm<FiltersFormValues>({
+      defaultValues: {
+        gender: [],
+        sizeIds: [],
+        categoryIds: [],
+        colorIds: [],
+        minPrice: priceRange?.minPrice ?? 0,
+        maxPrice: priceRange?.maxPrice ?? 1000,
+      },
+    });
 
-  if (isLoading) {
-    return <Preloader />;
-  }
-  if (isError) {
-    return toast.error("Failed to load sizes");
-  }
+  useEffect(() => {
+    const cookieData = Cookies.get(COOKIE_PRODUCT_KEY);
+
+    if (cookieData) {
+      const parsedData = JSON.parse(cookieData);
+
+      reset(parsedData);
+      setSliderValue([parsedData.minPrice || 0, parsedData.maxPrice || 1000]);
+    }
+  }, [reset]);
+
+  const onSubmit = (data: any) => {
+    const { minPrice, maxPrice, ...rest } = data;
+
+    console.log("Filters submitted:", data);
+    setFilterParams(rest);
+    if (setPriceRange) {
+      setPriceRange({
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+      });
+    }
+    Cookies.set(COOKIE_PRODUCT_KEY, JSON.stringify(data), {
+      expires: 2 / 24,
+    });
+    toast.success("Filters applied successfully!");
+    onOpenChange(false);
+  };
 
   return (
     <>
@@ -88,87 +130,213 @@ export default function DrawerCustom({
                 </Button>
               </DrawerHeader>
               <DrawerBody>
-                <Accordion>
-                  <AccordionItem
-                    className="d-flex justify-between items-center"
-                    classNames={{
-                      content: "drawer-body__content",
-                    }}
-                    title="Gender"
-                  >
-                    {Object.values(Gender).map((gender) => (
-                      <Button
-                        key={gender}
-                        className="capitalize border"
-                        startContent={
-                          filterParams.gender?.includes(gender) ? (
-                            <CheckIcon className="ml-1" />
-                          ) : null
-                        }
-                        variant={
-                          filterParams.gender?.includes(gender)
-                            ? "shadow"
-                            : "ghost"
-                        }
-                        onPress={() => setFilterParams({ gender: gender })}
-                      >
-                        {gender}
-                      </Button>
-                    ))}
-                  </AccordionItem>
-                  <AccordionItem
-                    className="d-flex justify-between items-center"
-                    classNames={{
-                      content: "drawer-body__content",
-                    }}
-                    title="Size"
-                  >
-                    {sizes.map((size: any) => (
-                      <Button
-                        key={size.id}
-                        className="capitalize border"
-                        startContent={
-                          filterParams.sizeIds?.includes(size.size) ? (
-                            <CheckIcon className="ml-1" />
-                          ) : null
-                        }
-                        variant={
-                          filterParams.sizeIds?.includes(size.id)
-                            ? "shadow"
-                            : "ghost"
-                        }
-                        onPress={() => setFilterParams({ sizeIds: size.id })}
-                      >
-                        {size.size}
-                      </Button>
-                    ))}
-                  </AccordionItem>
-                  <AccordionItem
-                    className="d-flex justify-between items-center"
-                    classNames={{
-                      content: "drawer-body__content",
-                    }}
-                    title="Price"
-                  >
-                    <Slider
-                      className="max-w-md"
-                      defaultValue={[0, priceRange?.max || 1000]}
-                      formatOptions={{ style: "currency", currency: "USD" }}
-                      label="Price Range"
-                      maxValue={priceRange?.max || 1000}
-                      minValue={priceRange?.min || 0}
-                      step={1}
-                      onChange={(value: number[] | number) => {
-                        if (!Array.isArray(value)) {
-                          return;
-                        }
-                        if (setPriceRange) {
-                          setPriceRange({ minPrice: value[0], maxPrice: value[1] });
-                        }
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <Accordion>
+                    <AccordionItem
+                      className="d-flex justify-between items-center "
+                      classNames={{
+                        content:
+                          "drawer-body__content drawer-body__content--grid",
                       }}
-                    />
-                  </AccordionItem>
-                </Accordion>
+                      title="Gender"
+                    >
+                      {Object.values(Gender).map((gender) => {
+                        const isSelected = watch("gender").includes(gender);
+
+                        return (
+                          <Button
+                            key={gender}
+                            className="capitalize border"
+                            startContent={
+                              isSelected ? (
+                                <CheckIcon className="ml-1 min-w-3" />
+                              ) : null
+                            }
+                            variant={isSelected ? "shadow" : "ghost"}
+                            onPress={() => {
+                              const previousGenders = getValues("gender") || [];
+                              const newGenders = previousGenders.includes(
+                                gender,
+                              )
+                                ? previousGenders.filter((g) => g !== gender)
+                                : [...previousGenders, gender];
+
+                              setValue("gender", newGenders);
+                            }}
+                          >
+                            {gender}
+                          </Button>
+                        );
+                      })}
+                    </AccordionItem>
+                    <AccordionItem
+                      className="d-flex justify-between items-center"
+                      classNames={{
+                        content:
+                          "drawer-body__content drawer-body__content--grid",
+                      }}
+                      title="Size"
+                    >
+                      {sizes.map((size: any) => {
+                        const isSelected = watch("sizeIds").includes(size.id);
+
+                        return (
+                          <Button
+                            key={size.id}
+                            className="capitalize border"
+                            startContent={
+                              isSelected ? (
+                                <CheckIcon className="ml-1 min-w-3" />
+                              ) : null
+                            }
+                            variant={isSelected ? "shadow" : "ghost"}
+                            onPress={() => {
+                              const previousSizes = getValues("sizeIds") || [];
+                              const newSizes = previousSizes.includes(size.id)
+                                ? previousSizes.filter((g) => g !== size.id)
+                                : [...previousSizes, size.id];
+
+                              setValue("sizeIds", newSizes);
+                            }}
+                          >
+                            {size.size}
+                          </Button>
+                        );
+                      })}
+                    </AccordionItem>
+                    <AccordionItem
+                      className="d-flex justify-between items-center"
+                      classNames={{
+                        content:
+                          "drawer-body__content drawer-body__content--grid",
+                      }}
+                      title="Price"
+                    >
+                      <Slider
+                        className="max-w-md"
+                        color="foreground"
+                        defaultValue={[
+                          isNaN(priceRange?.minPrice ?? 0)
+                            ? 0
+                            : (priceRange?.minPrice ?? 0),
+                          isNaN(priceRange?.maxPrice ?? 1000)
+                            ? 1000
+                            : (priceRange?.maxPrice ?? 1000),
+                        ]}
+                        formatOptions={{ style: "currency", currency: "USD" }}
+                        label="Price Range"
+                        maxValue={priceRange?.maxPrice ?? 1000}
+                        minValue={priceRange?.minPrice ?? 0}
+                        step={1}
+                        value={sliderValue}
+                        onChange={(value: number[] | number) => {
+                          if (!Array.isArray(value)) {
+                            return;
+                          }
+                          setSliderValue(value);
+                        }}
+                        onChangeEnd={(value: number[] | number) => {
+                          if (!Array.isArray(value)) {
+                            return;
+                          }
+                          if (setPriceRange) {
+                            setValue("minPrice", value[0], {
+                              shouldValidate: true,
+                            });
+                            setValue("maxPrice", value[1], {
+                              shouldValidate: true,
+                            });
+                            setPriceRange({
+                              minPrice: value[0],
+                              maxPrice: value[1],
+                            });
+                          }
+                        }}
+                      />
+                    </AccordionItem>
+                    <AccordionItem
+                      className="d-flex justify-between items-center"
+                      classNames={{
+                        content:
+                          "drawer-body__content drawer-body__content--grid",
+                      }}
+                      title="Brand"
+                    >
+                      {categories?.map((category: any) => {
+                        const isSelected = watch("categoryIds").includes(
+                          category.id,
+                        );
+
+                        return (
+                          <Button
+                            key={category.id}
+                            className="capitalize border"
+                            startContent={
+                              isSelected ? (
+                                <CheckIcon className="ml-1 min-w-3" />
+                              ) : null
+                            }
+                            variant={isSelected ? "shadow" : "ghost"}
+                            onPress={() => {
+                              const previousGenders =
+                                getValues("categoryIds") || [];
+                              const newCategories = previousGenders.includes(
+                                category.id,
+                              )
+                                ? previousGenders.filter(
+                                    (g) => g !== category.id,
+                                  )
+                                : [...previousGenders, category.id];
+
+                              setValue("categoryIds", newCategories);
+                            }}
+                          >
+                            {category.name}
+                          </Button>
+                        );
+                      })}
+                    </AccordionItem>
+                    <AccordionItem
+                      className="d-flex justify-between items-center"
+                      classNames={{
+                        content:
+                          "drawer-body__content drawer-body__content--grid",
+                      }}
+                      title="Color"
+                    >
+                      {colors?.map((color: any) => {
+                        const isSelected = watch("colorIds").includes(color.id);
+
+                        return (
+                          <ProductColors
+                            key={color.id}
+                            color={color}
+                            handleClick={() => {
+                              const previousColors =
+                                getValues("colorIds") || [];
+                              const newColors = previousColors.includes(
+                                color.id,
+                              )
+                                ? previousColors.filter((g) => g !== color.id)
+                                : [...previousColors, color.id];
+
+                              setValue("colorIds", newColors);
+                            }}
+                            isSelected={isSelected}
+                          />
+                        );
+                      })}
+                    </AccordionItem>
+                  </Accordion>
+                  <ButtonDark
+                    classNames="mt-8"
+                    isLoading={
+                      isLoading || isLoadingCategories || isLoadingColors
+                    }
+                    text="SHOW ALL"
+                    type="submit"
+                  />
+                </form>
               </DrawerBody>
             </>
           )}
@@ -177,22 +345,3 @@ export default function DrawerCustom({
     </>
   );
 }
-export const CheckIcon = (props: any) => {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      focusable="false"
-      height="1em"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      viewBox="0 0 24 24"
-      width="1em"
-      {...props}
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-};

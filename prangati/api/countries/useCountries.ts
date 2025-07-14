@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+
+import { api } from "../api";
 
 import { REACT_QUERY_COUNTRIES_KEY } from "@/config/const";
 /**
@@ -13,7 +14,7 @@ export function useGetCountries() {
 
     // Function to fetch data from the server
     queryFn: async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}countries`);
+      const res = await api.get(`/countries`);
 
       return res.data;
     },
@@ -26,9 +27,7 @@ export function useGetCountryStates(countryCode: string) {
     queryKey: [REACT_QUERY_COUNTRIES_KEY, countryCode],
     queryFn: async ({ queryKey }) => {
       const [, code] = queryKey;
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER}countries/${code}`,
-      );
+      const res = await api.get(`/countries/${code}`);
 
       return res.data.sub_regions || null;
     },

@@ -278,12 +278,18 @@ export class ProductService {
       queryBuilder,
       this.paginateConfig,
     );
-
+    console.log({
+      ...paginatedResult,
+      priceRange: {
+        minPrice: Number(priceRange.minPrice),
+        maxPrice: Number(priceRange.maxPrice),
+      },
+    });
     return {
       ...paginatedResult,
       priceRange: {
-        minPrice: Number(priceRange.min),
-        maxPrice: Number(priceRange.max),
+        minPrice: Number(priceRange.minPrice),
+        maxPrice: Number(priceRange.maxPrice),
       },
     };
   }

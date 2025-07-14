@@ -9,8 +9,6 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Category } from './Category.entity';
-// import { ProductColor } from './Product_Colors.entity';
-// import { ProductSize } from './Product_Sizes.entity';
 import { Wishlist } from './Wishlist.entity';
 import { UploadedImage } from './UploadImage';
 import { genderEnum } from 'src/utils/enums';

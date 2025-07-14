@@ -5,10 +5,12 @@ import { ValidationPipe } from '@nestjs/common';
 import 'reflect-metadata';
 import * as express from 'express';
 import { join } from 'path';
+import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(cookieParser());
   app.enableCors({
-    origin: 'http://localhost:3001',
+    origin: process.env.PUBLIC_FRONTEND.toString(),
     methods: 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
     credentials: true,
   });

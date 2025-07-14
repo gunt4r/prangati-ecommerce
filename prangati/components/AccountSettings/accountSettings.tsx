@@ -20,7 +20,7 @@ import Preloader from "../ClientPreloader/Preloader";
 import style from "./styleAccountSettings.module.css";
 
 import { archivo } from "@/config/fonts";
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 import { useGetUser } from "@/api/user/useUser";
 import { useUpdateUser } from "@/api/user/useUser";
 import { queryClient } from "@/api/react-query";
@@ -155,7 +155,7 @@ export default function AccountSettings({
               <p
                 className={classNames(
                   style["section-account__form-modal-title"],
-                  archivo.className,
+                  archivo.className
                 )}
               >
                 Account settings

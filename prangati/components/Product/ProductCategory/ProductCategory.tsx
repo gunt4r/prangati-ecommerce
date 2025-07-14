@@ -3,13 +3,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "@heroui/button";
 
 import { archivo } from "@/config/fonts";
+import { Category } from "@/types/categories";
 export default function ProductCategory({
   style,
   category,
   productsName,
 }: {
   style?: { [key: string]: string };
-  category: string;
+  category: Category;
   productsName: string;
 }) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function ProductCategory({
     router.push("/products");
   };
   const handleClickCategory = () => {
-    router.replace(`/products?category=${category}`);
+    router.replace(`/products?category=${category.id}`);
   };
 
   return (
@@ -39,7 +40,7 @@ export default function ProductCategory({
         variant="light"
         onPress={handleClickCategory}
       >
-        {category}
+        {category.name}
       </Button>
     </pre>
   );

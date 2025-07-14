@@ -1,5 +1,6 @@
 "use client";
 import { Link } from "@heroui/link";
+import { useEffect } from "react";
 
 import CartProduct from "./CartProduct/CartProduct";
 import "./styleCardProduct.scss";
@@ -8,8 +9,28 @@ import PriceProduct from "./PriceProduct/PriceProduct";
 
 import { oswald, poppins } from "@/config/fonts";
 import { Product } from "@/config/interfaces";
+import { placeholderImage } from "@/config/const";
+import { useWishlist } from "@/api/wishlist/useWishlist";
+import { useProductsStore } from "@/store/useProductsStore";
+import { useUUID } from "@/hooks/useUUID";
+import { useCartItems } from "@/api/cart/useCart";
 export default function CardProduct({ product }: { product: Product }) {
-  const descriptionProduct = product.description;
+  const userId = useUUID();
+  const setWishlistProducts = useProductsStore(
+    (state) => state.setWishlistProducts
+  );
+  const setCardProducts = useProductsStore((state) => state.setCartProducts);
+  const { data: wishlistProducts, isLoading } = useWishlist(userId);
+  const { data: cartProducts, isLoading: isLoadingCart } = useCartItems();
+
+  useEffect(() => {
+    if (!isLoading && wishlistProducts) {
+      setWishlistProducts(wishlistProducts);
+    }
+    if (!isLoadingCart && cartProducts) {
+      setCardProducts(cartProducts.items);
+    }
+  }, [isLoading, wishlistProducts, setWishlistProducts]);
 
   return (
     <div className="section-card">
@@ -20,7 +41,7 @@ export default function CardProduct({ product }: { product: Product }) {
           src={
             product.images && product.images.length > 0
               ? product.images[0].path
-              : "https://via.placeholder.com/150"
+              : placeholderImage
           }
         />
       </Link>
@@ -41,7 +62,7 @@ export default function CardProduct({ product }: { product: Product }) {
           <p
             className={`section-card__wrapper-details__description ${poppins.className}`}
           >
-            {descriptionProduct}
+            {product.description}
           </p>
         </Link>
         <PriceProduct link={product.id} price={product.price} />
@@ -63,6 +84,7 @@ export default function CardProduct({ product }: { product: Product }) {
           right: "9%",
           zIndex: "10",
         }}
+        userID={userId}
       />
     </div>
   );

@@ -7,6 +7,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  Patch,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -35,12 +36,18 @@ export class CategoriesController {
     return this.categoriesService.findOne(id);
   }
 
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: CreateCategoryDto,
+  ) {
+    return this.categoriesService.update(id, updateCategoryDto);
+  }
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(id);
   }
-  // @UseGuards(JwtAuthGuard, AdminGuard)
-  @Delete()
+  @Delete('remove-all')
   removeAll() {
     return this.categoriesService.removeAll();
   }

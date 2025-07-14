@@ -1,98 +1,49 @@
 "use client";
 
-import classNames from "classnames";
 import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
-import { useEffect, useState } from "react";
-import { HashLoader } from "react-spinners";
+import { useState, useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa6";
 
 import CardProduct from "../CardProduct/CardProduct";
 import Container from "../Container/Container";
 
-import style from "./styleWishListBody.module.css";
+import "./styleWishListBody.scss";
 
 import { poppins } from "@/config/fonts";
 import TitleHeader from "@/utils/TitleHeader/TitleHeader";
 import { Product } from "@/config/interfaces";
-import { useUUID } from "@/Hooks/useUUID";
-
+import { useProductsStore } from "@/store/useProductsStore";
+import { useWishlist } from "@/api/wishlist/useWishlist";
+import { useUUID } from "@/hooks/useUUID";
 export default function WishlistBody() {
-  const [wishlist, setWishlist] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const wishlistProducts = useProductsStore((state) => state.wishlistProducts);
   const userId = useUUID();
-  const [showMore, setShowMore] = useState(false);
+  const { data: wishlist } = useWishlist(userId);
 
   useEffect(() => {
-    async function getWishlist() {
-      if (!userId) {
-        setLoading(false);
+    if (wishlistProducts.length != 0) return;
+    if (!wishlist || wishlist.length == 0) return;
+    useProductsStore.getState().setWishlistProducts(wishlist);
+  }, [wishlist, wishlistProducts, useProductsStore]);
+  const [showMore, setShowMore] = useState(false);
 
-        return;
-      }
-      try {
-        const url = new URL(
-          `${process.env.NEXT_PUBLIC_SERVER}wishlist/getAllWishlist/${userId}`,
-        );
-
-        const response = await fetch(url.toString(), {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const result = await response.json();
-
-        setWishlist(Array.from(result));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    }
-    getWishlist();
-  }, [userId]);
-
-  if (loading)
-    return (
-      <HashLoader
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      />
-    );
-  const formattedWishlist =
-    wishlist?.map((item) => ({
-      ...item,
-      images:
-        item.images?.map((img) =>
-          typeof img === "string" ? { path: img } : img,
-        ) || [],
-    })) || [];
   const handleShowMore = () => {
     setShowMore(true);
   };
 
   return (
-    <div className={classNames(style["section-wish__wrapper"])}>
+    <div className="section-wish__wrapper">
       <Container>
         <TitleHeader text="WishList" />
-        {wishlist.length === 0 ? (
+        {wishlistProducts.length === 0 ? (
           <div>
-            <p
-              className={classNames(
-                style["section-wish__subtitle"],
-                poppins.className,
-              )}
-            >
+            <p className={`section-wish__subtitle ${poppins.className}`}>
               Explore the products you’ve added to your wishlist. Share them
               with friends, family, or even our experts to help you find the
               perfect match!
             </p>
-            <hr className={classNames(style["section-wish__line"])} />
+            <hr className="section-wish__line" />
             <Link className=" flex mx-auto" href="/products">
               <Button
                 className={`bg-default-900 text-default-50 w-40 flex mx-auto text-lg ${poppins.className}`}
@@ -107,12 +58,12 @@ export default function WishlistBody() {
           </div>
         ) : (
           <div>
-            <div className={classNames(style["section-wish__cards"])}>
-              {formattedWishlist.map((item: Product) => (
+            <div className="grid-cards">
+              {wishlistProducts.map((item: Product) => (
                 <CardProduct key={item.id} product={item} />
               ))}
             </div>
-            <Link className=" flex mx-auto" href="/products">
+            <Link className="flex mx-auto" href="/products">
               <Button
                 className={` uppercase  flex mx-auto text-lg mt-12 ${poppins.className}`}
                 isLoading={showMore}
@@ -120,7 +71,7 @@ export default function WishlistBody() {
                 variant="light"
                 onPress={handleShowMore}
               >
-                Show more <FaArrowRight className="text-lg" size={60} />
+                Show more <FaArrowRight className="text-lg" size={30} />
               </Button>
             </Link>
           </div>

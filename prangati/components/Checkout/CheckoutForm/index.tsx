@@ -18,7 +18,7 @@ import CheckoutFormTitle from "./CheckoutFormTitle";
 import { usePostOrder } from "@/api/checkout/useCheckout";
 import { poppins } from "@/config/fonts";
 import ButtonDark from "@/components/Cart/CartInfo/ButtonDark";
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 import {
   useGetCountries,
   useGetCountryStates,
@@ -121,7 +121,7 @@ export default function CheckoutForm() {
         onSettled: () => {
           setIsLoadingButton(false);
         },
-      },
+      }
     );
   };
 

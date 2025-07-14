@@ -1,5 +1,4 @@
 "use client";
-import classNames from "classnames";
 import { Checkbox, Input } from "@heroui/react";
 import { useMemo, useState } from "react";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
@@ -18,7 +17,7 @@ import {
 } from "@heroui/react";
 import React from "react";
 
-import style from "./styleLogInForm.module.css";
+import "./styleLogInForm.scss";
 
 import { poppins } from "@/config/fonts";
 import { queryClient } from "@/api/react-query";
@@ -77,9 +76,6 @@ export default function LogInForm() {
       {
         onSuccess: (response) => {
           toast.success("Authentication is successful!");
-          const { token } = response;
-
-          localStorage.setItem("token", token);
           localStorage.setItem("user_uuid", response.id);
           queryClient.invalidateQueries({ queryKey: [REACT_QUERY_AUTH_KEY] });
           setTimeout(() => {
@@ -96,19 +92,12 @@ export default function LogInForm() {
   };
 
   return (
-    <section className={classNames(style["section-login__form"])}>
+    <section className="section-login__form">
       <Toaster position="bottom-right" />
-      <p
-        className={classNames(style["section-login__title"], poppins.className)}
-      >
+      <p className={`section-login__title text-center  ${poppins.className}`}>
         Welcome back!
       </p>
-      <p
-        className={classNames(
-          style["section-login__subtitle"],
-          poppins.className,
-        )}
-      >
+      <p className={`section-login__subtitle  ${poppins.className}`}>
         Please enter your details
       </p>
       <Input
@@ -170,15 +159,12 @@ export default function LogInForm() {
               className="bg-transparent border-none py-0 px-4 pl-2.5"
               onPress={onOpen}
             >
-              <p className={style["section-login__privacy"]}>Privacy Policy</p>
+              <p className="section-login__privacy">Privacy Policy</p>
             </Button>
           </p>
         </Checkbox>
         <Link
-          className={classNames(
-            style["section-login__bottom-forgot"],
-            poppins.className,
-          )}
+          className={`section-login__bottom-forgot ${poppins.className}`}
           href="/forgot-password"
         >
           Forgot password?
@@ -220,21 +206,14 @@ export default function LogInForm() {
               <ModalHeader className="flex items-center flex-row justify-center gap-1">
                 <p className="mr-auto">PRANGATI</p>
                 <p
-                  className={classNames(
-                    style["section-login__form-modal-title"],
-                    "w-3/6 mx-auto",
-                    poppins.className,
-                  )}
+                  className={`section-login__form-modal-title w-3/6 mx-auto ${poppins.className}`}
                 >
                   Privacy Policy
                 </p>
               </ModalHeader>
               <ModalBody>
                 <p
-                  className={classNames(
-                    style["section-login__form-modal-body"],
-                    poppins.className,
-                  )}
+                  className={`section-login__form-modal-body ${poppins.className}`}
                 >
                   At Prangati, we value and respect the privacy of our visitors
                   and customers. This Privacy Policy explains how we collect,
@@ -316,14 +295,14 @@ export default function LogInForm() {
               </ModalBody>
               <ModalFooter className="flex items-center flex-row justify-center">
                 <Button
-                  className={style["section-login__modal-button-accept"]}
+                  className="section-login__modal-button-accept"
                   radius="full"
                   onPress={onClose}
                 >
                   Accept
                 </Button>
                 <Button
-                  className={style["section-login__modal-button-decline"]}
+                  className="section-login__modal-button-decline"
                   radius="full"
                   variant="light"
                   onPress={onClose}

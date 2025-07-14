@@ -3,13 +3,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { v4 as uuidv4 } from "uuid";
 
+import { api } from "../api";
 import { queryClient } from "../react-query";
 
 import {
   REACT_QUERY_USER_KEY,
   REACT_QUERY_USER_UUID_KEY,
 } from "@/config/const";
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 export function useGetUser() {
   const userID = useUUID();
 
@@ -18,9 +19,7 @@ export function useGetUser() {
     queryFn: async () => {
       if (!userID) throw new Error("User ID not found");
       try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}user/${userID}`,
-        );
+        const res = await api.get(`/user/${userID}`);
         const data = res.data;
 
         return data;
@@ -35,7 +34,7 @@ export function useGetUsers() {
     queryKey: [REACT_QUERY_USER_KEY],
     queryFn: async () => {
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}user`);
+        const res = await api.get(`/user`);
 
         return res.data;
       } catch (error) {
@@ -51,10 +50,7 @@ export function useUpdateUser() {
     mutationFn: async (data: any) => {
       try {
         const { userId } = data;
-        const res = await axios.patch(
-          `${process.env.NEXT_PUBLIC_SERVER}user/${userId}`,
-          data,
-        );
+        const res = await api.patch(`/user/${userId}`, data);
 
         if (res.data?.status === 400 || res.status === 400) {
           throw res.data;
@@ -101,8 +97,8 @@ export function useGetOrCreateUUID() {
       }
 
       try {
-        const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER}user/addUUID`,
+        const res = await api.post(
+          `/user/addUUID`,
           { uuid: finalUUID },
           { headers: { "Content-Type": "application/json" } },
         );
@@ -135,8 +131,8 @@ export function useAddUUID() {
           localStorage.setItem("user_uuid", finalUUID);
         }
 
-        const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER}user/addUUID`,
+        const res = await api.post(
+          `/user/addUUID`,
           { uuid: finalUUID },
           { headers: { "Content-Type": "application/json" } },
         );

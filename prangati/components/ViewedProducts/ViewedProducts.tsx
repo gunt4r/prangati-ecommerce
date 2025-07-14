@@ -8,7 +8,7 @@ import Container from "../Container/Container";
 import styles from "./styleViewedProducts.module.css";
 
 import { getRecentViewedProducts } from "@/services/viewedProductsService";
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 import { Product } from "@/config/interfaces";
 export default function ViewedProducts({
   style,

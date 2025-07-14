@@ -1,6 +1,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { useEffect } from "react";
 
+import { api } from "../api";
 import { queryClient } from "../react-query";
 
 import { REACT_QUERY_PRODUCTS_KEY } from "@/config/const";
@@ -10,6 +11,7 @@ import {
   ProductFilters,
   Product,
 } from "@/config/interfaces";
+import { useProductsStore } from "@/store/useProductsStore";
 const productApi = {
   getProducts: async (
     filters: ProductFilters = {},
@@ -22,23 +24,21 @@ const productApi = {
       }
     });
 
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER}product?${params.toString()}`,
-    );
+    const response = await api.get(`/product?${params.toString()}`);
 
     return response.data;
   },
 
   // Get single product
   getProduct: async (id: string): Promise<Product> => {
-    const response = await axios.get(`/product/${id}`);
+    const response = await api.get(`/product/${id}`);
 
     return response.data;
   },
 
   // Search products
   searchProducts: async (query: string): Promise<Product[]> => {
-    const response = await axios.get(
+    const response = await api.get(
       `/product/search?query=${encodeURIComponent(query)}`,
     );
 
@@ -47,7 +47,7 @@ const productApi = {
 
   // Create product
   createProduct: async (data: FormData): Promise<Product> => {
-    const response = await axios.post("/product", data, {
+    const response = await api.post("/product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -64,14 +64,14 @@ const productApi = {
     id: string;
     data: any;
   }): Promise<Product> => {
-    const response = await axios.patch(`/product/${id}`, data);
+    const response = await api.patch(`/product/${id}`, data);
 
     return response.data;
   },
 
   // Delete product
   deleteProduct: async (id: string): Promise<void> => {
-    await axios.delete(`/product/${id}`);
+    await api.delete(`/product/${id}`);
   },
 };
 
@@ -87,10 +87,7 @@ export function usePostProduct() {
   return useMutation({
     mutationFn: async (data) => {
       try {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER}product`,
-          data,
-        );
+        const response = await api.post(`/product`, data);
 
         return response;
       } catch (error) {
@@ -102,10 +99,22 @@ export function usePostProduct() {
     },
   });
 }
-export const useProductsAdvanced = (filters: AdvancedFilters = {}) => {
+export const useProductsAdvanced = () => {
+  const setPriceRange = useProductsStore((state) => state.setPriceRange);
+  const filtersStore = useProductsStore((state) => state.filterParams);
+  const sortParams = useProductsStore((state) => state.sortParams);
+  const queryParams = useProductsStore((state) => state.getQueryParams);
+  const priceRange = useProductsStore((state) => state.priceRange);
+  const filters = queryParams();
+
+  useEffect(() => {
+    queryParams();
+  }, [filtersStore, sortParams, priceRange]);
+  console.log("Filters in useProductsAdvanced:", filters);
+
   return useQuery({
     queryKey: ["products-advanced", filters],
-    queryFn: async (): Promise<PaginatedResponse<Product>> => {
+    queryFn: async (): Promise<any> => {
       try {
         const params = new URLSearchParams();
 
@@ -119,9 +128,13 @@ export const useProductsAdvanced = (filters: AdvancedFilters = {}) => {
           }
         });
 
-        const finalUrl = `${process.env.NEXT_PUBLIC_SERVER}product/advanced-search?${params.toString()}`;
+        const finalUrl = `/product/advanced-search?${params.toString()}`;
 
-        const response = await axios.get(finalUrl);
+        const response = await api.get(finalUrl);
+
+        if (typeof setPriceRange === "function") {
+          setPriceRange(response.data?.priceRange as any);
+        }
 
         return response.data;
       } catch (error) {

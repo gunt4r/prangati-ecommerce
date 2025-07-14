@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
-import axios from "axios";
 
 import HeadingSection from "../HeadingSection/HeadingSection";
 
 import style from "./stylePopularProducts.module.css";
 
+import { api } from "@/api/api";
 import { poppins } from "@/config/fonts";
 import CardProduct from "@/components/CardProduct/CardProduct";
 import { Product } from "@/config/interfaces";
@@ -15,15 +15,12 @@ export default function PopularProducts() {
 
   const handlerData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER}product`,
-        {
-          params: {
-            limit: 3,
-          },
+      const response = await api.get(`/product`, {
+        params: {
+          limit: 3,
         },
-      );
-      console.log(response);
+      });
+
       setProductsData(response.data.data);
     } catch (error) {
       throw error;

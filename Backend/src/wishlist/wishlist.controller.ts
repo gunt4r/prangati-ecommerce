@@ -37,6 +37,12 @@ export class WishlistController {
 
   @Delete()
   remove(@Body() deleteFromWishlist: CreateWishlistDto) {
+    console.log('deleteFromWishlist', deleteFromWishlist);
     return this.wishlistService.remove(deleteFromWishlist);
+  }
+  @Delete('remove-all/:userId')
+  removeAll(@Param('userId') userId: string) {
+    if (!userId) throw new BadRequestException('User ID required');
+    return this.wishlistService.removeAll(userId);
   }
 }

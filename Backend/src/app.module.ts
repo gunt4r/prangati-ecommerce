@@ -17,7 +17,6 @@ import { RecentlyViewedModule } from './recently-viewed/recently-viewed.module';
 import { PasswordResetModule } from './password-reset/password-reset.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { ProductModule } from './product/product.module';
-import { AdminModule } from './admin/admin.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CartModule } from './cart/cart.module';
 import { UserModule } from './user/user.module';
@@ -52,7 +51,6 @@ import { SizesModule } from './sizes/sizes.module';
     PasswordResetModule,
     WishlistModule,
     ProductModule,
-    AdminModule,
     CategoriesModule,
     CartModule,
     UserModule,

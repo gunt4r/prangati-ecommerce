@@ -10,6 +10,7 @@ import { Cart } from './Cart.entity';
 import { Order } from './Order.entity';
 import { PasswordResetToken } from './password-reset-token.entity';
 import { Wishlist } from './Wishlist.entity';
+import { userRoles } from 'src/utils/enums';
 @Entity('users')
 export class User {
   @PrimaryColumn('uuid', { unique: true })
@@ -27,8 +28,12 @@ export class User {
   @Column({ nullable: true })
   password: string;
 
-  @Column({ default: false })
-  isAdmin: boolean;
+  @Column({
+    type: 'enum',
+    enum: userRoles,
+    default: userRoles.USER,
+  })
+  role: userRoles;
 
   @Column({ nullable: true })
   city: string;

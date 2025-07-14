@@ -18,6 +18,7 @@ import { useGetAuth } from "@/api/auth/useAuth";
 
 const Cart = () => {
   const { isLoading, data } = useCartItems();
+
   const { data: auth, isLoading: authLoading } = useGetAuth();
   const isAuthenticated = Boolean(auth && auth.status === 200);
 
@@ -29,7 +30,7 @@ const Cart = () => {
     <div>
       <Header />
       <Container>
-        <TitleHeader styles={{ marginBottom: "0" }} text="Cart" />
+        <TitleHeader text="Cart" />
         {!data || data.items.length == 0 ? (
           <div>
             <p
@@ -68,17 +69,15 @@ const Cart = () => {
         ) : (
           <div className="section-cart">
             <div className={"section-cart__cards"}>
-              {data.items.map((item: any) => {
-                return (
-                  <CartItem
-                    key={item.id}
-                    product={item.product}
-                    quantity={item.quantity}
-                  />
-                );
-              })}
+              {data.items.map((item: any) => (
+                <CartItem
+                  key={item.id}
+                  product={item.product}
+                  quantity={item.quantity}
+                />
+              ))}
             </div>
-            <CartInfo subtotal={data.subtotalPrice} />
+            <CartInfo subtotal={data.subtotalPrice.toFixed(2)} />
           </div>
         )}
         <ViewedProducts />

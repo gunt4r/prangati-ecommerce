@@ -1,10 +1,5 @@
-import {
-  IsBoolean,
-  IsEmail,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import { userRoles } from 'src/utils/enums';
 
 export class CreateAuthDto {
   @IsUUID()
@@ -19,6 +14,6 @@ export class CreateAuthDto {
   password: string;
 
   @IsOptional()
-  @IsBoolean()
-  isAdmin?: boolean;
+  @IsEnum(userRoles)
+  user_role?: userRoles;
 }

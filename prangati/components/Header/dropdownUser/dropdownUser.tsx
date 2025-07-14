@@ -7,7 +7,6 @@ import {
 } from "@heroui/dropdown";
 import { motion } from "framer-motion";
 import { BiUser } from "react-icons/bi";
-import classNames from "classnames";
 import { BiUserCircle } from "react-icons/bi";
 import { SlSettings } from "react-icons/sl";
 import { CiLogout } from "react-icons/ci";
@@ -15,44 +14,39 @@ import { useRouter } from "next/navigation";
 import { useDisclosure } from "@heroui/modal";
 import { PiUserCirclePlusBold } from "react-icons/pi";
 
-import style from "./styleDropdownUser.module.css";
+import "./styleDropdownUser.scss";
 
 import AccountSettings from "@/components/AccountSettings/accountSettings";
 import { poppins } from "@/config/fonts";
-import { useGetAuth } from "@/api/auth/useAuth";
+import { useGetAuth, useLogout } from "@/api/auth/useAuth";
 import Preloader from "@/components/ClientPreloader/Preloader";
-import { queryClient } from "@/api/react-query";
-import { REACT_QUERY_AUTH_KEY } from "@/config/const";
 import { useGetUser } from "@/api/user/useUser";
 export default function DropdownUser() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
-  const { data, isLoading } = useGetAuth();
-  const isAuthenticated = Boolean(data && data.status === 200);
+  const { data: isAuthenticated, isLoading } = useGetAuth();
   const { data: user, isLoading: isLoadingUser } = useGetUser();
+  const { mutate: logoutUser } = useLogout();
   const handleLogin = () => {
     router.push("/logIn");
   };
   const handleSignIn = () => {
     router.push("/signIn");
   };
-  const handleLogOut = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_uuid");
-    queryClient.invalidateQueries({ queryKey: [REACT_QUERY_AUTH_KEY] });
-  };
   const motionUserIcon = {
     hover: {
       scale: 1.3,
       color: "#55630F",
       transition: {
+        delay: 0.1,
         duration: 0.5,
-        type: "tween",
         ease: "easeIn",
       },
     },
   };
-
+  const handleLogout = () => {
+    logoutUser();
+  };
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
@@ -68,9 +62,9 @@ export default function DropdownUser() {
           }}
           radius="sm"
         >
-          <DropdownTrigger>
+          <DropdownTrigger className="cursor-pointer">
             <motion.div
-              className={classNames(style["section-nav__helpers-icon"])}
+              className="section-nav__helpers-icon"
               style={{ color: "#000" }}
               variants={motionUserIcon}
               whileHover="hover"
@@ -132,9 +126,9 @@ export default function DropdownUser() {
               <DropdownItem
                 key="logout"
                 startContent={
-                  <CiLogout className={classNames(iconClasses, "rotate-180")} />
+                  <CiLogout className={` ${iconClasses} rotate-180 `} />
                 }
-                onPress={handleLogOut}
+                onPress={handleLogout}
               >
                 Log Out
               </DropdownItem>
@@ -151,7 +145,7 @@ export default function DropdownUser() {
         >
           <DropdownTrigger>
             <motion.div
-              className={classNames(style["section-nav__helpers-icon"])}
+              className="section-nav__helpers-icon"
               style={{ color: "#000" }}
               variants={motionUserIcon}
               whileHover="hover"

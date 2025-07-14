@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import Header from "@/components/Header/Headerpage";
 import Footer from "@/components/Footer/Footer";
 import CheckoutBody from "@/components/Checkout";
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 import { CartResponse } from "@/config/interfaces";
 
 export default function Checkout() {

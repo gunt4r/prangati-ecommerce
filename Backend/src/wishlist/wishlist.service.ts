@@ -52,7 +52,7 @@ export class WishlistService {
 
     const wishlistItems = await this.wishlistRepository.find({
       where: { user: { id: userId } },
-      relations: ['product'],
+      relations: ['product', 'product.images'],
     });
 
     if (!wishlistItems.length) {
@@ -83,6 +83,16 @@ export class WishlistService {
     const { productID, userID } = deleteFromWishlist;
     const wishlist = await this.wishlistRepository.findOne({
       where: { product: { id: productID }, user: { id: userID } },
+    });
+    if (!wishlist) {
+      throw new BadRequestException('Wishlist not found');
+    }
+    return this.wishlistRepository.remove(wishlist);
+  }
+
+  async removeAll(userId: string) {
+    const wishlist = await this.wishlistRepository.find({
+      where: { user: { id: userId } },
     });
     if (!wishlist) {
       throw new BadRequestException('Wishlist not found');

@@ -30,7 +30,6 @@ export class UploadImagesController {
   findOne(@Param('id') id: string) {
     return this.uploadImagesService.getImage(id);
   }
-  // @UseGuards(JwtAuthGuard, AdminGuard)
   @Delete()
   removeAll() {
     return this.uploadImagesService.removeAll();

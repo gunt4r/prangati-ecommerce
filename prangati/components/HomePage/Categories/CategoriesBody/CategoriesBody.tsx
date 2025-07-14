@@ -2,45 +2,30 @@ import { Card, CardFooter, Image } from "@heroui/react";
 import classNames from "classnames";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { Link } from "@heroui/link";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import toast from "react-hot-toast";
 
 import style from "./styleCategoriesBody.module.css";
 
 import { archivo } from "@/config/fonts";
-
-interface Category {
-  id: string;
-  name: string;
-  cardType: "tall" | "wide" | "normal";
-  image: {
-    path: string;
-    originalName: string;
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-}
+import { useCategories } from "@/api/categories/useCategories";
+import Preloader from "@/components/ClientPreloader/Preloader";
 
 export default function CategoriesBody() {
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    async function getCategories() {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER}categories`,
-      );
-
-      setCategories(data);
-    }
-    getCategories();
-  }, []);
+  // const [categories, setCategories] = useState<Category[]>([]);
+  const { data: categories = [], isLoading, isError } = useCategories();
 
   const tallCategories = categories.filter((cat) => cat.cardType === "tall");
   const wideCategories = categories.filter((cat) => cat.cardType === "wide");
   const normalCategories = categories.filter(
     (cat) => cat.cardType === "normal",
   );
+
+  if (isLoading) return <Preloader />;
+  if (isError) {
+    toast.error("Failed to load categories");
+
+    return <div className="text-center">Failed to load categories</div>;
+  }
 
   return (
     <div className="grid grid-cols-12 gap-8 px-8">

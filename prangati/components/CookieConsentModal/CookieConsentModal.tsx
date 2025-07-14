@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 
 import styles from "./styleCookieConsent.module.css";
 
-import { useCookieConsent } from "@/Hooks/useCookieConsent";
+import { useCookieConsent } from "@/hooks/useCookieConsent";
 import { archivo, poppins } from "@/config/fonts";
 const CookieConsentModal: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -30,7 +30,7 @@ const CookieConsentModal: React.FC = () => {
           <p
             className={classNames(
               styles["section-modal__title"],
-              archivo.className,
+              archivo.className
             )}
           >
             {t("cookieConsentTitle")}
@@ -39,7 +39,7 @@ const CookieConsentModal: React.FC = () => {
             className={classNames(
               styles["section-modal__subtitle"],
               poppins.className,
-              "mt-3",
+              "mt-3"
             )}
           >
             <Trans
@@ -62,13 +62,13 @@ const CookieConsentModal: React.FC = () => {
           <div
             className={classNames(
               styles["section-gadgets__left-bottom"],
-              " mt-5",
+              " mt-5"
             )}
           >
             <Button
               className={classNames(
                 styles["section-gadgets__bottom-left-button"],
-                "hover:bg-backgroundColorBlack hover:text-default-50 hover:border-2 bg-backgroundColor border-2 border-default-900 text-default-900 duration-500 mr-4",
+                "hover:bg-backgroundColorBlack hover:text-default-50 hover:border-2 bg-backgroundColor border-2 border-default-900 text-default-900 duration-500 mr-4"
               )}
               radius="sm"
               size="lg"
@@ -79,7 +79,7 @@ const CookieConsentModal: React.FC = () => {
             <Button
               className={classNames(
                 styles["section-gadgets__bottom-left-button"],
-                "bg-default-900 text-default-50 hover:bg-default-50 hover:border-2 hover:border-default-900 hover:text-default-900 duration-500 ml-4  w-37",
+                "bg-default-900 text-default-50 hover:bg-default-50 hover:border-2 hover:border-default-900 hover:text-default-900 duration-500 ml-4  w-37"
               )}
               radius="sm"
               size="lg"

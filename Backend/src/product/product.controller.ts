@@ -49,7 +49,7 @@ export class ProductController {
     ): string[] | undefined => {
       if (!param) return undefined;
       const arr = Array.isArray(param) ? param : [param];
-      return arr.map((v) => decodeURIComponent(v));
+      return arr.flatMap((v) => decodeURIComponent(v)).filter(Boolean);
     };
 
     const filters = {

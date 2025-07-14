@@ -9,8 +9,9 @@ import { BsArrowRepeat } from "react-icons/bs";
 import ProductBenefit from "../ProductBenefit/ProductBenefit";
 
 import QuantitySelector from "./quantitySelector/QuantitySelector";
+import ProductColors from "./ProductColors";
 
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 import { useAddProductToCart } from "@/api/cart/useCart";
 import { poppins, inter } from "@/config/fonts";
 import LikeProduct from "@/components/CardProduct/LikeProduct/LikeProduct";
@@ -85,7 +86,7 @@ export default function ProductInfo({ product }: { product: ProductDetailed }) {
         onError: () => {
           toast.error(`Error adding ${product.name} to the cart`);
         },
-      },
+      }
     );
     toast.success(`You successfully added ${product.name} to the cart`);
   };
@@ -121,23 +122,16 @@ export default function ProductInfo({ product }: { product: ProductDetailed }) {
             Colors:
           </p>
           <div className="section-product__info--colors--container">
-            {product.colors.map((color, index) => {
+            {product.colors.map((color) => {
               const isSelected = selectedColors.includes(color.name);
 
               return (
-                <div
+                <ProductColors
                   key={color.id}
-                  className={`section-product__info--colors--container--color ${
-                    isSelected ? "selected" : ""
-                  }`}
-                  role="button"
-                  style={{ backgroundColor: color.hexCode }}
-                  tabIndex={index}
-                  onClick={() => handleColorClick(color.name)}
-                  onKeyDown={() => handleColorClick(color.name)}
-                >
-                  {isSelected && <div className="selected-indicator" />}
-                </div>
+                  color={color}
+                  handleClick={handleColorClick}
+                  isSelected={isSelected}
+                />
               );
             })}
           </div>
@@ -185,7 +179,7 @@ export default function ProductInfo({ product }: { product: ProductDetailed }) {
           Buy now
         </Button>
         <div className="section-product__info--buttons--like">
-          <LikeProduct productID={product.id} />
+          <LikeProduct productID={product.id} userID={userID} />
         </div>
       </div>
       <ProductBenefit

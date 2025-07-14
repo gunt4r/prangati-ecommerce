@@ -1,52 +1,32 @@
 import { motion } from "framer-motion";
 import "./styleLikeProduct.scss";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
-import { useUUID } from "@/Hooks/useUUID";
-
+import useIsProductInWishlist from "@/services/productInWishlist";
+import { queryClient } from "@/api/react-query";
+import { REACT_QUERY_WISHLIST_KEY } from "@/config/const";
+import {
+  useAddToWishlist,
+  useRemoveProductFromWishlist,
+} from "@/api/wishlist/useWishlist";
 export default function LikeProduct({
   productID,
+  userID,
   style,
 }: {
   productID: string;
+  userID: string;
   style?: { [key: string]: string };
 }) {
-  const [isLiked, setIsLiked] = useState(false);
-  const userID = useUUID();
-
-  useEffect(() => {
-    async function checkWishlist() {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}wishlist/check/${productID}/${userID}`,
-        );
-
-        setIsLiked(response.data.status === 200);
-      } catch (error) {
-        setIsLiked(false);
-      }
-    }
-    if (userID) checkWishlist();
-  }, [productID, userID]);
+  const isLiked = useIsProductInWishlist(productID);
+  const { mutate: addToWishlist } = useAddToWishlist();
+  const { mutate: removeFromWishlist } = useRemoveProductFromWishlist();
   const handleToggleLike = async () => {
-    setIsLiked((prev) => !prev);
-    const data = JSON.stringify({ userID: userID, productID: productID });
-
     if (!isLiked) {
-      await axios.post(`${process.env.NEXT_PUBLIC_SERVER}wishlist`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      addToWishlist({ productID, userID });
     } else {
-      await axios.delete(`${process.env.NEXT_PUBLIC_SERVER}wishlist`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      });
+      removeFromWishlist({ productID, userID });
     }
+    queryClient.invalidateQueries({ queryKey: [REACT_QUERY_WISHLIST_KEY] });
   };
 
   return (

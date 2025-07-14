@@ -1,31 +1,41 @@
 "use client";
-import { useEffect } from "react";
+import Cookies from "js-cookie";
 
 import Container from "../Container/Container";
 import "./styleProducts.scss";
 import Preloader from "../ClientPreloader/Preloader";
 import CardProduct from "../CardProduct/CardProduct";
+import ButtonDark from "../Cart/CartInfo/ButtonDark";
 
 import Filters from "./FiltersSorting";
 
 import { useProductsAdvanced } from "@/api/products/useProducts";
 import TitleHeader from "@/utils/TitleHeader/TitleHeader";
 import { useProductsStore } from "@/store/useProductsStore";
-import { PriceRange } from "@/config/interfaces";
-
+import { COOKIE_PRODUCT_KEY } from "@/config/const";
 export default function ProductsBody() {
-  const filters = useProductsStore((state) => state.filterParams);
-  const sortParams = useProductsStore((state) => state.sortParams);
-  const queryParams = useProductsStore((state) => state.getQueryParams);
+  const { data, isLoading } = useProductsAdvanced();
+  const setFilterParams = useProductsStore((state) => state.setFilterParams);
 
-  useEffect(() => {
-    queryParams();
-  }, [filters, sortParams]);
-  const { data, isLoading } = useProductsAdvanced(queryParams());
-  const setPriceRange = useProductsStore((state) => state.setPriceRange);
-  console.log(data);
-  if (setPriceRange) setPriceRange(data?.priceRange as any);
   if (isLoading) return <Preloader />;
+
+  const deleteFilters = () => {
+    setFilterParams({});
+    Cookies.remove(COOKIE_PRODUCT_KEY);
+  };
+
+  if (!data || !data.data || data.data.length === 0) {
+    return (
+      <Container>
+        <section className="section-products__none">
+          <div className="text-center">No products found</div>
+          <div className="text-center">
+            <ButtonDark text="Delete filters" onPress={deleteFilters} />
+          </div>
+        </section>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -35,12 +45,21 @@ export default function ProductsBody() {
           <Filters />
         </div>
 
-        <div className="section-products__cards">
-          {data &&
-            data?.data.map((product) => (
-              <CardProduct key={product.id} product={product} />
-            ))}
-        </div>
+        {data.data.length > 0 ? (
+          <div className="grid-cards">
+            {data &&
+              data?.data.map((product: any) => (
+                <CardProduct key={product.id} product={product} />
+              ))}
+          </div>
+        ) : (
+          <section className="section-products__none">
+            <div className="text-center">No products found</div>
+            <div className="text-center">
+              <ButtonDark text="Delete filters" onPress={deleteFilters} />
+            </div>
+          </section>
+        )}
       </section>
     </Container>
   );

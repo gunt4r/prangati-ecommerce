@@ -51,11 +51,7 @@ export interface ProductDetailed {
 
 export interface ProductCart extends Product {
   quantity: number;
-}
-
-export interface Category {
-  id: string;
-  name: string;
+  product: { id: string };
 }
 
 export interface ApiResponse {

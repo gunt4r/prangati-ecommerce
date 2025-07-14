@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Head from "next/head";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
+import { api } from "@/api/api";
 import Preloader from "@/components/ClientPreloader/Preloader";
 import Header from "@/components/Header/Headerpage";
 import Footer from "@/components/Footer/Footer";
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 import { addViewedProduct } from "@/services/viewedProductsService";
 import { ProductDetailed } from "@/config/interfaces";
 import ViewedProducts from "@/components/ViewedProducts/ViewedProducts";
@@ -18,22 +18,21 @@ import "./styleProduct.scss";
 import ProductInfo from "@/components/Product/ProductInfo/ProductInfo";
 import ProductCategory from "@/components/Product/ProductCategory/ProductCategory";
 import Container from "@/components/Container/Container";
+import { Category } from "@/types/categories";
 export default function ProductPage() {
   const params = useParams();
   const { id } = params;
   const [productData, setProductData] = useState<ProductDetailed | null>(null);
   const userUUID = useUUID();
-  const [category, setCategory] = useState<string>("");
+  const [category, setCategory] = useState<Category>();
 
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}product/${id}`,
-        );
+        const response = await api.get(`/product/${id}`);
 
         setProductData(response.data);
-        setCategory(response.data.category.name);
+        setCategory(response.data.category);
         addViewedProduct(userUUID, String(id));
       } catch (error) {
         toast.error("Error fetching product data:");
@@ -55,10 +54,9 @@ export default function ProductPage() {
       </Head>
       <Header />
       <section className="section-product__category">
-        <ProductCategory
-          category={category.length == 0 ? "shoes" : category}
-          productsName="shoes"
-        />
+        {category && (
+          <ProductCategory category={category} productsName="shoes" />
+        )}
       </section>
       <main className="section-product__main">
         <Container>

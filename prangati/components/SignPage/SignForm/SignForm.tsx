@@ -1,5 +1,4 @@
 "use client";
-import classNames from "classnames";
 import { Checkbox, Input } from "@heroui/react";
 import { useMemo, useState } from "react";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
@@ -9,10 +8,10 @@ import { Link } from "@heroui/link";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 
-import style from "./styleSignForm.module.css";
+import "./styleSignForm.scss";
 
 import { poppins } from "@/config/fonts";
-import { useUUID } from "@/Hooks/useUUID";
+import { useUUID } from "@/hooks/useUUID";
 import { usePostRegister } from "@/api/auth/useAuth";
 export default function SignForm() {
   const router = useRouter();
@@ -97,11 +96,9 @@ export default function SignForm() {
         password: password,
       },
       {
-        onSuccess: (response) => {
+        onSuccess: () => {
           toast.success("Registration successful!");
-          const { token } = response;
 
-          localStorage.setItem("token", token);
           setTimeout(() => {
             router.push("/");
           }, 1500);
@@ -116,19 +113,10 @@ export default function SignForm() {
   };
 
   return (
-    <section className={classNames(style["section-sign__form"])}>
+    <section className="section-sign__form">
       <Toaster position="bottom-right" />
-      <p
-        className={classNames(style["section-sign__title"], poppins.className)}
-      >
-        Sign Up
-      </p>
-      <p
-        className={classNames(
-          style["section-sign__subtitle"],
-          poppins.className,
-        )}
-      >
+      <p className={`section-sign__title ${poppins.className}`}>Sign Up</p>
+      <p className={`section-sign__subtitle ${poppins.className}`}>
         Please enter your details
       </p>
       <Input

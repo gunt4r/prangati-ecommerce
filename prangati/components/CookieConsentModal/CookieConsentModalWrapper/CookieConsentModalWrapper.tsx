@@ -4,8 +4,8 @@ import { useEffect } from "react";
 
 import CookieConsentModal from "../CookieConsentModal";
 
-import { useUUID } from "@/Hooks/useUUID";
-import { useCookieConsent } from "@/Hooks/useCookieConsent";
+import { useUUID } from "@/hooks/useUUID";
+import { useCookieConsent } from "@/hooks/useCookieConsent";
 export default function CookieConsentModalWrapper() {
   const { hasConsented } = useCookieConsent();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

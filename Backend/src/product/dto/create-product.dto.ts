@@ -10,8 +10,10 @@ import {
   Min,
   Max,
   IsUrl,
+  IsEnum,
 } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
+import { genderEnum } from 'src/utils/enums';
 
 class ProductImageDto {
   @IsString()
@@ -75,6 +77,10 @@ export class CreateProductDto {
     return value;
   })
   isFeatured?: boolean;
+
+  @IsOptional()
+  @IsEnum(genderEnum)
+  gender?: genderEnum;
 
   @IsNumber()
   @IsOptional()

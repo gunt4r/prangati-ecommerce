@@ -43,10 +43,11 @@ export default function QuantitySelector({
       </Button>
       <NumberInput
         hideStepper
+        aria-label="Quantity"
         className={`${poppins.className}`}
         classNames={{
           inputWrapper: "section-product__info--buttons--input_wrapper",
-          input: `section-product__info--buttons--input ${poppins.className}`,
+          input: `section-product__info--buttons--input min-w-[25px] ${poppins.className}`,
         }}
         maxValue={maxValue ? maxValue : 0}
         minValue={1}

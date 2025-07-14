@@ -12,7 +12,6 @@ import "slick-carousel/slick/slick-theme.css";
 import ClientPreloader from "@/components/ClientPreloader/ClientPreloader";
 import { siteConfig } from "@/config/site";
 
-
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -37,7 +36,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
- 
+
   return (
     <html suppressHydrationWarning lang="en" >
       <head />
